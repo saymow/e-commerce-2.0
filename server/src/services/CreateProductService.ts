@@ -21,8 +21,8 @@ const schema = Yup.object().shape({
   description: Yup.string().required().min(12).max(320),
   brand: Yup.string().required().max(36),
   category: Yup.string().required().oneOf(['Electronics']),
-  price: Yup.number().required(),
-  count_in_stock: Yup.number().required(),
+  price: Yup.number().required().min(1),
+  count_in_stock: Yup.number().required().min(0),
 });
 
 class CreateProductService {

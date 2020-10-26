@@ -3,3 +3,5 @@ node_modules
 **/products/**
 
 .env
+typeorm.env
+typeorm.test.env
