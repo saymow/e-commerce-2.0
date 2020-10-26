@@ -29,7 +29,7 @@ export const errorHandler = (
     return res.status(400).send({ type: 'Invalid fields', fields: errorsMap });
   }
 
-  console.error('Unexpected error', error);
+  console.error(`Unexpected error ${error}`.red);
 
   return res.status(500).send({ message: 'Internal server error.' });
 };
