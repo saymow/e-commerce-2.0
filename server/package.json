@@ -5,7 +5,7 @@
   "scripts": {
     "dev:server": "env-cmd -f ./config/typeorm.env tsnd --transpile-only --ignore-watch node_modules ./src/server.ts",
     "dev:typeorm": "env-cmd -f ./config/typeorm.env tsnd ./node_modules/typeorm/cli.js",
-    "test": "env-cmd -f ./config/typeorm.test.env jest"
+    "test": "env-cmd -f ./config/typeorm.test.env jest --watch --forceExit --runInBand "
   },
   "keywords": [],
   "author": "",

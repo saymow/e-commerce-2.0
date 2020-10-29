@@ -24,7 +24,7 @@ type UpdatableFields =
   | 'count_in_stock';
 
 class UpdateProductService {
-  async execute(id: string, data: Record<UpdatableFields, string>) {
+  async execute(id: string, data: Record<UpdatableFields, string | number>) {
     const productsRepository = getRepository(Product);
 
     const updates = Object.keys(data);
