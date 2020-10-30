@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import * as Yup from 'yup';
 
-import Product from '../models/Product';
+import Product from '../../models/Product';
 
 interface ProductOnCreate {
   name: string;

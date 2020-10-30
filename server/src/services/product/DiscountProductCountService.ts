@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
-import AppError from '../errors/AppError';
-import Product from '../models/Product';
+import AppError from '../../errors/AppError';
+import Product from '../../models/Product';
 
 class DiscountProductCountService {
   async execute(id: string, qty: number) {

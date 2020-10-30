@@ -26,6 +26,22 @@ const fakeProduct2 = {
   num_reviews: 8,
 };
 
+const fakeUser = {
+  name: 'Gustavo alves',
+  email: 'example@example.com',
+  password: 'this_is_my_passwDord25',
+  birth_date: '2000-10-28',
+  contact_number: '(31) 99999-9999',
+};
+
+const fakeUser2 = {
+  name: 'João da silva',
+  email: 'test@example.com',
+  password: 'passwDord126',
+  birth_date: '2000-10-28',
+  contact_number: '(31) 99999-9999',
+};
+
 const setupEnvironment = async () => {
   const connection = await createConnection();
   await connection.runMigrations();
@@ -43,4 +59,11 @@ const tearEnvironment = async () => {
   await connection.close();
 };
 
-export { setupEnvironment, tearEnvironment, fakeProduct, fakeProduct2 };
+export {
+  setupEnvironment,
+  tearEnvironment,
+  fakeProduct,
+  fakeProduct2,
+  fakeUser,
+  fakeUser2,
+};

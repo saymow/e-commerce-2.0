@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
 import * as Yup from 'yup';
 
-import AppError from '../errors/AppError';
-import Product from '../models/Product';
+import AppError from '../../errors/AppError';
+import Product from '../../models/Product';
 
 const schema = Yup.object().shape({
   name: Yup.string().min(3).max(64),

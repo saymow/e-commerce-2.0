@@ -3,12 +3,12 @@ import {
   fakeProduct,
   fakeProduct2,
   tearEnvironment,
-} from '../__tests__/fixtures/db';
+} from '../../__tests__/fixtures/db';
 
 import { ValidationError } from 'yup';
 import UpdateProductService from './UpdateProductService';
 import CreateProductService from './CreateProductService';
-import AppError from '../errors/AppError';
+import AppError from '../../errors/AppError';
 
 beforeAll(setupEnvironment);
 afterAll(tearEnvironment);
@@ -96,7 +96,7 @@ describe('Product updating service', () => {
     const updateProcess = updateProductService.execute(createdProduct.id, {
       rating: 3,
       num_reviews: 1,
-    });
+    } as any);
 
     expect(updateProcess).rejects.toThrow();
   });

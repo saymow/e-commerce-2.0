@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('products')
-class Product {
+@Entity('users')
+class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -15,28 +15,22 @@ class Product {
   name: string;
 
   @Column()
-  description: string;
+  email: string;
+
+  @Column({ select: false })
+  password: string;
 
   @Column()
-  brand: string;
+  birth_date: Date;
 
   @Column()
-  category: string;
+  contact_number: string;
 
   @Column()
-  image: string;
+  is_confirmed: boolean;
 
   @Column()
-  price: number;
-
-  @Column()
-  count_in_stock: number;
-
-  @Column()
-  rating: number;
-
-  @Column()
-  num_reviews: number;
+  is_admin: boolean;
 
   @CreateDateColumn()
   created_at: Date;
@@ -45,4 +39,4 @@ class Product {
   updated_at: Date;
 }
 
-export default Product;
+export default User;

@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
 import Product from '../models/Product';
-import CreateProductService from '../services/CreateProductService';
-import UpdateProductService from '../services/UpdateProductService';
+import CreateProductService from '../services/product/CreateProductService';
+import UpdateProductService from '../services/product/UpdateProductService';
 
 class ProductController {
   async create(req: Request, res: Response) {

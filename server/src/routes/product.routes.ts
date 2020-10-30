@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import upload from '../config/uploads/internal/productImageUpload';
-import ProductsController from '../controllers/productsController';
+import ProductsController from '../controllers/productController';
 
 const productsController = new ProductsController();
 const router = Router();
