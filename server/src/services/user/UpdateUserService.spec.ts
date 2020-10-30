@@ -48,6 +48,6 @@ describe('User updating service', () => {
 
     const updatingProccess = updateUserService.execute(user.id, userUpdates);
 
-    expect(updatingProccess).rejects.toThrow();
+    expect(updatingProccess).rejects.toBeTruthy();
   });
 });

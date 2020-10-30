@@ -20,6 +20,8 @@ class UserController {
       contact_number,
     });
 
+    req.session!.userId = user.id;
+
     return res.status(201).send(user);
   }
 
@@ -47,7 +49,7 @@ class UserController {
     const updateUserService = new UpdateUserService();
 
     const data = req.body;
-    const { id } = req.user;
+    const id = req.session!.userId;
 
     const user = await updateUserService.execute(id, data);
 
@@ -57,7 +59,7 @@ class UserController {
   async destroy(req: Request, res: Response) {
     const usersRepository = getRepository(User);
 
-    const { id } = req.user;
+    const id = req.session!.userId;
 
     await usersRepository.delete(id);
 

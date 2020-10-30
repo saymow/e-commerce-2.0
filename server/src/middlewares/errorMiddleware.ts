@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { QueryFailedError } from 'typeorm';
 import { ValidationError } from 'yup';
 import AppError from '../errors/AppError';
 
@@ -27,6 +28,13 @@ export const errorHandler = (
 
     console.log(error);
     return res.status(400).send({ type: 'Invalid fields', fields: errorsMap });
+  }
+
+  if (error instanceof QueryFailedError) {
+    console.log(error);
+
+    const [message] = error.message.split('"');
+    return res.status(400).send({ message });
   }
 
   console.error(`Unexpected error ${error}`.red);

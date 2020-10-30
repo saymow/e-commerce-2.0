@@ -98,6 +98,6 @@ describe('Product updating service', () => {
       num_reviews: 1,
     } as any);
 
-    expect(updateProcess).rejects.toThrow();
+    expect(updateProcess).rejects.toBeTruthy();
   });
 });

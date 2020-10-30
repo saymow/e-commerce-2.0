@@ -7,7 +7,6 @@ import {
 } from '../../__tests__/fixtures/db';
 
 import { ValidationError } from 'yup';
-import DiscountProductCountInStockService from './DiscountProductCountService';
 import DiscountProductCountService from './DiscountProductCountService';
 
 beforeAll(setupEnvironment);
@@ -39,6 +38,6 @@ describe('Product count_in_stock discount service', () => {
 
     expect(
       discountProductCountService.execute(product.id, qty)
-    ).rejects.toThrow();
+    ).rejects.toBeTruthy();
   });
 });

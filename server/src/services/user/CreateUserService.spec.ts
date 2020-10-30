@@ -26,9 +26,11 @@ describe('User creation service', () => {
       email: 'example@example.com',
     };
 
-    const creationProcesss = createUserService.execute(invalidUser);
+    const creationProcess = createUserService.execute(invalidUser);
 
-    expect(creationProcesss).rejects.toThrow();
+    // toThrow methods expects an instance of Error Object, not custom errors
+    // That's the why i'm only expecting it to reject.
+    await expect(creationProcess).rejects.toBeTruthy();
   });
 
   it('Should not create an invalid user (invalid birth_date)', async () => {
@@ -39,9 +41,9 @@ describe('User creation service', () => {
       birth_date: '2000-6-6',
     };
 
-    const creationProcesss = createUserService.execute(invalidUser);
+    const creationProcess = createUserService.execute(invalidUser);
 
-    expect(creationProcesss).rejects.toThrow();
+    await expect(creationProcess).rejects.toBeTruthy();
   });
 
   it('Should not create an invalid user (invalid contact_number)', async () => {
@@ -54,6 +56,6 @@ describe('User creation service', () => {
 
     const creationProcess = createUserService.execute(invalidUser);
 
-    expect(creationProcess).rejects.toThrow();
+    await expect(creationProcess).rejects.toBeTruthy();
   });
 });
