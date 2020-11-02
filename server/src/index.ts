@@ -1,6 +1,6 @@
 import express from 'express';
 import session from 'express-session';
-import redis from 'redis';
+import Redis from 'ioredis';
 import ConnectRedis from 'connect-redis';
 import 'express-async-errors';
 import './database';
@@ -10,14 +10,14 @@ import routes from './routes';
 import { COOKIE_NAME, COOKIE_SECRET, __prod__ } from './constants';
 
 const app = express();
-const redisClient = redis.createClient();
+const redis = new Redis();
 const redisStore = ConnectRedis(session);
 
 app.use(
   session({
     name: COOKIE_NAME,
     store: new redisStore({
-      client: redisClient,
+      client: redis,
       disableTouch: true,
     }),
     cookie: {
@@ -28,6 +28,7 @@ app.use(
     },
     resave: false,
     secret: COOKIE_SECRET,
+    saveUninitialized: false,
   })
 );
 
@@ -36,5 +37,7 @@ app.use(express.json());
 app.use('/api', routes);
 app.use(routeNotFound);
 app.use(errorHandler);
+
+export { redis };
 
 export default app;

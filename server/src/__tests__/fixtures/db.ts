@@ -1,4 +1,11 @@
-import { Connection, createConnection, getConnection } from 'typeorm';
+import {
+  Connection,
+  createConnection,
+  getConnection,
+  getRepository,
+} from 'typeorm';
+import User from '../../models/User';
+import CreateUserService from '../../services/user/CreateUserService';
 
 const fakeProduct = {
   name: 'Airpods Wireless Bluetooth Headphones',
@@ -54,6 +61,13 @@ const setupEnvironment = async () => {
   }
 };
 
+const setupFakeData = async () => {
+  const createUserService = new CreateUserService();
+
+  await createUserService.execute(fakeUser);
+  await createUserService.execute(fakeUser2);
+};
+
 const tearEnvironment = async () => {
   const connection = getConnection('default');
   await connection.close();
@@ -61,6 +75,7 @@ const tearEnvironment = async () => {
 
 export {
   setupEnvironment,
+  setupFakeData,
   tearEnvironment,
   fakeProduct,
   fakeProduct2,
