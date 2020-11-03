@@ -1,11 +1,5 @@
-import {
-  Connection,
-  createConnection,
-  getConnection,
-  getRepository,
-} from 'typeorm';
-import User from '../../models/User';
-import CreateUserService from '../../services/user/CreateUserService';
+import CreateUserService from '@services/user/CreateUserService';
+import { createConnection, getConnection } from 'typeorm';
 
 const fakeProduct = {
   name: 'Airpods Wireless Bluetooth Headphones',

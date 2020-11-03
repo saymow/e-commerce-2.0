@@ -1,4 +1,4 @@
-import Queue from './lib/Queue';
+import Queue from './app/lib/Queue';
 import 'colors';
 
 Queue.process();

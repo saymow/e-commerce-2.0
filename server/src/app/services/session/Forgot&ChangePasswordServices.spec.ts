@@ -4,7 +4,7 @@ import {
   setupEnvironment,
   setupFakeData,
   tearEnvironment,
-} from '../../__tests__/fixtures/db';
+} from '@__tests__/fixtures/db';
 import ChangePasswordService from './ChangePasswordService';
 import ForgotPasswordService from './ForgotPasswordService';
 import LoginService from './LoginService';

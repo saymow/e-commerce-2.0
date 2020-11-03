@@ -4,7 +4,7 @@ import {
   fakeProduct,
   fakeProduct2,
   tearEnvironment,
-} from '../../__tests__/fixtures/db';
+} from '@__tests__/fixtures/db';
 
 import { ValidationError } from 'yup';
 
