@@ -1,11 +1,13 @@
 import { getRepository } from 'typeorm';
 import { v4 } from 'uuid';
-import { redis } from '../..';
 import { FORGOT_PASS_PREFIX } from '../../constants';
 import AppError from '../../errors/AppError';
 import User from '../../models/User';
 import { forgotPasswordEmailView } from '../../views/email';
-import EmailSenderService from '../mailer';
+import EmailSenderService from '../../lib/MailSenderService';
+import redis from '../../config/redis';
+
+import queue from '../../lib/Queue';
 
 class ForgotPasswordService {
   async execute(email: string) {
@@ -25,11 +27,17 @@ class ForgotPasswordService {
       60 * 60 * 24 * 1
     );
 
-    await emailSenderService.execute({
+    queue.add('RecoverPasswordMail', {
       email: user.email,
       subject: 'Rocover password',
       html: forgotPasswordEmailView(user.name, token),
     });
+
+    // await emailSenderService.execute({
+    //   email: user.email,
+    //   subject: 'Rocover password',
+    //   html: forgotPasswordEmailView(user.name, token),
+    // });
 
     return token;
   }

@@ -20,7 +20,7 @@ export const authAdmin = async (
 ) => {
   const usersRepository = getRepository(User);
 
-  const user = await usersRepository.findOne(req.session!.id);
+  const user = await usersRepository.findOne(req.session!.userId);
 
   if (!user) throw new AppError('User not found', 404);
 

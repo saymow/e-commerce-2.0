@@ -1,10 +1,10 @@
 import { getRepository } from 'typeorm';
 import argon2 from 'argon2';
 import * as Yup from 'yup';
-import { redis } from '../..';
 import { FORGOT_PASS_PREFIX } from '../../constants';
 import AppError from '../../errors/AppError';
 import User from '../../models/User';
+import redis from '../../config/redis';
 
 const schema = Yup.object().shape({
   password: Yup.string()

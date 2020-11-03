@@ -3,6 +3,8 @@ import { getRepository } from 'typeorm';
 import AppError from '../errors/AppError';
 import User from '../models/User';
 
+import orphanageView from '../views/api/user_view';
+
 import CreateUserService from '../services/user/CreateUserService';
 import UpdateUserService from '../services/user/UpdateUserService';
 
@@ -22,7 +24,7 @@ class UserController {
 
     req.session!.userId = user.id;
 
-    return res.status(201).send(user);
+    return res.status(201).send(orphanageView.render(user));
   }
 
   async index(req: Request, res: Response) {

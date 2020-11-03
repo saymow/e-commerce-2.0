@@ -9,7 +9,7 @@ const Transporter = nodemailer.createTransport({
   },
 });
 
-interface EmailProps {
+export interface EmailProps {
   email: string;
   subject: string;
   html: string;

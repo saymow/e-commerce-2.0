@@ -1,8 +1,9 @@
 import express from 'express';
 import session from 'express-session';
-import Redis from 'ioredis';
 import ConnectRedis from 'connect-redis';
 import 'express-async-errors';
+
+import redis from './config/redis';
 import './database';
 import { errorHandler, routeNotFound } from './middlewares/errorMiddleware';
 
@@ -10,7 +11,6 @@ import routes from './routes';
 import { COOKIE_NAME, COOKIE_SECRET, __prod__ } from './constants';
 
 const app = express();
-const redis = new Redis();
 const redisStore = ConnectRedis(session);
 
 app.use(

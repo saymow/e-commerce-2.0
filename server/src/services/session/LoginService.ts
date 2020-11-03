@@ -13,10 +13,10 @@ class LoginService {
       select: ['password', 'id'],
     });
 
-    if (!user) throw new AppError('Email or password incorrect', 404);
+    if (!user) throw new AppError('Email or password incorrect', 401);
 
     if (!(await argon2.verify(user.password, password)))
-      throw new AppError('Email or password incorrect', 404);
+      throw new AppError('Email or password incorrect', 401);
 
     return user.id;
   }
