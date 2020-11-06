@@ -17,6 +17,11 @@ class SessionController {
     return res.send();
   }
 
+  //Check if user is authenticated
+  async status(req: Request, res: Response) {
+    res.send();
+  }
+
   async logout(req: Request, res: Response) {
     await new Promise((resolve, reject) => {
       req.session?.destroy(err => {

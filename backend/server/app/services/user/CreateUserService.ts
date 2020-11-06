@@ -16,6 +16,7 @@ const schema = Yup.object().shape({
   email: Yup.string().required().email(),
   password: Yup.string()
     .required()
+    .min(8)
     .matches(/(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])/), // Minimum eight characters, letter upper and lower case and numbers.
   birth_date: Yup.string()
     .required()
