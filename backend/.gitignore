@@ -1,0 +1,8 @@
+node_modules
+
+**/products/**
+
+.env
+dev.env
+typeorm.env
+typeorm.test.env
