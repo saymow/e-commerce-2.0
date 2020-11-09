@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { userLoginAction } from '../reducers/usersReducers';
+import { Dispatch } from '../@types/redux';
+import { userLoginAction } from '../@types/redux/user';
 
 export const userLogin = (email: string, password: string) => async (
-  dispatch: (arg0: userLoginAction) => void
+  dispatch: Dispatch<userLoginAction>
 ) => {
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });
@@ -17,7 +18,7 @@ export const userLogin = (email: string, password: string) => async (
 };
 
 export const getAuthStatus = () => async (
-  dispatch: (arg0: userLoginAction) => void
+  dispatch: Dispatch<userLoginAction>
 ) => {
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });

@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
+
 import Authentication from '../screens/Authentication';
+import Panel from '../screens/Panel';
 
 import RestrictedRoute from '../components/RestrictedRoute';
 import { useDispatch } from 'react-redux';
-import { getAuthStatus } from '../actions/usersActions';
+import { getAuthStatus } from '../actions/userActions';
 
 const Router: React.FC = () => {
   useDispatch()(getAuthStatus());
@@ -18,7 +20,7 @@ const Router: React.FC = () => {
           exact
           component={Authentication}
         />
-        <RestrictedRoute path="/panel" exact component={() => <h1>todo</h1>} />
+        <RestrictedRoute path="/panel" component={Panel} />
       </Switch>
     </BrowserRouter>
   );

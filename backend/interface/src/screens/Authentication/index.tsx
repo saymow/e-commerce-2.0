@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import { Container, FormWrapper } from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { userLogin } from '../../actions/usersActions';
+import { userLogin } from '../../actions/userActions';
 import { ReduxState } from '../../store';
 
 const Authentication: React.FC = () => {

@@ -1,23 +1,10 @@
-export interface userLoginState {
-  loading?: boolean;
-  error?: {
-    message: string;
-  };
-  auth?: boolean;
-}
-
-export type userLoginAction =
-  | { type: 'USER_LOGIN_REQUEST' }
-  | {
-      type: 'USER_LOGIN_SUCCESS';
-    }
-  | { type: 'USER_LOGIN_FAIL'; payload: { message: string } }
-  | { type: 'USER_LOGOUT' };
+import { DefaultState } from '../@types/redux';
+import { userLoginAction } from '../@types/redux/user';
 
 export const userLoginReducer = (
-  state: userLoginState = { auth: true },
+  state: DefaultState<{ auth?: boolean }> = { auth: true },
   action: userLoginAction
-): userLoginState => {
+): DefaultState<{ auth?: boolean }> => {
   switch (action.type) {
     case 'USER_LOGIN_REQUEST':
       return { ...state, loading: true };
