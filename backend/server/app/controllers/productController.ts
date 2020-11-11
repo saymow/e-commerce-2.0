@@ -85,6 +85,8 @@ class ProductController {
     const { id } = req.params;
     const data = req.body;
 
+    console.log(data);
+
     const product = await updateProductService.execute(id, data);
 
     return res.send(ProductView.render(product));

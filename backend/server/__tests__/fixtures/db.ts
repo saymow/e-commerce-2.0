@@ -1,5 +1,6 @@
 import CreateUserService from '@services/user/CreateUserService';
-import { createConnection, getConnection } from 'typeorm';
+import User from '../../app/models/User';
+import { createConnection, getConnection, getRepository } from 'typeorm';
 
 const fakeProduct = {
   name: 'Airpods Wireless Bluetooth Headphones',
@@ -43,6 +44,14 @@ const fakeUser2 = {
   contact_number: '(31) 99999-9999',
 };
 
+const fakeAdmin = {
+  name: 'admin',
+  email: 'admin@admin.com',
+  password: 'passwDord126',
+  birth_date: '2000-10-28',
+  contact_number: '(31) 99999-9999',
+};
+
 const setupEnvironment = async () => {
   const connection = await createConnection();
   await connection.runMigrations();
@@ -56,10 +65,17 @@ const setupEnvironment = async () => {
 };
 
 const setupFakeData = async () => {
+  const usersRepository = getRepository(User);
   const createUserService = new CreateUserService();
 
   await createUserService.execute(fakeUser);
   await createUserService.execute(fakeUser2);
+  await usersRepository.save(
+    usersRepository.create({
+      ...fakeAdmin,
+      is_admin: true,
+    })
+  );
 };
 
 const tearEnvironment = async () => {
@@ -73,6 +89,7 @@ export {
   tearEnvironment,
   fakeProduct,
   fakeProduct2,
+  fakeAdmin,
   fakeUser,
   fakeUser2,
 };
