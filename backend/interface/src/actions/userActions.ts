@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Dispatch } from '../@types/redux';
-import { userLoginAction } from '../@types/redux/user';
+import { UserLoginAction, UsersListAction } from '../@types/redux/user';
 
 export const userLogin = (email: string, password: string) => async (
-  dispatch: Dispatch<userLoginAction>
+  dispatch: Dispatch<UserLoginAction>
 ) => {
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });
@@ -18,7 +18,7 @@ export const userLogin = (email: string, password: string) => async (
 };
 
 export const getAuthStatus = () => async (
-  dispatch: Dispatch<userLoginAction>
+  dispatch: Dispatch<UserLoginAction>
 ) => {
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });
@@ -29,5 +29,18 @@ export const getAuthStatus = () => async (
   } catch (err) {
     console.log(err);
     dispatch({ type: 'USER_LOGOUT' });
+  }
+};
+
+export const listUsers = () => async (dispatch: Dispatch<UsersListAction>) => {
+  try {
+    dispatch({ type: 'USER_LIST_REQUEST' });
+
+    const { data } = await axios.get('/api/users');
+
+    dispatch({ type: 'USER_LIST_SUCCESS', payload: data });
+  } catch (err) {
+    console.log(err);
+    dispatch({ type: 'USER_LIST_FAIL', payload: err.response.data });
   }
 };
