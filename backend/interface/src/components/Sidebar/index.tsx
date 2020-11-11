@@ -16,7 +16,9 @@ const SideBar: React.FC = () => {
 
   return (
     <Container>
-      <Title>Ecommerce2.0</Title>
+      <Link to="/panel">
+        <Title>Ecommerce2.0</Title>
+      </Link>
       <Nav>
         <NavItem>
           <Link

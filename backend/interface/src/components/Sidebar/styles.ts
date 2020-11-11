@@ -16,7 +16,7 @@ export const Container = styled.nav`
 `;
 
 export const Title = styled.h1`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   color: gray;
   background: #272b30;

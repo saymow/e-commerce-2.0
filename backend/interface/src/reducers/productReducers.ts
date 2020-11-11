@@ -1,5 +1,13 @@
 import { DefaultState } from '../@types/redux';
-import { ProductsListAction, ProductsListState } from '../@types/redux/product';
+import {
+  ProductsCreationAction,
+  ProductsDeleteAction,
+  ProductsEditAction,
+  ProductsListAction,
+  ProductsListState,
+  ProductsShowAction,
+  ProductsShowState,
+} from '../@types/redux/product';
 
 export const productListReducer = (
   state: ProductsListState = {},
@@ -9,9 +17,106 @@ export const productListReducer = (
     case 'LIST_PRODUCTS_REQUEST':
       return { ...state, loading: true };
     case 'LIST_PRODUCTS_SUCCESS':
-      return { loading: false, products: action.payload };
+      return { loading: false, success: true, products: action.payload };
     case 'LIST_PRODUCTS_FAIL':
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const productCreateReducer = (
+  state: DefaultState<{}> = {},
+  action: ProductsCreationAction
+): DefaultState<{}> => {
+  switch (action.type) {
+    case 'CREATE_PRODUCT_REQUEST':
+      return { ...state, loading: true };
+    case 'CREATE_PRODUCT_SUCCESS':
+      return {
+        loading: false,
+        success: true,
+        reset: () => ({
+          type: 'CREATE_PRODUCT_RESET',
+        }),
+      };
+    case 'CREATE_PRODUCT_FAIL':
+      return { loading: false, error: action.payload };
+    case 'CREATE_PRODUCT_RESET':
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const productDeleteReducer = (
+  state: DefaultState<{}> = {},
+  action: ProductsDeleteAction
+): DefaultState<{}> => {
+  switch (action.type) {
+    case 'DELETE_PRODUCT_REQUEST':
+      return { ...state, loading: true };
+    case 'DELETE_PRODUCT_SUCCESS':
+      return {
+        loading: false,
+        success: true,
+        reset: () => ({
+          type: 'DELETE_PRODUCT_RESET',
+        }),
+      };
+    case 'DELETE_PRODUCT_FAIL':
+      return { loading: false, error: action.payload };
+    case 'DELETE_PRODUCT_RESET':
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const productEditReducer = (
+  state: DefaultState<{}> = {},
+  action: ProductsEditAction
+): DefaultState<{}> => {
+  switch (action.type) {
+    case 'EDIT_PRODUCT_REQUEST':
+      return { ...state, loading: true };
+    case 'EDIT_PRODUCT_SUCCESS':
+      return {
+        loading: false,
+        success: true,
+        reset: () => ({
+          type: 'EDIT_PRODUCT_RESET',
+        }),
+      };
+    case 'EDIT_PRODUCT_FAIL':
+      return { loading: false, error: action.payload };
+    case 'EDIT_PRODUCT_RESET':
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const productShowReducer = (
+  state: ProductsShowState = {},
+  action: ProductsShowAction
+): ProductsShowState => {
+  switch (action.type) {
+    case 'SHOW_PRODUCT_REQUEST':
+      return { ...state, loading: true };
+    case 'SHOW_PRODUCT_SUCCESS':
+      return {
+        loading: false,
+        success: true,
+        reset: () => ({
+          type: 'SHOW_PRODUCT_RESET',
+        }),
+        product: action.payload,
+      };
+    case 'SHOW_PRODUCT_FAIL':
+      return { loading: false, error: action.payload };
+    case 'SHOW_PRODUCT_RESET':
+      return {};
     default:
       return state;
   }
