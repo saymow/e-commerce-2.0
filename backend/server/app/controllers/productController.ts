@@ -10,33 +10,6 @@ import UpdateProductService from '../services/product/UpdateProductService';
 import AppError from '../errors/AppError';
 
 class ProductController {
-  async create(req: Request, res: Response) {
-    const createProductService = new CreateProductService();
-
-    const {
-      name,
-      description,
-      brand,
-      category,
-      price,
-      count_in_stock,
-    } = req.body;
-
-    const image = req.file.filename;
-
-    const product = await createProductService.execute({
-      name,
-      image,
-      description,
-      brand,
-      category,
-      price,
-      count_in_stock,
-    });
-
-    return res.status(201).send(ProductView.render(product));
-  }
-
   // GET - /products?offset=5&limit=10
   // GET - /products?sortBy=price:DESC/ASC;name:DESC/ASC
   // ASC = 1 / DESC = -1
@@ -78,14 +51,41 @@ class ProductController {
 
     return res.send(ProductView.render(product));
   }
+}
+
+export class AdminProductController extends ProductController {
+  async create(req: Request, res: Response) {
+    const createProductService = new CreateProductService();
+
+    const {
+      name,
+      description,
+      brand,
+      category,
+      price,
+      count_in_stock,
+    } = req.body;
+
+    const image = req.file.filename;
+
+    const product = await createProductService.execute({
+      name,
+      image,
+      description,
+      brand,
+      category,
+      price,
+      count_in_stock,
+    });
+
+    return res.status(201).send(ProductView.render(product));
+  }
 
   async update(req: Request, res: Response) {
     const updateProductService = new UpdateProductService();
 
     const { id } = req.params;
     const data = req.body;
-
-    console.log(data);
 
     const product = await updateProductService.execute(id, data);
 

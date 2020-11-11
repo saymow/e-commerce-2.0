@@ -8,7 +8,7 @@ export const userLogin = (email: string, password: string) => async (
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });
 
-    await axios.post('/api/sessions', { email, password });
+    await axios.post('/api/admin/sessions', { email, password });
 
     dispatch({ type: 'USER_LOGIN_SUCCESS' });
   } catch (err) {
@@ -23,7 +23,7 @@ export const getAuthStatus = () => async (
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });
 
-    await axios.post('/api/sessions/me/admin');
+    await axios.post('/api/admin/sessions/me');
 
     dispatch({ type: 'USER_LOGIN_SUCCESS' });
   } catch (err) {
@@ -36,7 +36,7 @@ export const listUsers = () => async (dispatch: Dispatch<UsersListAction>) => {
   try {
     dispatch({ type: 'USER_LIST_REQUEST' });
 
-    const { data } = await axios.get('/api/users');
+    const { data } = await axios.get('/api/admin/users');
 
     dispatch({ type: 'USER_LIST_SUCCESS', payload: data });
   } catch (err) {

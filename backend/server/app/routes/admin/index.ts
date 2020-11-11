@@ -1,0 +1,20 @@
+import BullBoard from 'bull-board';
+import { Router } from 'express';
+
+import Queues from '../../lib/Queue';
+
+import productRoutes from './product.routes';
+import userRoutes from './user.routes';
+import sessionRoutes from './session.routes';
+import { authMiddleware, authAdmin } from '../../middlewares/authMiddleware';
+
+BullBoard.setQueues(Queues.queues.map(queue => queue.bull));
+
+const routes = Router();
+
+routes.use('/queues', authMiddleware, authAdmin, BullBoard.UI);
+routes.use('/products', authMiddleware, authAdmin, productRoutes);
+routes.use('/sessions', sessionRoutes);
+routes.use('/users', authMiddleware, authAdmin, userRoutes);
+
+export default routes;

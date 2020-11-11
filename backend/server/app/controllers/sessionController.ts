@@ -1,3 +1,4 @@
+import AdminLoginService from '../services/session/AdminLoginService';
 import { Request, Response } from 'express';
 import { COOKIE_NAME } from '../constants';
 import ChangePasswordService from '../services/session/ChangePasswordService';
@@ -56,6 +57,20 @@ class SessionController {
     const { password } = req.body;
 
     await changePasswordService.execute(token, password);
+
+    return res.send();
+  }
+}
+
+export class AdminSessionController extends SessionController {
+  async login(req: Request, res: Response) {
+    const adminLoginService = new AdminLoginService();
+
+    const { email, password } = req.body;
+
+    const userId = await adminLoginService.execute(email, password);
+
+    req.session!.userId = userId;
 
     return res.send();
   }

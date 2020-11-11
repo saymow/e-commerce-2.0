@@ -16,7 +16,7 @@ export const listProducts = () => async (
   try {
     dispatch({ type: 'LIST_PRODUCTS_REQUEST' });
 
-    const { data } = await axios.get('/api/products');
+    const { data } = await axios.get('/api/admin/products');
 
     dispatch({ type: 'LIST_PRODUCTS_SUCCESS', payload: data });
   } catch (err) {
@@ -33,7 +33,7 @@ export const createProduct = (product: FormData) => async (
   try {
     dispatch({ type: 'CREATE_PRODUCT_REQUEST' });
 
-    await axios.post('/api/products', product);
+    await axios.post('/api/admin/products', product);
 
     dispatch({ type: 'CREATE_PRODUCT_SUCCESS' });
   } catch (err) {
@@ -50,7 +50,7 @@ export const deleteProduct = (id: string) => async (
   try {
     dispatch({ type: 'DELETE_PRODUCT_REQUEST' });
 
-    await axios.delete(`/api/products/${id}`);
+    await axios.delete(`/api/admin/products/${id}`);
 
     dispatch({ type: 'DELETE_PRODUCT_SUCCESS' });
   } catch (err) {
@@ -67,7 +67,7 @@ export const editProduct = (product: any, productId: string) => async (
   try {
     dispatch({ type: 'EDIT_PRODUCT_REQUEST' });
 
-    await axios.put(`/api/products/${productId}`, product);
+    await axios.put(`/api/admin/products/${productId}`, product);
 
     dispatch({ type: 'EDIT_PRODUCT_SUCCESS' });
   } catch (err) {
@@ -84,7 +84,7 @@ export const showProduct = (id: string) => async (
   try {
     dispatch({ type: 'SHOW_PRODUCT_REQUEST' });
 
-    const { data } = await axios.put(`/api/products/${id}`);
+    const { data } = await axios.put(`/api/admin/products/${id}`);
 
     dispatch({ type: 'SHOW_PRODUCT_SUCCESS', payload: data });
   } catch (err) {
