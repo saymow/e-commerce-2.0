@@ -22,7 +22,7 @@ const SideBar: React.FC = () => {
       <Nav>
         <NavItem>
           <Link
-            className={pathname === '/panel/products' ? 'active' : ''}
+            className={pathname.startsWith('/panel/products') ? 'active' : ''}
             to="/panel/products"
           >
             <ProductIcon />
@@ -31,7 +31,7 @@ const SideBar: React.FC = () => {
         </NavItem>
         <NavItem>
           <Link
-            className={pathname === '/panel/users' ? 'active' : ''}
+            className={pathname.startsWith('/panel/users') ? 'active' : ''}
             to="/panel/users"
           >
             <UsersIcon />
@@ -40,7 +40,7 @@ const SideBar: React.FC = () => {
         </NavItem>
         <NavItem>
           <Link
-            className={pathname === '/panel/orders' ? 'active' : ''}
+            className={pathname.startsWith('/panel/orders') ? 'active' : ''}
             to="/panel/orders"
           >
             <OrdersIcon />
