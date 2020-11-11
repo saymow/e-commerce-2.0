@@ -4,9 +4,9 @@ import { Container, PanelRouteWrapper } from './styles';
 import Sidebar from '../../components/Sidebar';
 import { Switch, Route } from 'react-router-dom';
 
-import Products from './Products';
-import CreateProduct from './Products/CreateProduct';
-import EditProduct from './Products/EditProduct';
+import Products from './Product';
+import CreateProduct from './Product/CreateProduct';
+import EditProduct from './Product/EditProduct';
 
 const Panel: React.FC = () => {
   return (
