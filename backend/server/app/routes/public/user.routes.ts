@@ -9,5 +9,6 @@ const routes = Router();
 routes.post('/', userController.create);
 routes.put('/', authMiddleware, userController.update);
 routes.get('/:id', authMiddleware, userController.show);
+routes.delete('/', userController.destroy);
 
 export default routes;

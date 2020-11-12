@@ -7,6 +7,11 @@ import orphanageView from '../views/api/user_view';
 
 import CreateUserService from '../services/user/CreateUserService';
 import UpdateUserService from '../services/user/UpdateUserService';
+import ConfirmUserService from '../services/user/ConfirmUserService';
+import SetAdminService from '../services/user/SetAdminService';
+import AdminConfirmUserService from '../services/user/AdminConfirmUserService';
+import AdminDeleteUserService from '../services/user/AdminDeleteUserService';
+import AdminUpdateUserService from '../services/user/AdminUpdateUserService';
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -22,7 +27,11 @@ class UserController {
       contact_number,
     });
 
-    req.session!.userId = user.id;
+    req.session!.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
 
     return res.status(201).send(orphanageView.render(user));
   }
@@ -30,7 +39,7 @@ class UserController {
   async show(req: Request, res: Response) {
     const usersRepository = getRepository(User);
 
-    const userId = req.session!.userId;
+    const userId = req.session!.user.id;
 
     const user = await usersRepository.findOne(userId);
 
@@ -43,11 +52,23 @@ class UserController {
     const updateUserService = new UpdateUserService();
 
     const data = req.body;
-    const id = req.session!.userId;
+    const id = req.session!.user.id;
 
     const user = await updateUserService.execute(id, data);
 
     return res.send(user);
+  }
+
+  async destroy(req: Request, res: Response) {
+    const usersRepository = getRepository(User);
+
+    const id = req.session!.user.id;
+
+    await usersRepository.delete(id);
+
+    req.session?.destroy(() => {
+      return res.send();
+    });
   }
 }
 
@@ -77,12 +98,13 @@ export class AdminUserController extends UserController {
   }
 
   async update(req: Request, res: Response) {
-    const updateUserService = new UpdateUserService();
+    const adminUpdateUserService = new AdminUpdateUserService();
 
-    const { id } = req.route.params;
+    const { id } = req.params;
     const data = req.body;
+    const adminId = req.session!.user.id;
 
-    const user = await updateUserService.execute(id, data);
+    const user = await adminUpdateUserService.execute(id, data, adminId);
 
     return res.send(user);
   }
@@ -100,11 +122,33 @@ export class AdminUserController extends UserController {
   }
 
   async destroy(req: Request, res: Response) {
-    const usersRepository = getRepository(User);
+    const adminDeleteUserService = new AdminDeleteUserService();
 
-    const id = req.session!.userId;
+    const { id } = req.params as { id: string };
+    const adminId = req.session!.user.id;
 
-    await usersRepository.delete(id);
+    await adminDeleteUserService.execute(adminId, id);
+
+    res.send();
+  }
+
+  async confirm(req: Request, res: Response) {
+    const adminConfirmUserService = new AdminConfirmUserService();
+    const { id } = req.params;
+    const adminId = req.session!.user.id;
+
+    await adminConfirmUserService.execute(adminId, id);
+
+    return res.send();
+  }
+
+  async setAdmin(req: Request, res: Response) {
+    const setAdminService = new SetAdminService();
+
+    const { id } = req.params;
+    const adminId = req.session!.user.id;
+
+    await setAdminService.execute(adminId, id);
 
     return res.send();
   }

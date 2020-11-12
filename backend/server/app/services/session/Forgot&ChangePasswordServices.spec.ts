@@ -16,7 +16,7 @@ beforeAll(async () => {
 
 afterAll(tearEnvironment);
 
-describe('Forgot password service', () => {
+describe('Forgot & Change password services', () => {
   it('It should be able send forgot mail password and reset password', async () => {
     const forgotPasswordService = new ForgotPasswordService();
     const changePasswordService = new ChangePasswordService();
@@ -29,10 +29,10 @@ describe('Forgot password service', () => {
     let newPassword = 'D465s4A56Ss5da';
 
     await changePasswordService.execute(token, newPassword);
-    const userId = await loginService.execute(fakeUser.email, newPassword);
+    const { id } = await loginService.execute(fakeUser.email, newPassword);
 
     //Valid user id (UUID)
-    expect(validate(userId)).toBe(true);
+    expect(validate(id)).toBe(true);
   });
 
   it('It should not be able send forgot mail password and reset password (email not in use)', async () => {
@@ -76,10 +76,10 @@ describe('Forgot password service', () => {
     let newPassword2 = 'dPSJDopkepOK4DKOPAd';
 
     await changePasswordService.execute(token, newPassword);
-    const userId = await loginService.execute(fakeUser.email, newPassword);
+    const { id } = await loginService.execute(fakeUser.email, newPassword);
 
     //Valid user id (UUID)
-    expect(validate(userId)).toBe(true);
+    expect(validate(id)).toBe(true);
 
     const changePasswordProcess = changePasswordService.execute(
       fakeUser.email,

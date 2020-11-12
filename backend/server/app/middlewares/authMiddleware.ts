@@ -8,7 +8,7 @@ export const authMiddleware = (
   _: Response,
   next: NextFunction
 ) => {
-  if (!req.session!.userId) throw new AppError('User not authenticated', 401);
+  if (!req.session!.user.id) throw new AppError('User not authenticated', 401);
 
   return next();
 };
@@ -20,7 +20,7 @@ export const authAdmin = async (
 ) => {
   const usersRepository = getRepository(User);
 
-  const user = await usersRepository.findOne(req.session!.userId);
+  const user = await usersRepository.findOne(req.session!.user.id);
 
   if (!user) throw new AppError('User not found', 404);
 

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { RadioButtonOff, RadioButtonOn } from '@styled-icons/ionicons-outline';
+import { DeleteOutline } from '@styled-icons/material';
 
 export const Container = styled.div``;
 
@@ -11,10 +12,12 @@ export const Options = styled.div`
 `;
 
 export const iconsCSS = css`
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.4rem;
+  height: 1.4rem;
 
-  cursor: pointer;
+  &:not(.no-action) {
+    cursor: pointer;
+  }
 `;
 
 export const Checked = styled(RadioButtonOn)`
@@ -24,4 +27,7 @@ export const Checked = styled(RadioButtonOn)`
 export const Unchecked = styled(RadioButtonOff)`
   ${iconsCSS}
   color: red;
+`;
+export const DeleteIcon = styled(DeleteOutline)`
+  ${iconsCSS}
 `;

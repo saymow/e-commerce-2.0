@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { UsersLoginState } from '../../@types/redux/user';
 
 import { ReduxState } from '../../store';
 
@@ -14,11 +15,11 @@ const RestrictedRoute: React.FC<Props> = ({
   fallback = '/',
   ...rest
 }) => {
-  const { auth } = useSelector<typeof ReduxState>(state => state.userLogin) as {
-    auth: boolean;
-  };
+  const { user } = useSelector<typeof ReduxState>(
+    state => state.userLogin
+  ) as UsersLoginState;
 
-  return Boolean(auth) === authenticate ? (
+  return Boolean(user) === authenticate ? (
     <Route {...rest} />
   ) : (
     <Redirect to={fallback} />

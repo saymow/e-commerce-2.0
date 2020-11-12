@@ -10,7 +10,18 @@ class LoginService {
 
     const user = await usersRepository.findOne({
       where: { email },
-      select: ['password', 'id'],
+      select: [
+        'password',
+        'id',
+        'name',
+        'email',
+        'birth_date',
+        'contact_number',
+        'is_confirmed',
+        'is_admin',
+        'created_at',
+        'updated_at',
+      ],
     });
 
     if (!user) throw new AppError('Email or password incorrect', 401);
@@ -18,7 +29,7 @@ class LoginService {
     if (!(await argon2.verify(user.password, password)))
       throw new AppError('Email or password incorrect', 401);
 
-    return user.id;
+    return user;
   }
 }
 

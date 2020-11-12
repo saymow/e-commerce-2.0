@@ -52,6 +52,14 @@ const fakeAdmin = {
   contact_number: '(31) 99999-9999',
 };
 
+const fakeAdmin2 = {
+  name: 'admin',
+  email: 'admin2@admin2.com',
+  password: 'passwDord126',
+  birth_date: '2000-10-28',
+  contact_number: '(31) 99999-9999',
+};
+
 const setupEnvironment = async () => {
   const connection = await createConnection();
   await connection.runMigrations();
@@ -68,14 +76,22 @@ const setupFakeData = async () => {
   const usersRepository = getRepository(User);
   const createUserService = new CreateUserService();
 
-  await createUserService.execute(fakeUser);
-  await createUserService.execute(fakeUser2);
-  await usersRepository.save(
-    usersRepository.create({
-      ...fakeAdmin,
-      is_admin: true,
-    })
-  );
+  await Promise.all([
+    createUserService.execute(fakeUser),
+    createUserService.execute(fakeUser2),
+    usersRepository.save(
+      usersRepository.create({
+        ...fakeAdmin,
+        is_admin: true,
+      })
+    ),
+    usersRepository.save(
+      usersRepository.create({
+        ...fakeAdmin2,
+        is_admin: true,
+      })
+    ),
+  ]);
 };
 
 const tearEnvironment = async () => {
@@ -90,6 +106,7 @@ export {
   fakeProduct,
   fakeProduct2,
   fakeAdmin,
+  fakeAdmin2,
   fakeUser,
   fakeUser2,
 };

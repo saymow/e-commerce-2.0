@@ -1,6 +1,8 @@
 import AdminLoginService from '../services/session/AdminLoginService';
 import { Request, Response } from 'express';
 import { COOKIE_NAME } from '../constants';
+import UserView from '../views/api/user_view';
+
 import ChangePasswordService from '../services/session/ChangePasswordService';
 import ForgotPasswordService from '../services/session/ForgotPasswordService';
 import LoginService from '../services/session/LoginService';
@@ -11,16 +13,21 @@ class SessionController {
 
     const { email, password } = req.body;
 
-    const userId = await loginService.execute(email, password);
+    const user = await loginService.execute(email, password);
 
-    req.session!.userId = userId;
+    req.session!.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
 
-    return res.send();
+    return res.send(UserView.render(user));
   }
 
   //Check if user is authenticated
   async status(req: Request, res: Response) {
-    res.send();
+    const userData = req.session!.user;
+    res.send(UserView.render(userData));
   }
 
   async logout(req: Request, res: Response) {
@@ -68,11 +75,15 @@ export class AdminSessionController extends SessionController {
 
     const { email, password } = req.body;
 
-    const userId = await adminLoginService.execute(email, password);
+    const user = await adminLoginService.execute(email, password);
 
-    req.session!.userId = userId;
+    req.session!.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
 
-    return res.send();
+    return res.send(UserView.render(user));
   }
 }
 

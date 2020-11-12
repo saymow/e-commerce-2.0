@@ -12,7 +12,6 @@ import queue from '../../lib/Queue';
 class ForgotPasswordService {
   async execute(email: string) {
     const usersRepository = getRepository(User);
-    const emailSenderService = new EmailSenderService();
 
     const user = await usersRepository.findOne({ where: { email } });
 

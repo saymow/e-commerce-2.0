@@ -58,21 +58,23 @@ const Products: React.FC = () => {
           Create Product
         </Button>
       </Options>
-      {error && <Message>error.message</Message>}
+      {error && <Message>{error.message}</Message>}
       {loading ? (
         <Loader />
       ) : (
         <Table striped bordered hover>
           <thead>
-            <th>#</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Rating</th>
-            <th>Price</th>
-            <th>Count in stock</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Brand</th>
+              <th>Category</th>
+              <th>Rating</th>
+              <th>Price</th>
+              <th>Qty in stock</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
           </thead>
           <tbody>
             {products?.map((product, i) => (
