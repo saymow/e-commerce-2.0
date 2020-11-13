@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { UsersListState, UsersLoginState } from '../../../@types/redux/user';
+import {
+  UsersDefaultInteractionState,
+  UsersListState,
+  UsersLoginState,
+} from '../../../@types/redux/user';
 import { Table, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import {
   confirmUser,
@@ -15,7 +20,6 @@ import Message from '../../../components/Message';
 import { ReduxState } from '../../../store';
 
 import { Container, Options, Checked, Unchecked, DeleteIcon } from './styles';
-import { DefaultState } from '../../../@types/redux';
 
 const Users: React.FC = () => {
   const history = useHistory();
@@ -30,40 +34,45 @@ const Users: React.FC = () => {
   ) as UsersLoginState;
 
   const {
-    loading: confirmationLoading,
     error: confirmationError,
     success: confirmationSuccess,
     reset: confirmationReset,
+    identifier: confirmationIdentifier,
   } = useSelector<typeof ReduxState>(
     state => state.userConfirm
-  ) as DefaultState<{}>;
+  ) as UsersDefaultInteractionState;
 
   const {
-    loading: setAdminLoading,
     error: setAdminError,
     success: setAdminSuccess,
     reset: setAdminReset,
+    identifier: setAdminIdentifier,
   } = useSelector<typeof ReduxState>(
     state => state.userSetAdmin
-  ) as DefaultState<{}>;
+  ) as UsersDefaultInteractionState;
 
   const {
-    loading: deleteLoading,
     error: deleteError,
     success: deleteSuccess,
     reset: deleteReset,
+    identifier: deleteIdentifier,
   } = useSelector<typeof ReduxState>(
     state => state.userDelete
-  ) as DefaultState<{}>;
+  ) as UsersDefaultInteractionState;
 
   useEffect(() => {
     if (confirmationSuccess && confirmationReset) {
+      toast.success(
+        `User ${confirmationIdentifier} confirmed status updated successfully.`
+      );
       dispatch(confirmationReset());
       dispatch(listUsers());
     } else if (setAdminSuccess && setAdminReset) {
+      toast.success(`User ${setAdminIdentifier} set as admin successfully.`);
       dispatch(setAdminReset());
       dispatch(listUsers());
     } else if (deleteSuccess && deleteReset) {
+      toast.success(`User ${deleteIdentifier} deleted successfully.`);
       dispatch(deleteReset());
       dispatch(listUsers());
     }
@@ -75,6 +84,34 @@ const Users: React.FC = () => {
     dispatch,
     deleteSuccess,
     deleteReset,
+    confirmationIdentifier,
+    setAdminIdentifier,
+    deleteIdentifier,
+  ]);
+
+  useEffect(() => {
+    if (confirmationError && confirmationReset) {
+      toast.error(`Error on confirming user ${confirmationIdentifier}.`);
+      dispatch(confirmationReset());
+    } else if (deleteError && deleteReset) {
+      toast.error(`Error on deleting user ${deleteIdentifier}.`);
+      dispatch(deleteReset());
+    }
+    if (setAdminError && setAdminReset) {
+      toast.error(`Error on confirming user ${setAdminIdentifier}.`);
+      dispatch(setAdminReset());
+    }
+  }, [
+    confirmationError,
+    confirmationIdentifier,
+    confirmationReset,
+    deleteError,
+    deleteIdentifier,
+    deleteReset,
+    dispatch,
+    setAdminError,
+    setAdminIdentifier,
+    setAdminReset,
   ]);
 
   useEffect(() => {
@@ -91,13 +128,13 @@ const Users: React.FC = () => {
 
   function handleDeleteUser(id: string, email: string) {
     if (window.confirm(`Do you really wanna delete ${email}?`)) {
-      dispatch(deleteUser(id));
+      dispatch(deleteUser(id, email));
     }
   }
 
   function handleToggleUserAdmin(id: string, email: string) {
     if (window.confirm(`Do you really want to set ${email} as admin?`)) {
-      dispatch(setUserAdmin(id));
+      dispatch(setUserAdmin(id, email));
     }
   }
 
@@ -113,28 +150,22 @@ const Users: React.FC = () => {
         } the user ${email}?`
       )
     )
-      dispatch(confirmUser(id));
+      dispatch(confirmUser(id, email));
   }
 
   return (
     <Container>
       <Options>
         <h1>Users</h1>
-
         <Button variant="dark" size="lg" onClick={handleCreateUser}>
           Create User
         </Button>
       </Options>
 
-      {loading || confirmationLoading || setAdminLoading || deleteLoading ? (
+      {loading ? (
         <Loader />
-      ) : error || confirmationError || setAdminError || deleteError ? (
-        <Message>
-          {error?.message ||
-            confirmationError?.message ||
-            setAdminError?.message ||
-            deleteError?.message}
-        </Message>
+      ) : error ? (
+        <Message>{error.message}</Message>
       ) : (
         <Table striped bordered hover>
           <thead>

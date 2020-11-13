@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { UsersCreateState } from '../../../../@types/redux/user';
 import { createUser } from '../../../../actions/userActions';
@@ -21,10 +22,18 @@ const CreateUser: React.FC = () => {
 
   useEffect(() => {
     if (success && reset) {
+      toast.success('User created successfully.');
       history.goBack();
       dispatch(reset());
     }
   }, [success, reset, history, dispatch]);
+
+  useEffect(() => {
+    if (error && reset) {
+      toast.error(`Ooops we've got an error.`);
+      dispatch(reset());
+    }
+  }, [reset, history, dispatch, error]);
 
   function handleGoBack() {
     history.goBack();
@@ -38,8 +47,6 @@ const CreateUser: React.FC = () => {
       <FormContainer>
         {loading ? (
           <Loader />
-        ) : error ? (
-          <Message>{error.message}</Message>
         ) : (
           <Formik
             initialValues={{

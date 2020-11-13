@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, Button, Image } from 'react-bootstrap';
 import { Formik } from 'formik';
+import { toast } from 'react-toastify';
 
 import { Container, FormContainer } from './styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,10 +36,18 @@ const EditProduct: React.FC = () => {
 
   useEffect(() => {
     if (editSuccess && editReset) {
+      toast.success('Product updated successfully.');
       dispatch(editReset());
       history.goBack();
     }
   }, [editSuccess, history, dispatch, editReset]);
+
+  useEffect(() => {
+    if (editError && editReset) {
+      toast.error(editError.message);
+      dispatch(editReset());
+    }
+  }, [editSuccess, history, dispatch, editReset, editError]);
 
   useEffect(() => {
     if (!product) return;
@@ -61,8 +70,8 @@ const EditProduct: React.FC = () => {
       <FormContainer>
         {loading || editLoading ? (
           <Loader />
-        ) : error || editError ? (
-          <Message>{error?.message || editError?.message}</Message>
+        ) : error ? (
+          <Message>{error?.message}</Message>
         ) : (
           <>
             <Image
@@ -187,10 +196,11 @@ const EditProduct: React.FC = () => {
                 </Form.Group> */}
 
                   <Form.Group controlId="price">
-                    <Form.Label>Price</Form.Label>
+                    <Form.Label>Price (IN CENTS)</Form.Label>
                     <Form.Control
                       type="number"
                       placeholder="Product's price"
+                      step={100}
                       {...formik.getFieldProps('price')}
                     />
                     {formik.touched.price && formik.errors.price && (

@@ -32,7 +32,7 @@ export type ProductsCreationAction =
   | { type: 'CREATE_PRODUCT_RESET' };
 
 export type ProductsDeleteAction =
-  | { type: 'DELETE_PRODUCT_REQUEST' }
+  | { type: 'DELETE_PRODUCT_REQUEST'; payload: string }
   | {
       type: 'DELETE_PRODUCT_SUCCESS';
     }
@@ -56,5 +56,8 @@ export type ProductsShowAction =
   | { type: 'SHOW_PRODUCT_FAIL'; payload: { message: string } }
   | { type: 'SHOW_PRODUCT_RESET' };
 
+export type ProductsDefaultInteractionState = DefaultState<{
+  identifier?: string;
+}>;
 export type ProductsListState = DefaultState<{ products?: Product[] }>;
 export type ProductsShowState = DefaultState<{ product?: Product }>;

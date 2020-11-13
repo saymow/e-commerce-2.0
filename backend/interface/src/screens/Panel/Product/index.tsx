@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
+import { Button, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { ProductsListState } from '../../../@types/redux/product';
-
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import {
+  ProductsDefaultInteractionState,
+  ProductsListState,
+} from '../../../@types/redux/product';
 import { deleteProduct, listProducts } from '../../../actions/productActions';
-import { ReduxState } from '../../../store';
 import Loader from '../../../components/Loader';
 import Message from '../../../components/Message';
-
-import { Table, Button } from 'react-bootstrap';
+import { ReduxState } from '../../../store';
 import { Container, DeleteIcon, Options } from './styles';
-import { useHistory } from 'react-router-dom';
-import { DefaultState } from '../../../@types/redux';
 
 const Products: React.FC = () => {
   const history = useHistory();
@@ -20,18 +21,29 @@ const Products: React.FC = () => {
     state => state.productList
   ) as ProductsListState;
 
-  const { success: successDelete, reset: resetDelete } = useSelector<
-    typeof ReduxState
-  >(state => state.productDelete) as DefaultState<{}>;
-
-  console.log(successDelete, resetDelete);
+  const {
+    error: deleteError,
+    success: deleteSuccess,
+    reset: deleteReset,
+    identifier: deleteIdentifier,
+  } = useSelector<typeof ReduxState>(
+    state => state.productDelete
+  ) as ProductsDefaultInteractionState;
 
   useEffect(() => {
-    if (successDelete && resetDelete) {
-      dispatch(resetDelete());
+    if (deleteSuccess && deleteReset) {
+      toast.success(`Product ${deleteIdentifier} as deleted successfully.`);
+      dispatch(deleteReset());
       dispatch(listProducts());
     }
-  }, [dispatch, successDelete, resetDelete]);
+  }, [dispatch, deleteSuccess, deleteReset, deleteIdentifier]);
+
+  useEffect(() => {
+    if (deleteError && deleteReset) {
+      toast.error(`Error on deleting ${deleteIdentifier}.`);
+      dispatch(deleteReset());
+    }
+  }, [dispatch, deleteReset, deleteIdentifier, deleteError]);
 
   useEffect(() => {
     dispatch(listProducts());
@@ -47,7 +59,7 @@ const Products: React.FC = () => {
 
   function handleDeleteProduct(id: string, name: string) {
     if (window.confirm(`Do you really wanna delete ${name} ?`))
-      dispatch(deleteProduct(id));
+      dispatch(deleteProduct(id, name));
   }
 
   return (
@@ -58,9 +70,10 @@ const Products: React.FC = () => {
           Create Product
         </Button>
       </Options>
-      {error && <Message>{error.message}</Message>}
       {loading ? (
         <Loader />
+      ) : error ? (
+        <Message>{error.message}</Message>
       ) : (
         <Table striped bordered hover>
           <thead>

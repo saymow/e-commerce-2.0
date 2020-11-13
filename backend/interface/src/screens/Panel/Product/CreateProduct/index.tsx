@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { Form, Button, Image } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { Container, FormContainer } from './styles';
 import { createProduct } from '../../../../actions/productActions';
@@ -23,14 +24,21 @@ const CreateProduct: React.FC = () => {
     state => state.productCreate
   ) as DefaultState<{}>;
 
-  console.log(error);
-
   useEffect(() => {
     if (success && reset) {
+      toast.success('Product created successfully.');
       history.goBack();
       dispatch(reset());
     }
   }, [dispatch, history, success, reset]);
+
+  useEffect(() => {
+    if (error && reset) {
+      toast.error(error.message);
+      setPreviewImageUrl(null);
+      dispatch(reset());
+    }
+  }, [dispatch, history, success, reset, error]);
 
   function handleGoBack() {
     history.goBack();
@@ -42,7 +50,6 @@ const CreateProduct: React.FC = () => {
         Go back
       </Button>
       <FormContainer>
-        {error && <Message variant="danger">{error.message}</Message>}
         {loading ? (
           <Loader />
         ) : (
@@ -57,7 +64,7 @@ const CreateProduct: React.FC = () => {
               count_in_stock: 0,
             }}
             validationSchema={Yup.object().shape({
-              name: Yup.string().required().min(3).max(64),
+              name: Yup.string().required().trim().min(3).max(64),
               description: Yup.string().required().min(12).max(320),
               brand: Yup.string().required().max(36),
               category: Yup.string().required().oneOf(['Electronics']),
@@ -65,7 +72,6 @@ const CreateProduct: React.FC = () => {
               count_in_stock: Yup.number().required().min(0),
             })}
             onSubmit={(data, helpers) => {
-              console.log(data);
               if (!data.image)
                 return helpers.setFieldError('image', 'Image is required.');
               const form = new FormData();
@@ -161,10 +167,11 @@ const CreateProduct: React.FC = () => {
                 </Form.Group>
 
                 <Form.Group controlId="price">
-                  <Form.Label>Price</Form.Label>
+                  <Form.Label>Price (IN CENTS)</Form.Label>
                   <Form.Control
                     type="number"
                     placeholder="Product's price"
+                    step={100}
                     {...formik.getFieldProps('price')}
                   />
                   {formik.touched.price && formik.errors.price && (

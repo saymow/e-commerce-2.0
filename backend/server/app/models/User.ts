@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -37,6 +38,11 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  trimUniqueFields() {
+    this.email = this.email.trim();
+  }
 }
 
 export default User;

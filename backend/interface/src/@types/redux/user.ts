@@ -36,7 +36,7 @@ export type UsersListAction =
   | { type: 'USER_LIST_FAIL'; payload: { message: string } };
 
 export type UsersConfirmAction =
-  | { type: 'USER_CONFIRM_REQUEST' }
+  | { type: 'USER_CONFIRM_REQUEST'; payload: string }
   | {
       type: 'USER_CONFIRM_SUCCESS';
     }
@@ -44,7 +44,7 @@ export type UsersConfirmAction =
   | { type: 'USER_CONFIRM_RESET' };
 
 export type UsersDeleteAction =
-  | { type: 'USER_DELETE_REQUEST' }
+  | { type: 'USER_DELETE_REQUEST'; payload: string }
   | {
       type: 'USER_DELETE_SUCCESS';
     }
@@ -52,7 +52,7 @@ export type UsersDeleteAction =
   | { type: 'USER_DELETE_RESET' };
 
 export type UsersSetAdminAction =
-  | { type: 'USER_SET_ADMIN_REQUEST' }
+  | { type: 'USER_SET_ADMIN_REQUEST'; payload: string }
   | {
       type: 'USER_SET_ADMIN_SUCCESS';
     }
@@ -85,6 +85,10 @@ export type UsersShowAction =
     }
   | { type: 'USER_SHOW_FAIL'; payload: { message: string } }
   | { type: 'USER_SHOW_RESET' };
+
+export type UsersDefaultInteractionState = DefaultState<{
+  identifier?: string;
+}>;
 
 export type UsersLoginState = DefaultState<{
   user?: UserOnPing | {};

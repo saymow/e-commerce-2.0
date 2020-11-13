@@ -13,6 +13,7 @@ import {
   UsersShowState,
   UsersShowAction,
   UsersLoginState,
+  UsersDefaultInteractionState,
 } from '../@types/redux/user';
 
 export const userLoginReducer = (
@@ -50,22 +51,28 @@ export const userListReducer = (
 };
 
 export const userConfirmReducer = (
-  state: DefaultState<{}> = {},
+  state: UsersDefaultInteractionState = {},
   action: UsersConfirmAction
-): DefaultState<{}> => {
+): UsersDefaultInteractionState => {
   switch (action.type) {
     case 'USER_CONFIRM_REQUEST':
-      return { ...state, loading: true };
-    case 'USER_CONFIRM_SUCCESS':
       return {
-        loading: false,
-        success: true,
+        ...state,
+        loading: true,
+        identifier: action.payload,
         reset: () => ({
           type: 'USER_CONFIRM_RESET',
         }),
       };
+    case 'USER_CONFIRM_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
     case 'USER_CONFIRM_FAIL':
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };
@@ -77,22 +84,28 @@ export const userConfirmReducer = (
 };
 
 export const userDeleteReducer = (
-  state: DefaultState<{}> = {},
+  state: UsersDefaultInteractionState = {},
   action: UsersDeleteAction
-): DefaultState<{}> => {
+): UsersDefaultInteractionState => {
   switch (action.type) {
     case 'USER_DELETE_REQUEST':
-      return { ...state, loading: true };
-    case 'USER_DELETE_SUCCESS':
       return {
-        loading: false,
-        success: true,
+        ...state,
+        loading: true,
+        identifier: action.payload,
         reset: () => ({
           type: 'USER_DELETE_RESET',
         }),
       };
+    case 'USER_DELETE_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
     case 'USER_DELETE_FAIL':
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };
@@ -104,22 +117,28 @@ export const userDeleteReducer = (
 };
 
 export const userSetAdminReducer = (
-  state: DefaultState<{}> = {},
+  state: UsersDefaultInteractionState = {},
   action: UsersSetAdminAction
-): DefaultState<{}> => {
+): UsersDefaultInteractionState => {
   switch (action.type) {
     case 'USER_SET_ADMIN_REQUEST':
-      return { ...state, loading: true };
-    case 'USER_SET_ADMIN_SUCCESS':
       return {
-        loading: false,
-        success: true,
+        ...state,
+        loading: true,
+        identifier: action.payload,
         reset: () => ({
           type: 'USER_SET_ADMIN_RESET',
         }),
       };
+    case 'USER_SET_ADMIN_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
     case 'USER_SET_ADMIN_FAIL':
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };
@@ -164,18 +183,23 @@ export const userEditReducer = (
 ): UsersEditState => {
   switch (action.type) {
     case 'USER_EDIT_REQUEST':
-      return { ...state, loading: true };
-    case 'USER_EDIT_SUCCESS':
       return {
-        loading: false,
-        success: true,
-        user: action.payload,
+        ...state,
+        loading: true,
         reset: () => ({
           type: 'USER_EDIT_RESET',
         }),
       };
+    case 'USER_EDIT_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: action.payload,
+      };
     case 'USER_EDIT_FAIL':
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };

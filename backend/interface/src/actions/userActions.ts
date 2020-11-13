@@ -53,15 +53,20 @@ export const listUsers = () => async (dispatch: Dispatch<UsersListAction>) => {
     dispatch({ type: 'USER_LIST_SUCCESS', payload: data });
   } catch (err) {
     console.log(err);
-    dispatch({ type: 'USER_LIST_FAIL', payload: err.response.data });
+    dispatch({
+      type: 'USER_LIST_FAIL',
+      payload: {
+        message: err?.response?.data?.message || 'Internal server error!',
+      },
+    });
   }
 };
 
-export const confirmUser = (id: string) => async (
+export const confirmUser = (id: string, email: string) => async (
   dispatch: Dispatch<UsersConfirmAction>
 ) => {
   try {
-    dispatch({ type: 'USER_CONFIRM_REQUEST' });
+    dispatch({ type: 'USER_CONFIRM_REQUEST', payload: email });
 
     await axios.post(`/api/admin/users/confirm/${id}`);
 
@@ -72,11 +77,11 @@ export const confirmUser = (id: string) => async (
   }
 };
 
-export const setUserAdmin = (id: string) => async (
+export const setUserAdmin = (id: string, email: string) => async (
   dispatch: Dispatch<UsersSetAdminAction>
 ) => {
   try {
-    dispatch({ type: 'USER_SET_ADMIN_REQUEST' });
+    dispatch({ type: 'USER_SET_ADMIN_REQUEST', payload: email });
 
     await axios.post(`/api/admin/users/admin/${id}`);
 
@@ -87,11 +92,11 @@ export const setUserAdmin = (id: string) => async (
   }
 };
 
-export const deleteUser = (id: string) => async (
+export const deleteUser = (id: string, email: string) => async (
   dispatch: Dispatch<UsersDeleteAction>
 ) => {
   try {
-    dispatch({ type: 'USER_DELETE_REQUEST' });
+    dispatch({ type: 'USER_DELETE_REQUEST', payload: email });
 
     await axios.delete(`/api/admin/users/${id}`);
 

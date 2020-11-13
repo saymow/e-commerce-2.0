@@ -22,7 +22,9 @@ export const listProducts = () => async (
   } catch (err) {
     dispatch({
       type: 'LIST_PRODUCTS_FAIL',
-      payload: err.response.data,
+      payload: {
+        message: err?.response?.data?.message || 'Internal server error!',
+      },
     });
   }
 };
@@ -44,11 +46,11 @@ export const createProduct = (product: FormData) => async (
   }
 };
 
-export const deleteProduct = (id: string) => async (
+export const deleteProduct = (id: string, name: string) => async (
   dispatch: Dispatch<ProductsDeleteAction>
 ) => {
   try {
-    dispatch({ type: 'DELETE_PRODUCT_REQUEST' });
+    dispatch({ type: 'DELETE_PRODUCT_REQUEST', payload: name });
 
     await axios.delete(`/api/admin/products/${id}`);
 

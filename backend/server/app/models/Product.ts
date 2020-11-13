@@ -4,6 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  BeforeInsert,
 } from 'typeorm';
 
 @Entity('products')
@@ -11,7 +12,7 @@ class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
@@ -43,6 +44,11 @@ class Product {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  trimUniqueFields() {
+    this.name = this.name.trim();
+  }
 }
 
 export default Product;

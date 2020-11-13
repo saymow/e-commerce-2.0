@@ -1,6 +1,7 @@
 import { DefaultState } from '../@types/redux';
 import {
   ProductsCreationAction,
+  ProductsDefaultInteractionState,
   ProductsDeleteAction,
   ProductsEditAction,
   ProductsListAction,
@@ -31,17 +32,21 @@ export const productCreateReducer = (
 ): DefaultState<{}> => {
   switch (action.type) {
     case 'CREATE_PRODUCT_REQUEST':
-      return { ...state, loading: true };
-    case 'CREATE_PRODUCT_SUCCESS':
       return {
-        loading: false,
-        success: true,
+        ...state,
+        loading: true,
         reset: () => ({
           type: 'CREATE_PRODUCT_RESET',
         }),
       };
+    case 'CREATE_PRODUCT_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
     case 'CREATE_PRODUCT_FAIL':
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case 'CREATE_PRODUCT_RESET':
       return {};
     default:
@@ -50,22 +55,27 @@ export const productCreateReducer = (
 };
 
 export const productDeleteReducer = (
-  state: DefaultState<{}> = {},
+  state: ProductsDefaultInteractionState = {},
   action: ProductsDeleteAction
-): DefaultState<{}> => {
+): ProductsDefaultInteractionState => {
   switch (action.type) {
     case 'DELETE_PRODUCT_REQUEST':
-      return { ...state, loading: true };
-    case 'DELETE_PRODUCT_SUCCESS':
       return {
-        loading: false,
-        success: true,
+        ...state,
+        loading: true,
+        identifier: action.payload,
         reset: () => ({
           type: 'DELETE_PRODUCT_RESET',
         }),
       };
+    case 'DELETE_PRODUCT_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
     case 'DELETE_PRODUCT_FAIL':
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case 'DELETE_PRODUCT_RESET':
       return {};
     default:
@@ -79,17 +89,21 @@ export const productEditReducer = (
 ): DefaultState<{}> => {
   switch (action.type) {
     case 'EDIT_PRODUCT_REQUEST':
-      return { ...state, loading: true };
-    case 'EDIT_PRODUCT_SUCCESS':
       return {
-        loading: false,
-        success: true,
+        ...state,
+        loading: true,
         reset: () => ({
           type: 'EDIT_PRODUCT_RESET',
         }),
       };
+    case 'EDIT_PRODUCT_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
     case 'EDIT_PRODUCT_FAIL':
-      return { loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case 'EDIT_PRODUCT_RESET':
       return {};
     default:

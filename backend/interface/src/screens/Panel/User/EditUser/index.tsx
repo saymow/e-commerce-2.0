@@ -4,11 +4,9 @@ import { Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-import {
-  UserOnCreation,
-  UsersEditState,
-  UsersShowState,
-} from '../../../../@types/redux/user';
+import { UsersEditState, UsersShowState } from '../../../../@types/redux/user';
+import { toast } from 'react-toastify';
+
 import { editUser, showUser } from '../../../../actions/userActions';
 import Loader from '../../../../components/Loader';
 import Message from '../../../../components/Message';
@@ -21,13 +19,9 @@ const EditUser: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const {
-    loading: userShowLoading,
-    error: userShowError,
-    success: userShowSuccess,
-    reset: userShowReset,
-    user,
-  } = useSelector<typeof ReduxState>(state => state.userShow) as UsersShowState;
+  const { loading: userShowLoading, error: userShowError, user } = useSelector<
+    typeof ReduxState
+  >(state => state.userShow) as UsersShowState;
 
   const {
     loading: userEditLoading,
@@ -38,10 +32,18 @@ const EditUser: React.FC = () => {
 
   useEffect(() => {
     if (userEditSuccess && userEditReset) {
+      toast.success('User updated successfully.');
       history.goBack();
       dispatch(userEditReset());
     }
   }, [userEditSuccess, userEditReset, history, dispatch]);
+
+  useEffect(() => {
+    if (userEditError && userEditReset) {
+      toast.error(userEditError.message);
+      dispatch(userEditReset());
+    }
+  }, [userEditSuccess, userEditReset, history, dispatch, userEditError]);
 
   useEffect(() => {
     dispatch(showUser(id));
@@ -59,8 +61,8 @@ const EditUser: React.FC = () => {
       <FormContainer>
         {userShowLoading || userEditLoading ? (
           <Loader />
-        ) : userShowError || userEditError ? (
-          <Message>{userShowError?.message || userEditError?.message}</Message>
+        ) : userShowError ? (
+          <Message>{userShowError?.message}</Message>
         ) : (
           <Formik
             initialValues={{
