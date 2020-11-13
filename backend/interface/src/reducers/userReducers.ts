@@ -155,18 +155,23 @@ export const userCreateReducer = (
 ): UsersCreateState => {
   switch (action.type) {
     case 'USER_CREATE_REQUEST':
-      return { ...state, loading: true };
-    case 'USER_CREATE_SUCCESS':
       return {
-        loading: false,
-        success: true,
-        user: action.payload,
+        ...state,
+        loading: true,
         reset: () => ({
           type: 'USER_CREATE_RESET',
         }),
       };
+    case 'USER_CREATE_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        user: action.payload,
+      };
     case 'USER_CREATE_FAIL':
       return {
+        ...state,
         loading: false,
         error: action.payload,
       };

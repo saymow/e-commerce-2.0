@@ -6,6 +6,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { UsersEditState, UsersShowState } from '../../../../@types/redux/user';
 import { toast } from 'react-toastify';
+import MaskedInput from 'react-text-mask';
+import { CONTACT_NUMBER_MASK } from '../../../../utils/inputMasks';
 
 import { editUser, showUser } from '../../../../actions/userActions';
 import Loader from '../../../../components/Loader';
@@ -126,7 +128,9 @@ const EditUser: React.FC = () => {
 
                 <Form.Group controlId="contact_number">
                   <Form.Label>Contact number</Form.Label>
-                  <Form.Control
+                  <MaskedInput
+                    className="form-control"
+                    mask={CONTACT_NUMBER_MASK}
                     placeholder="User's Contact number"
                     {...formik.getFieldProps('contact_number')}
                   />

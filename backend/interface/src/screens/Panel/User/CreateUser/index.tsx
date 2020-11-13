@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import MaskedInput from 'react-text-mask';
+
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { UsersCreateState } from '../../../../@types/redux/user';
@@ -11,6 +13,8 @@ import Loader from '../../../../components/Loader';
 import Message from '../../../../components/Message';
 import { ReduxState } from '../../../../store';
 import { Container, FormContainer } from './styles';
+
+import { CONTACT_NUMBER_MASK } from '../../../../utils/inputMasks';
 
 const CreateUser: React.FC = () => {
   const history = useHistory();
@@ -30,7 +34,7 @@ const CreateUser: React.FC = () => {
 
   useEffect(() => {
     if (error && reset) {
-      toast.error(`Ooops we've got an error.`);
+      toast.error(error.message);
       dispatch(reset());
     }
   }, [reset, history, dispatch, error]);
@@ -53,6 +57,7 @@ const CreateUser: React.FC = () => {
               name: '',
               email: '',
               password: '',
+              confirmationPassword: '',
               contact_number: '',
               birth_date: '',
             }}
@@ -63,15 +68,26 @@ const CreateUser: React.FC = () => {
                 .required()
                 .min(8)
                 .matches(/(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])/), // Minimum eight characters, letter upper and lower case and numbers.
+              confirmationPassword: Yup.string()
+                .required()
+                .oneOf(
+                  [Yup.ref('password')],
+                  'Password confirmation does not match.'
+                ),
               birth_date: Yup.string()
                 .required()
-                .matches(/^\d{4}\-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/), // yyyy-mm-dd
+                .matches(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/), // yyyy-mm-dd
               contact_number: Yup.string()
                 .required()
                 .matches(/^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}-[0-9]{4}$/), // (xx) xxxxx-xxxx
             })}
             onSubmit={(data, helpers) => {
-              dispatch(createUser(data));
+              dispatch(
+                createUser({
+                  ...data,
+                  confirmationPassword: null,
+                })
+              );
             }}
           >
             {formik => (
@@ -117,9 +133,26 @@ const CreateUser: React.FC = () => {
                   )}
                 </Form.Group>
 
+                <Form.Group controlId="confirmationPassword">
+                  <Form.Label>Confirmation Password</Form.Label>
+                  <Form.Control
+                    placeholder="User's password confirmation"
+                    type="password"
+                    {...formik.getFieldProps('confirmationPassword')}
+                  />
+                  {formik.touched.confirmationPassword &&
+                    formik.errors.confirmationPassword && (
+                      <Form.Control.Feedback type="invalid" className="d-block">
+                        {formik.errors.confirmationPassword}
+                      </Form.Control.Feedback>
+                    )}
+                </Form.Group>
+
                 <Form.Group controlId="contact_number">
                   <Form.Label>Contact number</Form.Label>
-                  <Form.Control
+                  <MaskedInput
+                    className="form-control"
+                    mask={CONTACT_NUMBER_MASK}
                     placeholder="User's Contact number"
                     {...formik.getFieldProps('contact_number')}
                   />
