@@ -8,6 +8,7 @@ const router = Router();
 
 router.get('/', adminProductController.index);
 router.get('/:id', adminProductController.show);
+router.get('/top', adminProductController.topRated);
 router.post('/', upload.multer.single('image'), adminProductController.create);
 router.put('/:id', adminProductController.update);
 router.delete('/:id', adminProductController.destroy);

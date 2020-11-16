@@ -1,8 +1,13 @@
 import React from "react";
+import { GetStaticProps } from "next";
+import Image from "next/image";
 import styled from "styled-components";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import api from "../services/api";
+import { IProduct } from "../@types";
+import TopRatedProducts from "../components/TopRatedProducts";
 
 const Container = styled.div`
   background: url("/img/background.jpg");
@@ -37,6 +42,10 @@ export const Title = styled.h2`
 `;
 
 export const AboutUsContainer = styled.article`
+  margin: 5rem 0;
+`;
+
+export const AboutUsContent = styled.div`
   margin: 2rem 0;
   display: flex;
   justify-content: space-evenly;
@@ -69,36 +78,49 @@ export const Parallax = styled.div`
   }
 `;
 
-const Home: React.FC = () => {
+const ProductsSection = styled.article`
+  margin: 5rem 0;
+`;
+
+interface Props {
+  products: Array<IProduct>;
+}
+
+const Home: React.FC<Props> = ({ products }) => {
   return (
     <Container>
       <Header />
       <Main />
       <Content>
         <ContentWrapper>
-          <Title>Featured products</Title>
-          <Title>About us</Title>
+          <ProductsSection>
+            <Title>Featured products</Title>
+            <TopRatedProducts products={products} />
+          </ProductsSection>
           <AboutUsContainer>
-            <AboutUsSection>
-              <h3>Our mission</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                sit amet tellus accumsan, dictum quam et, dictum tortor. Nullam
-                ac pulvinar orci. Suspendisse ante augue, ullamcorper eget
-                tellus ac, eleifend sollicitudin augue. Ut eu erat id dui dictum
-                mollis et in tellus.
-              </p>
-            </AboutUsSection>
-            <AboutUsSection>
-              <h3>Our promise</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                sit amet tellus accumsan, dictum quam et, dictum tortor. Nullam
-                ac pulvinar orci. Suspendisse ante augue, ullamcorper eget
-                tellus ac, eleifend sollicitudin augue. Ut eu erat id dui dictum
-                mollis et in tellus.
-              </p>
-            </AboutUsSection>
+            <Title>About us</Title>
+            <AboutUsContent>
+              <AboutUsSection>
+                <h3>Our mission</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                  sit amet tellus accumsan, dictum quam et, dictum tortor.
+                  Nullam ac pulvinar orci. Suspendisse ante augue, ullamcorper
+                  eget tellus ac, eleifend sollicitudin augue. Ut eu erat id dui
+                  dictum mollis et in tellus.
+                </p>
+              </AboutUsSection>
+              <AboutUsSection>
+                <h3>Our promise</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                  sit amet tellus accumsan, dictum quam et, dictum tortor.
+                  Nullam ac pulvinar orci. Suspendisse ante augue, ullamcorper
+                  eget tellus ac, eleifend sollicitudin augue. Ut eu erat id dui
+                  dictum mollis et in tellus.
+                </p>
+              </AboutUsSection>
+            </AboutUsContent>
           </AboutUsContainer>
         </ContentWrapper>
       </Content>
@@ -111,3 +133,14 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { data } = await api.get("/products/top");
+
+  return {
+    props: {
+      products: data,
+    },
+    revalidate: 60 * 5, // in seconds
+  };
+};

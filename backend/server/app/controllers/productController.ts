@@ -51,6 +51,20 @@ class ProductController {
 
     return res.send(ProductView.render(product));
   }
+
+  async topRated(req: Request, res: Response) {
+    const qty = 3;
+    const productsRepository = getRepository(Product);
+
+    const products = await productsRepository.find({
+      take: qty,
+      order: {
+        rating: 'DESC',
+      },
+    });
+
+    return res.send(ProductView.renderMany(products));
+  }
 }
 
 export class AdminProductController extends ProductController {

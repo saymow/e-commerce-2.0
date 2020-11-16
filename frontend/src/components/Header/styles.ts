@@ -7,6 +7,7 @@ export const Container = styled.header`
   left: 0;
   width: 100%;
   height: 6rem;
+  z-index: 2;
 
   background: #fff;
 `;
@@ -28,6 +29,11 @@ export const Title = styled.h1`
   font-size: 3rem;
   text-transform: uppercase;
   letter-spacing: 0.125em;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 `;
 
 export const Nav = styled.nav``;

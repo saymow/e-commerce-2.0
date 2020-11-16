@@ -15,7 +15,9 @@ const Header: React.FC = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>eCommerce</Title>
+        <Title>
+          <Link href="/">eCommerce</Link>
+        </Title>
         <Nav>
           <NavItems>
             <Item>
