@@ -1,43 +1,6 @@
-import { IProduct } from "../@types";
 import { PAGE_NAVIGATION_LIMIT } from "../utils/constants";
 
-export interface ShopPaginationState {
-  loading?: boolean;
-  total?: number;
-  currentPage?: number;
-  pages?: number;
-  limit: number;
-  products: IProduct[];
-  error?: {
-    message: String;
-  };
-}
-
-export type ShopPaginationAction =
-  | {
-      type: "SHOP-PAGINATION-SETUP";
-      payload: {
-        products: IProduct[];
-        total: number;
-        pages: number;
-      };
-    }
-  | {
-      type: "SHOP-PAGINATION-REQUEST";
-    }
-  | {
-      type: "SHOP-PAGINATION-SUCCESS";
-      payload: {
-        products: IProduct[];
-        currentPage: number;
-      };
-    }
-  | {
-      type: "SHOP-PAGINATION-FAIL";
-      payload: {
-        message: String;
-      };
-    };
+import { ShopPaginationAction, ShopPaginationState } from "../@types/redux";
 
 export const shopPaginationReducer = (
   state: ShopPaginationState = {

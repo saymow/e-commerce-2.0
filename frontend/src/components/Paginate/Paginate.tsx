@@ -46,6 +46,7 @@ const Paginate: React.FC<{ pages: number }> = ({ pages }) => {
       />
       {[...Array(pages)].map((_, i) => (
         <PaginateButton
+          key={i}
           onClick={() => routePaginate(i + 1)}
           className={i + 1 === currentPage ? "active" : "none"}
         >

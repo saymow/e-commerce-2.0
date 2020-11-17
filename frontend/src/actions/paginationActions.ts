@@ -1,6 +1,6 @@
 import { ThunkDispatch } from "redux-thunk";
 import { IProduct } from "../@types";
-import { ShopPaginationAction } from "../reducers/paginationReducers";
+import { ShopPaginationAction } from "../@types/redux";
 import api from "../services/api";
 import { reduxStore } from "../store";
 
@@ -31,7 +31,6 @@ export const shopPaginate = (page: string) => async (
     const offset = limit * (parseInt(page) - 1);
 
     const { data } = await api.get(`/products?limit=${limit}&offset=${offset}`);
-    console.log(data);
 
     dispatch({
       type: "SHOP-PAGINATION-SUCCESS",

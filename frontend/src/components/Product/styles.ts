@@ -1,6 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { Heart } from "@styled-icons/boxicons-regular";
+import { HeartDislike } from "@styled-icons/ionicons-outline";
 
 interface Props {
   detailBgColor: string;
@@ -55,7 +56,7 @@ export const Price = styled.span`
   padding: 0.5rem;
 `;
 
-export const WishListIcon = styled(Heart)`
+const iconsCSS = css`
   position: absolute;
   right: 0;
   top: 0;
@@ -63,4 +64,12 @@ export const WishListIcon = styled(Heart)`
 
   width: 3rem;
   height: 3rem;
+`;
+
+export const WishListIcon = styled(Heart)`
+  ${iconsCSS}
+`;
+
+export const UnsetWishListIcon = styled(HeartDislike)`
+  ${iconsCSS}
 `;
