@@ -2,6 +2,7 @@ import path from 'path';
 import express from 'express';
 import session from 'express-session';
 import ConnectRedis from 'connect-redis';
+import cors from 'cors';
 import 'express-async-errors';
 import 'module-alias/register';
 
@@ -15,6 +16,8 @@ import { COOKIE_NAME, COOKIE_SECRET, __prod__ } from './app/constants';
 const app = express();
 const redisStore = ConnectRedis(session);
 const uploadsPath = path.resolve(__dirname, '..', 'uploads');
+
+app.use(cors());
 
 app.use(
   session({

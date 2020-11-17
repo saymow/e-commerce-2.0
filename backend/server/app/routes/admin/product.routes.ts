@@ -7,6 +7,7 @@ const adminProductController = new AdminProductController();
 const router = Router();
 
 router.get('/', adminProductController.index);
+router.get('/count', adminProductController.indexCount);
 router.get('/:id', adminProductController.show);
 router.get('/top', adminProductController.topRated);
 router.post('/', upload.multer.single('image'), adminProductController.create);

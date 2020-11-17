@@ -25,8 +25,6 @@ class ProductController {
 
         order[prop] = value === 'DESC' ? 'DESC' : 'ASC';
       });
-
-      console.log(order);
     }
 
     const options = {
@@ -38,6 +36,14 @@ class ProductController {
     const products = await productsRepository.find(options);
 
     return res.send(ProductView.renderMany(products));
+  }
+
+  async indexCount(req: Request, res: Response) {
+    const productsRepository = getRepository(Product);
+
+    const count = await productsRepository.count();
+
+    return res.send({ count });
   }
 
   async show(req: Request, res: Response) {

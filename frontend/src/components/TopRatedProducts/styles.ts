@@ -21,8 +21,8 @@ export const Details = styled.div`
   padding: 0.5rem;
   box-sizing: content-box;
 
-  background: #d5dadd;
-  background: #d0cccc;
+  background: #5f00ba;
+  color: #fff;
 `;
 
 export const Name = styled.p`
