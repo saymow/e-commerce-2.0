@@ -1,13 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { shopPaginationReducer } from "./reducers/paginationReducers";
+import { shopPaginationReducer } from "./reducers/paginateReducers";
 import { wishListReducer } from "./reducers/wishListReducers";
 import { ON_SERVER } from "./utils/constants";
+import { sideBarReducer } from "./reducers/sideBarReducer";
 
 export const reduxStore = {
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,
+  sideBar: sideBarReducer,
 };
 
 const reducer = combineReducers(reduxStore);

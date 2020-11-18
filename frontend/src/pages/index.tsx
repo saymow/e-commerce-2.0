@@ -3,11 +3,11 @@ import { GetStaticProps } from "next";
 import Image from "next/image";
 import styled from "styled-components";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../components/ui/Header";
+import Footer from "../components/ui/Footer";
 import api from "../services/api";
 import { IProduct } from "../@types";
-import TopRatedProducts from "../components/TopRatedProducts";
+import TopRatedProducts from "../components/ui/TopRatedProducts";
 
 const Container = styled.div`
   background: url("/img/background.jpg");

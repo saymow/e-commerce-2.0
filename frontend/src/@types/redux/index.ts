@@ -57,3 +57,19 @@ export type WishListAction =
         id: string;
       };
     };
+
+export interface AsideBarState {
+  show?: boolean;
+  content?: "WISHLIST_VIEW" | "CART_VIEW";
+}
+
+export type AsideBarAction =
+  | {
+      type: "ASIDE_SHOW_WISHLIST";
+    }
+  | {
+      type: "ASIDE_SHOW_CART";
+    }
+  | {
+      type: "ASIDE_CLOSE";
+    };

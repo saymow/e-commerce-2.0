@@ -3,18 +3,18 @@ import { GetStaticProps } from "next";
 
 import styled from "styled-components";
 
-import Layout from "../../components/Layout";
+import Layout from "../../components/ui/Layout";
 import { IProduct } from "../../@types";
 import api from "../../services/api";
 import Link from "next/link";
-import Product from "../../components/Product";
+import Product from "../../components/ui/Product";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxStore } from "../../store";
-import { ShopPaginationState } from "../../reducers/paginationReducers";
 import { setupPagination, shopPaginate } from "../../actions/paginationActions";
-import Paginate from "../../components/Paginate";
+import Paginate from "../../components/ui/Paginate";
 import { PAGE_NAVIGATION_LIMIT } from "../../utils/constants";
+import { ShopPaginationState } from "../../@types/redux";
 
 const Container = styled.main`
   margin: 2rem 0;

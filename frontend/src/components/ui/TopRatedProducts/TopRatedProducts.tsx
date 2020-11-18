@@ -1,17 +1,16 @@
-import React from "react";
 import Image from "next/image";
-import { IProduct } from "../../@types";
-
+import React from "react";
+import { IProduct } from "../../../@types";
+import { priceFormmater } from "../../../utils";
+import Rating from "../Rating";
 import {
   Container,
-  Product,
   Details,
   Name,
-  RatingContainer,
   Price,
+  Product,
+  RatingContainer,
 } from "./styles";
-import { priceFormmater } from "../../utils";
-import Rating from "../Rating";
 
 interface Props {
   products: IProduct[];

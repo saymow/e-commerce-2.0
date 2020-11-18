@@ -1,14 +1,14 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IProduct } from "../../@types";
-import { WishListState } from "../../@types/redux";
+import { IProduct } from "../../../@types";
+import { WishListState } from "../../../@types/redux";
 import {
   addProductToWishList,
   removeProductFromWishList,
-} from "../../actions/wishListActions";
-import { reduxStore } from "../../store";
-import { priceFormmater, randomColor } from "../../utils";
+} from "../../../actions/wishListActions";
+import { reduxStore } from "../../../store";
+import { priceFormmater, randomColor } from "../../../utils";
 import {
   Container,
   Details,

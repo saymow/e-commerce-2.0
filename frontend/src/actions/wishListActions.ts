@@ -1,12 +1,12 @@
 import { IProduct } from "../@types";
-import { WishListAction, WishListState } from "../@types/redux";
+import { AsideBarAction, WishListAction, WishListState } from "../@types/redux";
 
 const saveWishList = (wishList: WishListState) => {
   localStorage.setItem("eCommerce2.0:wishList", JSON.stringify(wishList));
 };
 
 export const addProductToWishList = (product: IProduct) => async (
-  dispatch: (arg0: WishListAction) => void,
+  dispatch: (arg0: WishListAction | AsideBarAction) => void,
   getState: any
 ) => {
   dispatch({
@@ -16,11 +16,14 @@ export const addProductToWishList = (product: IProduct) => async (
 
   const { wishList } = getState();
 
+  dispatch({
+    type: "ASIDE_SHOW_WISHLIST",
+  });
   saveWishList(wishList);
 };
 
 export const removeProductFromWishList = (id: string) => async (
-  dispatch: (arg0: WishListAction) => void,
+  dispatch: (arg0: WishListAction | AsideBarAction) => void,
   getState: any
 ) => {
   dispatch({
@@ -32,5 +35,8 @@ export const removeProductFromWishList = (id: string) => async (
 
   const { wishList } = getState();
 
+  dispatch({
+    type: "ASIDE_SHOW_WISHLIST",
+  });
   saveWishList(wishList);
 };

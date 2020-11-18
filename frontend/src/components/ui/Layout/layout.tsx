@@ -2,6 +2,7 @@ import React from "react";
 
 import Header from "../Header";
 import Footer from "../Footer";
+import SideBar from "../SideBar";
 
 import { Container, Content } from "./styles";
 
