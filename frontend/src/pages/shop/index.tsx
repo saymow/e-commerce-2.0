@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
 
 import styled from "styled-components";
@@ -7,7 +7,7 @@ import Layout from "../../components/ui/Layout";
 import { IProduct } from "../../@types";
 import api from "../../services/api";
 import Link from "next/link";
-import Product from "../../components/ui/Product";
+import Product, { ProductShimmer } from "../../components/ui/Product";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxStore } from "../../store";
@@ -19,10 +19,14 @@ import { ShopPaginationState } from "../../@types/redux";
 const Container = styled.main`
   margin: 2rem 0;
 `;
+
 const FilterOptions = styled.div``;
+
 const ProductsSection = styled.section`
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
+  padding: 1rem;
 `;
 
 interface Props {
@@ -47,15 +51,18 @@ const Shop: React.FC<Props> = ({ products, total, pages }) => {
       <Container>
         <FilterOptions></FilterOptions>
         <ProductsSection>
-          {loading ? (
-            <h1>Loadinng</h1>
-          ) : (
-            shopProducts.map((product) => (
-              <Link key={product.id} href={`/shop/${encodeURI(product.name)}`}>
-                <Product product={product} />
-              </Link>
-            ))
-          )}
+          {loading
+            ? [...Array(PAGE_NAVIGATION_LIMIT)].map((_, i) => (
+                <ProductShimmer key={i} />
+              ))
+            : shopProducts.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/shop/${encodeURI(product.name)}`}
+                >
+                  <Product product={product} />
+                </Link>
+              ))}
         </ProductsSection>
         <Paginate pages={pages} />
       </Container>
