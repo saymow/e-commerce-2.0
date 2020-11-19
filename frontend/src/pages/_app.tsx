@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Provider } from "react-redux";
 import store from "../store";
 
-import SideBar from "../components/ui/SideBar";
+import SideBar from "../components/core/SideBar";
 
 import GlobalStyles from "../styles/globalStyles";
 

@@ -3,8 +3,8 @@ import { GetStaticProps } from "next";
 import Image from "next/image";
 import styled from "styled-components";
 
-import Header from "../components/ui/Header";
-import Footer from "../components/ui/Footer";
+import Header from "../components/core/Header";
+import Footer from "../components/core/Footer";
 import api from "../services/api";
 import { IProduct } from "../@types";
 import TopRatedProducts from "../components/ui/TopRatedProducts";

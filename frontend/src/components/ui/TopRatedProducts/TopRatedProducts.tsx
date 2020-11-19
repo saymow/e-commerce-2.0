@@ -26,7 +26,7 @@ const TopRatedProducts: React.FC<Props> = ({ products }) => {
           <Image
             src={product.image}
             alt={product.name}
-            height={480}
+            height={400}
             width={420}
           />
           <Details>

@@ -3,22 +3,23 @@ import { GetStaticProps } from "next";
 
 import styled from "styled-components";
 
-import Layout from "../../components/ui/Layout";
+import Layout from "../../components/core/Layout";
 import { IProduct } from "../../@types";
 import api from "../../services/api";
-import Link from "next/link";
 import Product, { ProductShimmer } from "../../components/ui/Product";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxStore } from "../../store";
 import { setupPagination, shopPaginate } from "../../actions/paginationActions";
 import Paginate from "../../components/ui/Paginate";
-import { PAGE_NAVIGATION_LIMIT } from "../../utils/constants";
+import {
+  PAGE_NAVIGATION_LIMIT,
+  REVALIDATE_DEFAULT_TIME,
+} from "../../utils/constants";
 import { ShopPaginationState } from "../../@types/redux";
+import Link from "../../components/core/Link";
 
-const Container = styled.main`
-  margin: 2rem 0;
-`;
+const Container = styled.main``;
 
 const FilterOptions = styled.div``;
 
@@ -27,6 +28,17 @@ const ProductsSection = styled.section`
   flex-direction: row;
   flex-wrap: wrap;
   padding: 1rem;
+
+  a {
+    flex: 0 1 32%;
+
+    margin: 1rem 0;
+
+    &:nth-child(3n + 2) {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  }
 `;
 
 interface Props {
@@ -56,10 +68,7 @@ const Shop: React.FC<Props> = ({ products, total, pages }) => {
                 <ProductShimmer key={i} />
               ))
             : shopProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/shop/${encodeURI(product.name)}`}
-                >
+                <Link key={product.id} href={`/product/${product.id}`}>
                   <Product product={product} />
                 </Link>
               ))}
@@ -72,7 +81,7 @@ const Shop: React.FC<Props> = ({ products, total, pages }) => {
 
 export default Shop;
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async () => {
   const { data } = await api.get(`/products?limit=${PAGE_NAVIGATION_LIMIT}}`);
   const {
     data: { count },
@@ -86,6 +95,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       total: count,
       pages,
     },
-    revalidate: 60 * 5,
+    revalidate: REVALIDATE_DEFAULT_TIME,
   };
 };

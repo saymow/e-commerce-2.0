@@ -7,6 +7,7 @@ import {
   addProductToWishList,
   removeProductFromWishList,
 } from "../../../actions/wishListActions";
+import useWishList from "../../../hooks/useWishList";
 import { reduxStore } from "../../../store";
 import { priceFormmater, randomColor } from "../../../utils";
 import {
@@ -19,27 +20,31 @@ import {
 } from "./styles";
 
 const Product: React.FC<{ product: IProduct }> = ({ product }) => {
-  const dispatch = useDispatch();
-  const [isWishListed, setIsWishListed] = useState(false);
+  const [isWishListed, addToWishList, removeFromWishList] = useWishList(
+    product
+  );
 
-  const { products } = useSelector<typeof reduxStore>(
-    (state) => state.wishList
-  ) as WishListState;
+  // const dispatch = useDispatch();
+  // const [isWishListed, setIsWishListed] = useState(false);
 
-  useEffect(() => {
-    const isOnWishList = products.find(
-      (_product) => _product.id === product.id
-    );
-    setIsWishListed(Boolean(isOnWishList));
-  }, [products]);
+  // const { products } = useSelector<typeof reduxStore>(
+  //   (state) => state.wishList
+  // ) as WishListState;
 
-  const handleAddToWishlist = () => {
-    dispatch(addProductToWishList(product));
-  };
+  // useEffect(() => {
+  //   const isOnWishList = products.find(
+  //     (_product) => _product.id === product.id
+  //   );
+  //   setIsWishListed(Boolean(isOnWishList));
+  // }, [products]);
 
-  const handleDeleteFromWishlist = () => {
-    dispatch(removeProductFromWishList(product.id));
-  };
+  // const handleAddToWishlist = () => {
+  //   dispatch(addProductToWishList(product));
+  // };
+
+  // const handleDeleteFromWishlist = () => {
+  //   dispatch(removeProductFromWishList(product.id));
+  // };
 
   return (
     <Container detailBgColor={randomColor()}>
@@ -53,9 +58,9 @@ const Product: React.FC<{ product: IProduct }> = ({ product }) => {
         <Name>{product.name}</Name>
         <Price>{priceFormmater(product.price)}</Price>
         {isWishListed ? (
-          <UnsetWishListIcon onClick={handleDeleteFromWishlist} />
+          <UnsetWishListIcon onClick={removeFromWishList} />
         ) : (
-          <WishListIcon onClick={handleAddToWishlist} />
+          <WishListIcon onClick={addToWishList} />
         )}
       </Details>
     </Container>

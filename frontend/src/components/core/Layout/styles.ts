@@ -8,7 +8,7 @@ export const Container = styled.div`
 export const Content = styled.div`
   flex-grow: 1;
 
-  margin: 6rem auto 0 auto;
+  margin: 8rem auto 2rem auto;
   max-width: 1260px;
   width: 100%;
 `;
