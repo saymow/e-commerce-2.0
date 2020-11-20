@@ -74,7 +74,7 @@ export type AsideBarAction =
       type: "ASIDE_CLOSE";
     };
 
-interface CartProduct extends IProduct {
+export interface CartProduct extends IProduct {
   qty: number;
 }
 

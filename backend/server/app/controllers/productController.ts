@@ -65,7 +65,7 @@ class ProductController {
     const products = await productsRepository.find({
       take: qty,
       order: {
-        rating: 'DESC',
+        rating: 'ASC',
       },
     });
 
