@@ -1,18 +1,12 @@
 import { FC } from "react";
-import { Provider } from "react-redux";
-import store from "../store";
 
-import SideBar from "../components/core/SideBar";
-
-import GlobalStyles from "../styles/globalStyles";
+import Context from "../context";
 
 function MyApp({ Component, pageProps }: { Component: FC; pageProps: any }) {
   return (
-    <Provider store={store}>
-      <GlobalStyles />
+    <Context>
       <Component {...pageProps} />
-      <SideBar />
-    </Provider>
+    </Context>
   );
 }
 

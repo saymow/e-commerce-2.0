@@ -12,8 +12,8 @@ export const Container = styled.div`
   span {
     &.active,
     &:hover {
-      background: #5f00ba;
-      color: #fff;
+      background: var(--secondary-Color);
+      color: var(--bg-Color);
     }
   }
 `;

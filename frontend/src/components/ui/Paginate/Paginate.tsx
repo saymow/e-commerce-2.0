@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ShopPaginationState } from "../../../@types/redux";
-import { shopPaginate } from "../../../actions/paginationActions";
+import { shopPaginate } from "../../../actions/uiActions";
 import { reduxStore } from "../../../store";
 
 import { Container, BackArrow, ForwardArrow, PaginateButton } from "./styles";

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.footer`
-  background: #fff;
+  background: var(--bg-Color);
   height: 15rem;
 `;
 
@@ -24,7 +24,7 @@ export const Section = styled.section`
     margin: 1rem 0;
     text-transform: uppercase;
 
-    border-bottom: 1px solid #343a40;
+    border-bottom: 1px solid var(--tertiary-Color);
   }
 `;
 
@@ -57,6 +57,6 @@ export const Button = styled.button`
   padding: 0.8125rem;
   border: 0;
 
-  background: #343a40;
-  color: #fff;
+  background: var(--tertiary-Color);
+  color: var(--bg-Color);
 `;

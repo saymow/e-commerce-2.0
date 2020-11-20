@@ -32,7 +32,7 @@ export const Container = styled.aside<{ duration: number }>`
 
   max-width: 25rem;
   width: 100%;
-  background: #fff;
+  background: var(--bg-Color);
 
   transition: ${({ duration }) => `transform ${duration}ms ease`};
 
@@ -43,7 +43,13 @@ export const Container = styled.aside<{ duration: number }>`
   }
 
   display: grid;
-  grid-template-rows: 1fr 4fr;
+  grid-template-rows: 8fr 15fr 77fr;
+`;
+
+export const Options = styled.div`
+  padding-left: 4rem;
+  display: flex;
+  align-items: center;
 `;
 
 export const AsideHeader = styled.header`
@@ -65,16 +71,16 @@ export const AsideNavItem = styled.div`
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #eee;
+  border: 1px solid var(--lighter-Grey);
 
   h1 {
     font-size: 1.6rem;
   }
 
   &.selected {
-    border-bottom: solid 0.5rem #5f00ba;
+    border-bottom: solid 0.5rem var(--secondary-Color);
     svg {
-      fill: #5f00ba;
+      fill: var(--secondary-Color);
     }
   }
 `;

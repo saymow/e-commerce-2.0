@@ -112,3 +112,11 @@ export type CartAction =
   | {
       type: "RESET_CART";
     };
+
+export interface ThemeState {
+  theme: "dark-mode" | "light-mode";
+}
+
+export type ThemeAction = {
+  type: "SWICTH-THEME";
+};

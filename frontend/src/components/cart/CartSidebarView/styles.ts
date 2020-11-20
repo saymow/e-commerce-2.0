@@ -17,6 +17,12 @@ export const ProductList = styled.ul`
     background-color: #000;
     border-radius: 0.4rem;
   }
+
+  > li {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--lighter-Grey);
+    }
+  }
 `;
 
 export const Information = styled.div`

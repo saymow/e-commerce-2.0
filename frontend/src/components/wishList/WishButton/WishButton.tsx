@@ -1,10 +1,7 @@
-import React from "react";
-import styled, { css } from "styled-components";
 import { Heart } from "@styled-icons/boxicons-regular";
 import { HeartDislike } from "@styled-icons/ionicons-outline";
-import { useSelector } from "react-redux";
-import { WishListState } from "../../../@types/redux";
-import { reduxStore } from "../../../store";
+import React from "react";
+import styled, { css } from "styled-components";
 import { IProduct } from "../../../@types";
 import useWishList from "../../../hooks/useWishList";
 
@@ -13,8 +10,8 @@ const Container = styled.button`
 
   padding: 0.475rem;
 
-  background: #fff;
-  border: 1px solid #000;
+  background: var(--bg-Color);
+  border: 1px solid var(--primary-Color);
 `;
 
 const IconsCSS = css`

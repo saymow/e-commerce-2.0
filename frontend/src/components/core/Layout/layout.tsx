@@ -1,18 +1,34 @@
 import React from "react";
-
-import Header from "../Header";
+import { useSelector } from "react-redux";
+import { ThemeProvider } from "styled-components";
+import { ThemeState } from "../../../@types/redux";
+import SideBar from "../../../components/core/SideBar";
+import { reduxStore } from "../../../store";
+import GlobalStyles from "../../../styles/globalStyles";
+import { darkTheme, lightTheme } from "../../../styles/theme";
 import Footer from "../Footer";
-import SideBar from "../SideBar";
-
+import Header from "../Header";
 import { Container, Content } from "./styles";
 
-const Layout: React.FC = ({ children }) => {
+interface Props {
+  contained?: boolean;
+}
+
+const Layout: React.FC<Props> = ({ children, contained = true }) => {
+  const { theme } = useSelector<typeof reduxStore>(
+    (state) => state.theme
+  ) as ThemeState;
+
   return (
-    <Container>
-      <Header />
-      <Content>{children}</Content>
-      <Footer />
-    </Container>
+    <ThemeProvider theme={theme === "light-mode" ? lightTheme : darkTheme}>
+      <GlobalStyles />
+      <Container>
+        <Header />
+        <Content contained={contained}>{children}</Content>
+        <SideBar />
+        <Footer />
+      </Container>
+    </ThemeProvider>
   );
 };
 

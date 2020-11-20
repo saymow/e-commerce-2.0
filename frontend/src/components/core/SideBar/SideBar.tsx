@@ -5,10 +5,11 @@ import {
   closeAsidebar,
   openCart,
   openWishlist,
-} from "../../../actions/sideBarActions";
+} from "../../../actions/uiActions";
 import { reduxStore } from "../../../store";
 import CartSidebarView from "../../cart/CartSidebarView";
 import WishlistSidebarView from "../../wishList/WishlistSidebarView";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 import {
   Container,
@@ -20,6 +21,7 @@ import {
   CartIcon,
   WishListIcon,
   Content,
+  Options,
 } from "./styles";
 
 const SideBar: React.FC = () => {
@@ -56,6 +58,9 @@ const SideBar: React.FC = () => {
   return (
     <Wrapper>
       <Container ref={asideRef} duration={SLIDE_DURATION}>
+        <Options>
+          <ThemeSwitcher />
+        </Options>
         <CloseIcon onClick={handleCloseAsideBar} />
         <AsideHeader>
           <AsideNav>

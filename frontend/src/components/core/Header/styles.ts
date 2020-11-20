@@ -9,7 +9,7 @@ export const Container = styled.header`
   height: 6rem;
   z-index: 2;
 
-  background: #fff;
+  background: var(--bg-Color);
 `;
 
 export const Wrapper = styled.div`
@@ -61,31 +61,31 @@ export const Item = styled.li`
 export const CartIconContainer = styled.span<{ qty: number }>`
   position: relative;
 
+  cursor: pointer;
+
   &:after {
     display: ${({ qty }) => (qty === 0 ? "none" : "block")};
     content: "${({ qty }) => qty}";
 
     position: absolute;
-    z-index: 2;
     top: 50%;
     left: 50%;
 
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
-    padding: 0.1rem;
+    padding: 0.115rem;
 
     font-size: 1rem;
     font-weight: bold;
     text-align: center;
 
-    background: #5f00ba;
-    color: #fff;
+    background: var(--secondary-Color);
+    color: var(--bg-Color);
   }
 `;
 
 export const CartIcon = styled(Cart2)`
-  cursor: pointer;
   height: 2.2rem;
   width: 2.2rem;
 

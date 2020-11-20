@@ -1,13 +1,11 @@
 import React from "react";
 import { GetStaticProps } from "next";
-import Image from "next/image";
 import styled from "styled-components";
 
-import Header from "../components/core/Header";
-import Footer from "../components/core/Footer";
 import api from "../services/api";
 import { IProduct } from "../@types";
 import TopRatedProducts from "../components/ui/TopRatedProducts";
+import Layout from "../components/core/Layout";
 
 const Container = styled.div`
   background: url("/img/background.jpg");
@@ -23,7 +21,7 @@ export const Main = styled.main`
 `;
 
 export const Content = styled.div`
-  background: #fff;
+  background: var(--secondary-bg-Color);
 `;
 
 export const ContentWrapper = styled.div`
@@ -88,47 +86,47 @@ interface Props {
 
 const Home: React.FC<Props> = ({ products }) => {
   return (
-    <Container>
-      <Header />
-      <Main />
-      <Content>
-        <ContentWrapper>
-          <ProductsSection>
-            <Title>Featured products</Title>
-            <TopRatedProducts products={products} />
-          </ProductsSection>
-          <AboutUsContainer>
-            <Title>About us</Title>
-            <AboutUsContent>
-              <AboutUsSection>
-                <h3>Our mission</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                  sit amet tellus accumsan, dictum quam et, dictum tortor.
-                  Nullam ac pulvinar orci. Suspendisse ante augue, ullamcorper
-                  eget tellus ac, eleifend sollicitudin augue. Ut eu erat id dui
-                  dictum mollis et in tellus.
-                </p>
-              </AboutUsSection>
-              <AboutUsSection>
-                <h3>Our promise</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                  sit amet tellus accumsan, dictum quam et, dictum tortor.
-                  Nullam ac pulvinar orci. Suspendisse ante augue, ullamcorper
-                  eget tellus ac, eleifend sollicitudin augue. Ut eu erat id dui
-                  dictum mollis et in tellus.
-                </p>
-              </AboutUsSection>
-            </AboutUsContent>
-          </AboutUsContainer>
-        </ContentWrapper>
-      </Content>
-      <Parallax>
-        <h2>The products you need.</h2>
-      </Parallax>
-      <Footer />
-    </Container>
+    <Layout contained={false}>
+      <Container>
+        <Main />
+        <Content>
+          <ContentWrapper>
+            <ProductsSection>
+              <Title>Featured products</Title>
+              <TopRatedProducts products={products} />
+            </ProductsSection>
+            <AboutUsContainer>
+              <Title>About us</Title>
+              <AboutUsContent>
+                <AboutUsSection>
+                  <h3>Our mission</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nulla sit amet tellus accumsan, dictum quam et, dictum
+                    tortor. Nullam ac pulvinar orci. Suspendisse ante augue,
+                    ullamcorper eget tellus ac, eleifend sollicitudin augue. Ut
+                    eu erat id dui dictum mollis et in tellus.
+                  </p>
+                </AboutUsSection>
+                <AboutUsSection>
+                  <h3>Our promise</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nulla sit amet tellus accumsan, dictum quam et, dictum
+                    tortor. Nullam ac pulvinar orci. Suspendisse ante augue,
+                    ullamcorper eget tellus ac, eleifend sollicitudin augue. Ut
+                    eu erat id dui dictum mollis et in tellus.
+                  </p>
+                </AboutUsSection>
+              </AboutUsContent>
+            </AboutUsContainer>
+          </ContentWrapper>
+        </Content>
+        <Parallax>
+          <h2>The products you need.</h2>
+        </Parallax>
+      </Container>
+    </Layout>
   );
 };
 

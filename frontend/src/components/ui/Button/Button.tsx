@@ -12,16 +12,16 @@ const Container = styled.button<Props>`
   font-weight: 500;
 
   padding: 0.8rem 5rem;
-  border: 1px solid #000;
+  border: 1px solid var(--primary-Color);
 
-  background: #000;
-  color: #fff;
+  background: var(--primary-Color);
+  color: var(--bg-Color);
 
   transition: all 200ms ease;
 
   &:hover {
-    background: #fff;
-    color: #000;
+    background: var(--bg-Color);
+    color: var(--primary-Color);
   }
 
   width: ${({ variant }) => (variant == "fill" ? "100%" : "auto")};

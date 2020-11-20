@@ -13,10 +13,6 @@ export const Container = styled.div`
   > div {
     padding: 1rem;
   }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid #ccc;
-  }
 `;
 
 export const ProductImage = styled.div``;
@@ -76,5 +72,5 @@ export const RemoveProductIcon = styled(Trash)`
 
   width: 2rem;
   height: 2rem;
-  fill: #ccc;
+  fill: var(--lighter-Grey);
 `;

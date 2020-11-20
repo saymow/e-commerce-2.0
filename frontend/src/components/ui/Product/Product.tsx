@@ -1,15 +1,9 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { IProduct } from "../../../@types";
-import { WishListState } from "../../../@types/redux";
-import {
-  addProductToWishList,
-  removeProductFromWishList,
-} from "../../../actions/wishListActions";
+import { useProvideRandomColors } from "../../../hooks/useProvideRandomColors";
 import useWishList from "../../../hooks/useWishList";
-import { reduxStore } from "../../../store";
-import { priceFormmater, randomColor } from "../../../utils";
+import { priceFormmater } from "../../../utils";
 import {
   Container,
   Details,
@@ -20,34 +14,13 @@ import {
 } from "./styles";
 
 const Product: React.FC<{ product: IProduct }> = ({ product }) => {
+  const randomColor = useProvideRandomColors();
   const [isWishListed, addToWishList, removeFromWishList] = useWishList(
     product
   );
 
-  // const dispatch = useDispatch();
-  // const [isWishListed, setIsWishListed] = useState(false);
-
-  // const { products } = useSelector<typeof reduxStore>(
-  //   (state) => state.wishList
-  // ) as WishListState;
-
-  // useEffect(() => {
-  //   const isOnWishList = products.find(
-  //     (_product) => _product.id === product.id
-  //   );
-  //   setIsWishListed(Boolean(isOnWishList));
-  // }, [products]);
-
-  // const handleAddToWishlist = () => {
-  //   dispatch(addProductToWishList(product));
-  // };
-
-  // const handleDeleteFromWishlist = () => {
-  //   dispatch(removeProductFromWishList(product.id));
-  // };
-
   return (
-    <Container detailBgColor={randomColor()}>
+    <Container detailBgColor={randomColor}>
       <Image
         src={product.image}
         layout="responsive"

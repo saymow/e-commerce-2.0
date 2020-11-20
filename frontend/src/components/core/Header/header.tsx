@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartState } from "../../../@types/redux";
-import { openCart } from "../../../actions/sideBarActions";
+import { openCart } from "../../../actions/uiActions";
 import { reduxStore } from "../../../store";
 import Link from "../Link";
 

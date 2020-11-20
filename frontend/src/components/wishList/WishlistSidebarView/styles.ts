@@ -12,7 +12,7 @@ export const Container = styled.ul`
     width: 0.4rem;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: #000;
+    background-color: var(--primary-Color);
     border-radius: 0.4rem;
   }
 `;
@@ -31,7 +31,7 @@ export const Item = styled.li`
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--lighter-Grey);
   }
 
   transition: background 200ms ease;
@@ -68,5 +68,5 @@ export const UnwishlistIcon = styled(HeartDislike)`
   width: 4rem;
   height: 4rem;
 
-  fill: #5f00ba;
+  fill: var(--secondary-Color);
 `;

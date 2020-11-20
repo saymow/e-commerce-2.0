@@ -1,10 +1,13 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { shopPaginationReducer } from "./reducers/paginateReducers";
 import { wishListReducer } from "./reducers/wishListReducers";
 import { LOCAL_STORAGE_PREFIX, ON_SERVER } from "./utils/constants";
-import { sideBarReducer } from "./reducers/sideBarReducer";
+import {
+  sideBarReducer,
+  shopPaginationReducer,
+  themeReducer,
+} from "./reducers/uiReducers";
 import { cartReducer } from "./reducers/cartReducers";
 
 export const reduxStore = {
@@ -12,6 +15,7 @@ export const reduxStore = {
   wishList: wishListReducer,
   sideBar: sideBarReducer,
   cart: cartReducer,
+  theme: themeReducer,
 };
 
 const reducer = combineReducers(reduxStore);
@@ -31,8 +35,13 @@ if (!ON_SERVER) {
     ? JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}cart`) as string)
     : undefined;
 
+  const themeFromStorage = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}theme`)
+    ? localStorage.getItem(`${LOCAL_STORAGE_PREFIX}theme`)
+    : undefined;
+
   if (wishListFromStorage) initialState["wishList"] = wishListFromStorage;
   if (cartFromStorage) initialState["cart"] = cartFromStorage;
+  if (themeFromStorage) initialState["theme"] = cartFromStorage;
 }
 
 const middlewares = [thunk];

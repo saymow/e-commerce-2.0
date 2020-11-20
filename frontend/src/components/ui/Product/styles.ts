@@ -23,7 +23,7 @@ export const Container = styled.article<Props>`
   div h2,
   div span,
   div svg {
-    background: #fff;
+    background: var(--secondary-bg-Color);
     transition-property: background, color;
     transition-duration: 500ms;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -33,7 +33,8 @@ export const Container = styled.article<Props>`
   &:hover div span,
   &:hover div svg {
     background: ${({ detailBgColor }) => detailBgColor};
-    color: #fff;
+    color: var(--bg-Color);
+    fill: var(--bg-Color);
   }
 `;
 

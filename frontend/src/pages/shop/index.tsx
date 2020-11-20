@@ -1,23 +1,20 @@
-import React, { useState } from "react";
 import { GetStaticProps } from "next";
-
-import styled from "styled-components";
-
-import Layout from "../../components/core/Layout";
-import { IProduct } from "../../@types";
-import api from "../../services/api";
-import Product, { ProductShimmer } from "../../components/ui/Product";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxStore } from "../../store";
-import { setupPagination, shopPaginate } from "../../actions/paginationActions";
+import styled from "styled-components";
+import { IProduct } from "../../@types";
+import { ShopPaginationState } from "../../@types/redux";
+import { setupPagination } from "../../actions/uiActions";
+import Layout from "../../components/core/Layout";
+import Link from "../../components/core/Link";
 import Paginate from "../../components/ui/Paginate";
+import Product, { ProductShimmer } from "../../components/ui/Product";
+import api from "../../services/api";
+import { reduxStore } from "../../store";
 import {
   PAGE_NAVIGATION_LIMIT,
   REVALIDATE_DEFAULT_TIME,
 } from "../../utils/constants";
-import { ShopPaginationState } from "../../@types/redux";
-import Link from "../../components/core/Link";
 
 const Container = styled.main``;
 
