@@ -58,6 +58,32 @@ export const Item = styled.li`
   }
 `;
 
+export const CartIconContainer = styled.span<{ qty: number }>`
+  position: relative;
+
+  &:after {
+    display: ${({ qty }) => (qty === 0 ? "none" : "block")};
+    content: "${({ qty }) => qty}";
+
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    padding: 0.1rem;
+
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+
+    background: #5f00ba;
+    color: #fff;
+  }
+`;
+
 export const CartIcon = styled(Cart2)`
   cursor: pointer;
   height: 2.2rem;

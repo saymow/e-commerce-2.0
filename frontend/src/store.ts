@@ -3,13 +3,15 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { shopPaginationReducer } from "./reducers/paginateReducers";
 import { wishListReducer } from "./reducers/wishListReducers";
-import { ON_SERVER } from "./utils/constants";
+import { LOCAL_STORAGE_PREFIX, ON_SERVER } from "./utils/constants";
 import { sideBarReducer } from "./reducers/sideBarReducer";
+import { cartReducer } from "./reducers/cartReducers";
 
 export const reduxStore = {
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,
   sideBar: sideBarReducer,
+  cart: cartReducer,
 };
 
 const reducer = combineReducers(reduxStore);
@@ -17,13 +19,20 @@ const reducer = combineReducers(reduxStore);
 const initialState: Record<any, any> = {};
 
 if (!ON_SERVER) {
-  const wishListFromStorage = localStorage.getItem("eCommerce2.0:wishList")
-    ? JSON.parse(localStorage.getItem("eCommerce2.0:wishList") as string)
+  const wishListFromStorage = localStorage.getItem(
+    `${LOCAL_STORAGE_PREFIX}wishList`
+  )
+    ? JSON.parse(
+        localStorage.getItem(`${LOCAL_STORAGE_PREFIX}wishList`) as string
+      )
     : undefined;
 
-  if (wishListFromStorage) {
-    initialState["wishList"] = wishListFromStorage;
-  }
+  const cartFromStorage = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}cart`)
+    ? JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}cart`) as string)
+    : undefined;
+
+  if (wishListFromStorage) initialState["wishList"] = wishListFromStorage;
+  if (cartFromStorage) initialState["cart"] = cartFromStorage;
 }
 
 const middlewares = [thunk];

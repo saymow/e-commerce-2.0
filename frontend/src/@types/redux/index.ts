@@ -73,3 +73,42 @@ export type AsideBarAction =
   | {
       type: "ASIDE_CLOSE";
     };
+
+interface CartProduct extends IProduct {
+  qty: number;
+}
+
+interface Address {
+  street: string;
+  neighborhood: string;
+  postalCode: string;
+  location: {
+    city: string;
+    state: string;
+  };
+}
+
+export interface CartState {
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  products: CartProduct[];
+  address?: Address;
+}
+
+export type CartAction =
+  | {
+      type: "ADD_PRODUCT_CART";
+      payload: IProduct;
+    }
+  | {
+      type: "REMOVE_PRODUCT_CART";
+      payload: {
+        id: string;
+        force?: boolean;
+      };
+    }
+  | { type: "UPDATE_TOTAL_CART" }
+  | {
+      type: "RESET_CART";
+    };

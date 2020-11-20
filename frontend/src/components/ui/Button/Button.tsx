@@ -1,8 +1,12 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
 import styled from "styled-components";
 
-const Container = styled.button`
+interface Props {
+  variant?: "normal" | "fill";
+}
+
+const Container = styled.button<Props>`
   cursor: pointer;
   font-size: 1.1rem;
   font-weight: 500;
@@ -19,10 +23,20 @@ const Container = styled.button`
     background: #fff;
     color: #000;
   }
+
+  width: ${({ variant }) => (variant == "fill" ? "100%" : "auto")};
 `;
 
-const Button: React.FC = ({ children }) => {
-  return <Container>{children}</Container>;
+const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & Props> = ({
+  children,
+  variant = "normal",
+  ...rest
+}) => {
+  return (
+    <Container variant={variant} {...rest}>
+      {children}
+    </Container>
+  );
 };
 
 export default Button;

@@ -7,6 +7,7 @@ import {
   openWishlist,
 } from "../../../actions/sideBarActions";
 import { reduxStore } from "../../../store";
+import CartSidebarView from "../../cart/CartSidebarView";
 import WishlistSidebarView from "../../wishList/WishlistSidebarView";
 
 import {
@@ -78,7 +79,7 @@ const SideBar: React.FC = () => {
           {content === "WISHLIST_VIEW" ? (
             <WishlistSidebarView />
           ) : (
-            <h1>todo</h1>
+            <CartSidebarView />
           )}
         </Content>
       </Container>

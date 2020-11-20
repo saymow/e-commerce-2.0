@@ -1,8 +1,12 @@
 import { IProduct } from "../@types";
 import { AsideBarAction, WishListAction, WishListState } from "../@types/redux";
+import { LOCAL_STORAGE_PREFIX } from "../utils/constants";
 
 const saveWishList = (wishList: WishListState) => {
-  localStorage.setItem("eCommerce2.0:wishList", JSON.stringify(wishList));
+  localStorage.setItem(
+    `${LOCAL_STORAGE_PREFIX}wishList`,
+    JSON.stringify(wishList)
+  );
 };
 
 export const addProductToWishList = (product: IProduct) => async (

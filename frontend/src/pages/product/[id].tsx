@@ -1,8 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { IProduct } from "../../@types";
+import { addProductToCart } from "../../actions/cartActions";
 import Layout from "../../components/core/Layout";
 import Button from "../../components/ui/Button";
 import WishButton from "../../components/wishList/WishButton";
@@ -61,6 +63,12 @@ const Options = styled.div`
 `;
 
 const Product: React.FC<{ product: IProduct }> = ({ product }) => {
+  const dispatch = useDispatch();
+
+  const handleAddProductToCart = () => {
+    dispatch(addProductToCart(product));
+  };
+
   return (
     <Layout>
       <Container>
@@ -82,7 +90,7 @@ const Product: React.FC<{ product: IProduct }> = ({ product }) => {
           </Information>
           <Options>
             <WishButton product={product} />
-            <Button>ADD TO CART</Button>
+            <Button onClick={handleAddProductToCart}>ADD TO CART</Button>
           </Options>
         </DetailsContainer>
       </Container>
