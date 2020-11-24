@@ -1,5 +1,10 @@
-import { LoginAction, SessionAction } from "../@types/redux";
+import {
+  LoginAction,
+  SessionAction,
+  RegisterAction,
+} from "../@types/redux/user";
 import api from "../services/api";
+import { SignUpInitialState } from "../utils/schemas";
 
 export const session = () => async (
   dispatch: (arg0: SessionAction) => void
@@ -34,6 +39,26 @@ export const login = (email: string, password: string) => async (
     console.log(err);
     dispatch({
       type: "USER_LOGIN-FAIL",
+      payload: {
+        message: err?.response?.data?.message || "Internal server error!",
+      },
+    });
+  }
+};
+
+export const register = (user: typeof SignUpInitialState) => async (
+  dispatch: (arg0: RegisterAction) => void
+) => {
+  try {
+    dispatch({ type: "USER_REGISTER-REQUEST" });
+
+    const { data } = await api.post("/users", user);
+
+    dispatch({ type: "USER_REGISTER-SUCCESS", payload: data });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: "USER_REGISTER-FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },

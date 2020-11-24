@@ -1,9 +1,11 @@
 import {
-  SessionState,
-  SessionAction,
+  RegisterAction,
+  RegisterState,
   LoginAction,
   LoginState,
-} from "../@types/redux";
+  SessionAction,
+  SessionState,
+} from "../@types/redux/user";
 
 export const userSessionReducer = (
   state: SessionState = { loading: true },
@@ -42,6 +44,29 @@ export const userLoginReducer = (
     case "USER_LOGIN-FAIL":
       return { ...state, loading: false, error: action.payload };
     case "USER_LOGIN-RESET":
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const userRegisterReducer = (
+  state: RegisterState = {},
+  action: RegisterAction
+): RegisterState => {
+  switch (action.type) {
+    case "USER_REGISTER-REQUEST":
+      return {
+        loading: true,
+        reset: () => ({ type: "USER-REGISTER-RESET" }),
+      };
+    case "USER_REGISTER-SUCCESS": {
+      const { email, name } = action.payload;
+      return { ...state, loading: false, user: { email, name }, success: true };
+    }
+    case "USER_REGISTER-FAIL":
+      return { ...state, loading: false, error: action.payload };
+    case "USER_REGISTER-RESET":
       return {};
     default:
       return state;

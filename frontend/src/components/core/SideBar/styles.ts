@@ -2,6 +2,7 @@ import styled, { css, keyframes } from "styled-components";
 import { CloseSquareOutline } from "@styled-icons/evaicons-outline";
 import { Cart2 } from "@styled-icons/bootstrap";
 import { Heart } from "@styled-icons/boxicons-regular";
+import { LogOut } from "@styled-icons/entypo";
 
 export const Wrapper = styled.div`
   position: fixed;
@@ -50,6 +51,16 @@ export const Options = styled.div`
   padding-left: 4rem;
   display: flex;
   align-items: center;
+`;
+
+export const LogoutIcon = styled(LogOut)`
+  cursor: pointer;
+  margin-left: auto;
+
+  width: 2.8rem;
+  height: 2.8em;
+
+  fill: var(--primary-Color);
 `;
 
 export const AsideHeader = styled.header`

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import MaskedInput from "react-text-mask";
 
 export const Container = styled.div`
   position: relative;
@@ -13,7 +14,7 @@ export const Label = styled.label`
   font-size: 1.2rem;
 `;
 
-export const CustomInput = styled.input`
+export const CustomInput = styled(MaskedInput)`
   width: 100%;
   font-size: 1.2rem;
   padding: 0.8rem 0.5rem;

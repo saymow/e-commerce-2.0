@@ -2,10 +2,6 @@ import React, { ButtonHTMLAttributes } from "react";
 
 import styled from "styled-components";
 
-interface Props {
-  variant?: "normal" | "fill";
-}
-
 const Container = styled.button<Props>`
   cursor: pointer;
   font-size: 1.1rem;
@@ -30,6 +26,10 @@ const Container = styled.button<Props>`
 
   width: ${({ variant }) => (variant == "fill" ? "100%" : "auto")};
 `;
+
+interface Props {
+  variant?: "normal" | "fill";
+}
 
 const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & Props> = ({
   children,

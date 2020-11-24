@@ -22,6 +22,7 @@ import {
   WishListIcon,
   Content,
   Options,
+  LogoutIcon,
 } from "./styles";
 
 const SideBar: React.FC = () => {
@@ -60,6 +61,7 @@ const SideBar: React.FC = () => {
       <Container ref={asideRef} duration={SLIDE_DURATION}>
         <Options>
           <ThemeSwitcher />
+          <LogoutIcon />
         </Options>
         <CloseIcon onClick={handleCloseAsideBar} />
         <AsideHeader>

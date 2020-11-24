@@ -1,18 +1,18 @@
 import { Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { CustomFC } from "../@types";
-import { LoginState } from "../@types/redux/user";
-import { login } from "../actions/userActions";
+import { RegisterState } from "../@types/redux/user";
+import { register } from "../actions/userActions";
 import Layout from "../components/core/Layout";
-import Link from "../components/core/Link";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { reduxStore } from "../store";
-import { SignInSchema, SignInInitialState } from "../utils/schemas";
+import { CONTACT_NUMBER_MASK } from "../utils/masks";
+import { SignUpSchema, SignUpInitialState } from "../utils/schemas";
 
 const Container = styled.div`
   margin: 1rem 0;
@@ -38,25 +38,21 @@ const Form = styled.form`
   }
 `;
 
-export const SignupLink = styled.div`
-  color: var(--secondary-Color);
-`;
-
-const SignIn: CustomFC = () => {
+const SignUp: CustomFC = () => {
   const router = useRouter();
 
   const dispatch = useDispatch();
 
-  const { error, loading, reset, success } = useSelector<typeof reduxStore>(
-    (state) => state.userLogin
-  ) as LoginState;
+  const { loading, success, error, reset } = useSelector<typeof reduxStore>(
+    (state) => state.userRegister
+  ) as RegisterState;
 
   useEffect(() => {
     if (error && reset) {
       toast.error(error.message);
       dispatch(reset());
     }
-  }, [error]);
+  }, [error, reset]);
 
   useEffect(() => {
     if (success) router.push("/profile");
@@ -66,33 +62,40 @@ const SignIn: CustomFC = () => {
     <Layout>
       <Container>
         <Formik
-          initialValues={SignInInitialState}
-          validationSchema={SignInSchema}
+          initialValues={SignUpInitialState}
+          validationSchema={SignUpSchema}
           onSubmit={(values) => {
-            const { email, password } = values;
-
-            dispatch(login(email, password));
+            dispatch(register(values));
           }}
         >
-          {({ handleSubmit, isSubmitting }) => (
+          {({ handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
-              <h1>Login</h1>
-              <Input id="email" type="text" placeholder="Email" />
+              <h1>Register</h1>
+              <Input id="email" placeholder="Email address" type="email" />
+              <Input id="name" placeholder="Name" />
               <Input id="password" type="password" placeholder="Password" />
-              <Button type="submit" variant="fill" disabled={loading}>
-                Sign in
+              <Input
+                id="passwordConfirmation"
+                type="password"
+                placeholder="Password confirmation"
+              />
+              <Input id="birth_date" type="date" placeholder="Birth date" />
+              <Input
+                id="contact_number"
+                placeholder="Contact number"
+                mask={CONTACT_NUMBER_MASK}
+              />
+              <Button variant="fill" disabled={loading}>
+                Sign up
               </Button>
             </Form>
           )}
         </Formik>
-        <SignupLink>
-          <Link href="/signup"> Try out Sign up.</Link>
-        </SignupLink>
       </Container>
     </Layout>
   );
 };
 
-SignIn.restrictVisibility = "public";
+SignUp.restrictVisibility = "public";
 
-export default SignIn;
+export default SignUp;
