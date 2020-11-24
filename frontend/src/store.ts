@@ -9,8 +9,11 @@ import {
   themeReducer,
 } from "./reducers/uiReducers";
 import { cartReducer } from "./reducers/cartReducers";
+import { userLoginReducer, userSessionReducer } from "./reducers/userReducers";
 
 export const reduxStore = {
+  userSession: userSessionReducer,
+  userLogin: userLoginReducer,
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,
   sideBar: sideBarReducer,

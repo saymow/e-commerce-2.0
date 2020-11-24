@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CartState } from "../../../@types/redux";
 import { openCart } from "../../../actions/uiActions";
+import useSession from "../../../hooks/useSession";
 import { reduxStore } from "../../../store";
 import Link from "../Link";
 
@@ -19,6 +20,7 @@ import {
 const Header: React.FC = () => {
   const [productsQty, setProductsQty] = useState(0);
   const dispatch = useDispatch();
+  const [user, loading] = useSession();
 
   const { products } = useSelector<typeof reduxStore>(
     (state) => state.cart
@@ -48,7 +50,11 @@ const Header: React.FC = () => {
               <Link href="/contact">Contact</Link>
             </Item>
             <Item>
-              <Link href="/profile">Profile</Link>
+              {user ? (
+                <Link href="/profile">Profile</Link>
+              ) : (
+                <Link href="/signin">Sign in</Link>
+              )}
             </Item>
             <Item>
               <CartIconContainer qty={productsQty} onClick={handleOpenCart}>

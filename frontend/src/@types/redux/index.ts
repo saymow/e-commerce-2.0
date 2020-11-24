@@ -6,6 +6,7 @@ export interface DefaultState {
   error?: {
     message: String;
   };
+  reset?: () => { type: string };
 }
 
 export interface ShopPaginationState extends DefaultState {
@@ -120,3 +121,56 @@ export interface ThemeState {
 export type ThemeAction = {
   type: "SWICTH-THEME";
 };
+
+export interface SessionState extends DefaultState {
+  user?: {
+    name: string;
+    email: string;
+  };
+  auth?: boolean;
+}
+
+export type SessionAction =
+  | {
+      type: "SESSION-REQUEST";
+    }
+  | {
+      type: "SESSION-SUCCESS";
+      payload: {
+        name: string;
+        email: string;
+      };
+    }
+  | {
+      type: "SESSION-FAIL";
+      payload: {
+        message: String;
+      };
+    }
+  | { type: "SESSION-LOGOUT" };
+
+export interface LoginState extends DefaultState {
+  user?: {
+    name: string;
+    email: string;
+  };
+}
+
+export type LoginAction =
+  | {
+      type: "USER_LOGIN-REQUEST";
+    }
+  | {
+      type: "USER_LOGIN-SUCCESS";
+      payload: {
+        name: string;
+        email: string;
+      };
+    }
+  | {
+      type: "USER_LOGIN-FAIL";
+      payload: {
+        message: String;
+      };
+    }
+  | { type: "USER_LOGIN-RESET" };

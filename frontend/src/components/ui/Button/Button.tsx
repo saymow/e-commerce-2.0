@@ -24,6 +24,10 @@ const Container = styled.button<Props>`
     color: var(--primary-Color);
   }
 
+  &:disabled {
+    filter: brightness(60%);
+  }
+
   width: ${({ variant }) => (variant == "fill" ? "100%" : "auto")};
 `;
 

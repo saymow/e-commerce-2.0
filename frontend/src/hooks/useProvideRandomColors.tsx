@@ -31,5 +31,9 @@ export const useProvideRandomColors = () => {
     ],
   };
 
-  return pool[theme][Math.floor(Math.random() * pool[theme].length)];
+  let activeTheme = theme || "light-mode";
+
+  return pool[activeTheme][
+    Math.floor(Math.random() * pool[activeTheme].length)
+  ];
 };

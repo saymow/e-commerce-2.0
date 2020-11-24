@@ -1,3 +1,9 @@
+import { FC } from "react";
+
+export type CustomFC<t = {}> = FC<t> & {
+  restrictVisibility: "public" | "private";
+};
+
 export interface IProduct {
   id: string;
   name: string;
