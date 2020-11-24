@@ -16,7 +16,7 @@ export const userSessionReducer = (
       return { ...state, loading: true };
     case "SESSION-SUCCESS": {
       const { email, name } = action.payload;
-      return { ...state, loading: false, user: { email, name } };
+      return { ...state, loading: false, user: { email, name }, auth: true };
     }
     case "SESSION-FAIL":
       return { ...state, loading: false, error: action.payload };

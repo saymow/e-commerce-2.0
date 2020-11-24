@@ -10,20 +10,19 @@ import { reduxStore } from "../../../store";
 import CartSidebarView from "../../cart/CartSidebarView";
 import WishlistSidebarView from "../../wishList/WishlistSidebarView";
 import ThemeSwitcher from "../ThemeSwitcher";
-
 import {
-  Container,
-  Wrapper,
-  CloseIcon,
   AsideHeader,
   AsideNav,
   AsideNavItem,
   CartIcon,
-  WishListIcon,
+  CloseIcon,
+  Container,
   Content,
   Options,
-  LogoutIcon,
+  WishListIcon,
+  Wrapper,
 } from "./styles";
+import UserInfo from "./UserInfo";
 
 const SideBar: React.FC = () => {
   const dispatch = useDispatch();
@@ -61,7 +60,7 @@ const SideBar: React.FC = () => {
       <Container ref={asideRef} duration={SLIDE_DURATION}>
         <Options>
           <ThemeSwitcher />
-          <LogoutIcon />
+          <UserInfo />
         </Options>
         <CloseIcon onClick={handleCloseAsideBar} />
         <AsideHeader>

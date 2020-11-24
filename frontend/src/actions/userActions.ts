@@ -26,6 +26,24 @@ export const session = () => async (
   }
 };
 
+export const sessionLogout = () => async (
+  dispatch: (arg0: SessionAction) => void
+) => {
+  try {
+    await api.post("/sessions/logout");
+
+    dispatch({ type: "SESSION-LOGOUT" });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: "SESSION-FAIL",
+      payload: {
+        message: err?.response?.data?.message || "Internal server error!",
+      },
+    });
+  }
+};
+
 export const login = (email: string, password: string) => async (
   dispatch: (arg0: LoginAction) => void
 ) => {
