@@ -17,6 +17,8 @@ export default {
   add(name: any, data: any) {
     const queue = this.queues.find(_queue => _queue.name === name);
 
+    if (!queue) throw new Error(`${name} is a invalid queue.`);
+
     queue?.bull.add(data);
   },
   process() {

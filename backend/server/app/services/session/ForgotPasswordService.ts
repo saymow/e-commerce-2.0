@@ -28,7 +28,7 @@ class ForgotPasswordService {
 
     queue.add('RecoverPasswordMail', {
       email: user.email,
-      subject: 'Rocover password',
+      subject: 'Recover password',
       html: forgotPasswordEmailView(user.name, token),
     });
 

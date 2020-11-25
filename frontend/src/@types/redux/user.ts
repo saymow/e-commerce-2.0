@@ -104,25 +104,6 @@ export interface RegisterState extends DefaultState {
   };
 }
 
-export type RegisterAction =
-  | {
-      type: "USER_REGISTER_REQUEST";
-    }
-  | {
-      type: "USER_REGISTER_SUCCESS";
-      payload: {
-        name: string;
-        email: string;
-      };
-    }
-  | {
-      type: "USER_REGISTER_FAIL";
-      payload: {
-        message: String;
-      };
-    }
-  | { type: "USER_REGISTER_RESET" };
-
 export interface UserDetailsState extends DefaultState {
   user?: User;
 }
@@ -142,3 +123,18 @@ export type UserDetailsAction =
       };
     }
   | { type: "USER_DETAILS_RESET" };
+
+export type UserConfirmationAction =
+  | {
+      type: "USER_CONFIRMATION_MAIL_REQUEST";
+    }
+  | {
+      type: "USER_CONFIRMATION_MAIL_SUCCESS";
+    }
+  | {
+      type: "USER_CONFIRMATION_MAIL_FAIL";
+      payload: {
+        message: String;
+      };
+    }
+  | { type: "USER_CONFIRMATION_MAIL_RESET" };

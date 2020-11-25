@@ -1,3 +1,4 @@
+import { DefaultState } from "../@types/redux";
 import {
   RegisterAction,
   RegisterState,
@@ -7,6 +8,7 @@ import {
   SessionState,
   UserDetailsState,
   UserDetailsAction,
+  UserConfirmationAction,
 } from "../@types/redux/user";
 
 export const userSessionReducer = (
@@ -93,6 +95,28 @@ export const userDetailsReducer = (
     case "USER_DETAILS_FAIL":
       return { ...state, loading: false, error: action.payload };
     case "USER_DETAILS_RESET":
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const userConfirmationReducer = (
+  state: DefaultState = {},
+  action: UserConfirmationAction
+): DefaultState => {
+  switch (action.type) {
+    case "USER_CONFIRMATION_MAIL_REQUEST":
+      return {
+        loading: true,
+        reset: () => ({ type: "USER_CONFIRMATION_MAIL_RESET" }),
+      };
+    case "USER_CONFIRMATION_MAIL_SUCCESS": {
+      return { ...state, loading: false, success: true };
+    }
+    case "USER_CONFIRMATION_MAIL_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    case "USER_CONFIRMATION_MAIL_RESET":
       return {};
     default:
       return state;

@@ -23,6 +23,8 @@ class EmailSenderService {
       subject: mail.subject,
       html: mail.html,
     });
+
+    console.log(`Email sent to ${mail.email}`.green);
   }
 }
 

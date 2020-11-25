@@ -83,6 +83,8 @@ export class AdminSessionController extends SessionController {
       email: user.email,
     };
 
+    console.log(req.session);
+
     return res.send(UserView.render(user));
   }
 }

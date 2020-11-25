@@ -4,6 +4,7 @@ import {
   RegisterAction,
   User,
   UserDetailsAction,
+  UserConfirmationAction,
 } from "../@types/redux/user";
 import api from "../services/api";
 import { SignUpInitialState } from "../utils/schemas";
@@ -96,11 +97,33 @@ export const userDetails = () => async (
 
     const { data } = await api.get("/users");
 
+    console.log(data);
+
     dispatch({ type: "USER_DETAILS_SUCCESS", payload: data });
   } catch (err) {
     console.log(err);
     dispatch({
       type: "USER_DETAILS_FAIL",
+      payload: {
+        message: err?.response?.data?.message || "Internal server error!",
+      },
+    });
+  }
+};
+
+export const userConfirmation = () => async (
+  dispatch: (arg0: UserConfirmationAction) => void
+) => {
+  try {
+    dispatch({ type: "USER_CONFIRMATION_MAIL_REQUEST" });
+
+    await api.post("/users/confirm");
+
+    dispatch({ type: "USER_CONFIRMATION_MAIL_SUCCESS" });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: "USER_CONFIRMATION_MAIL_FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },

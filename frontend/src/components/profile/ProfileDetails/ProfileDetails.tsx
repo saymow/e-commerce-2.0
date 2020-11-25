@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, { ChangeEvent, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { DefaultState } from "../../../@types/redux";
 import { UserDetailsState } from "../../../@types/redux/user";
-import { userDetails } from "../../../actions/userActions";
+import { userConfirmation, userDetails } from "../../../actions/userActions";
 import { reduxStore } from "../../../store";
 import { dateFormmater } from "../../../utils";
 import Button from "../../ui/Button";
@@ -23,9 +25,31 @@ const ProfileDetails: React.FC = () => {
     (state) => state.userDetails
   ) as UserDetailsState;
 
+  const {
+    success: confirmationSuccess,
+    reset: confirmationReset,
+    error: confirmationError,
+  } = useSelector<typeof reduxStore>(
+    (state) => state.userConfirmation
+  ) as DefaultState;
+
   useEffect(() => {
     dispatch(userDetails());
   }, []);
+
+  useEffect(() => {
+    if (confirmationSuccess && confirmationReset) {
+      toast.success("Confirmation email sent successfully");
+      dispatch(confirmationReset());
+    }
+  }, [confirmationSuccess, confirmationReset]);
+
+  useEffect(() => {
+    if (confirmationError && confirmationReset) {
+      toast.error("Confirmation email failed, sorry :(.");
+      dispatch(confirmationReset());
+    }
+  }, [confirmationError, confirmationReset]);
 
   const completitionPercentage = useMemo(() => {
     if (!user) return undefined;
@@ -44,7 +68,15 @@ const ProfileDetails: React.FC = () => {
     return `${(notNullKeys / editableKeys.length) * 100}%`;
   }, [user]);
 
-  if (loading) return <h1>Loading...</h1>;
+  const handleUserConfirmation = (e: ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+
+    if (!checked) return;
+
+    dispatch(userConfirmation());
+  };
+
+  if (loading || !user) return <h1>Loading...</h1>;
 
   return (
     <Container>
@@ -84,22 +116,25 @@ const ProfileDetails: React.FC = () => {
         </PerfilCompletition>
       </UserInfoProgress>
       <UserOptions>
-        {!user!.is_confirmed && (
-          <div>
-            <input
-              type="checkbox"
-              name="confirm_account"
-              id="confirm_account"
-              checked={user?.is_confirmed}
-            />
-            <label htmlFor="confirm_account">
-              Click here to confirm your account{"  "}
-              <span>
-                (In order to buy products you have to confirm your account.)
-              </span>
-            </label>
-          </div>
-        )}
+        <div>
+          {!user!.is_confirmed && (
+            <>
+              <input
+                type="checkbox"
+                name="confirm_account"
+                id="confirm_account"
+                checked={user?.is_confirmed}
+                onChange={handleUserConfirmation}
+              />
+              <label htmlFor="confirm_account">
+                Click here to confirm your account{"  "}
+                <span>
+                  (In order to buy products you have to confirm your account.)
+                </span>
+              </label>
+            </>
+          )}
+        </div>
         <Button variant="fill">Edit profile</Button>
       </UserOptions>
     </Container>

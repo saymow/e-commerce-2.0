@@ -8,7 +8,7 @@ export const authMiddleware = (
   _: Response,
   next: NextFunction
 ) => {
-  if (!req.session!.user.id) throw new AppError('User not authenticated', 401);
+  if (!req.session?.user?.id) throw new AppError('User not authenticated', 401);
 
   return next();
 };

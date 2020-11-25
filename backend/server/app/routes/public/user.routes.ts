@@ -8,7 +8,9 @@ const routes = Router();
 
 routes.post('/', userController.create);
 routes.put('/', authMiddleware, userController.update);
-routes.get('/:id', authMiddleware, userController.show);
+routes.get('/', authMiddleware, userController.show);
+routes.post('/confirm', authMiddleware, userController.sendConfirmation);
+routes.get('/confirm/:token', userController.confirm);
 routes.delete('/', userController.destroy);
 
 export default routes;

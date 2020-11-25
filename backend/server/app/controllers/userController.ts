@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
+import { WEB_VIEW_URL } from '../constants';
 import AppError from '../errors/AppError';
 import User from '../models/User';
-
-import orphanageView from '../views/api/user_view';
-
-import CreateUserService from '../services/user/CreateUserService';
-import UpdateUserService from '../services/user/UpdateUserService';
-import ConfirmUserService from '../services/user/ConfirmUserService';
-import SetAdminService from '../services/user/SetAdminService';
 import AdminConfirmUserService from '../services/user/AdminConfirmUserService';
 import AdminDeleteUserService from '../services/user/AdminDeleteUserService';
 import AdminUpdateUserService from '../services/user/AdminUpdateUserService';
+import ConfirmUserService from '../services/user/ConfirmUserService';
+import CreateUserService from '../services/user/CreateUserService';
+import SendUserConfirmationEmail from '../services/user/SendUserConfirmationEmail';
+import SetAdminService from '../services/user/SetAdminService';
+import UpdateUserService from '../services/user/UpdateUserService';
+import orphanageView from '../views/api/user_view';
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -34,6 +34,26 @@ class UserController {
     };
 
     return res.status(201).send(orphanageView.render(user));
+  }
+
+  async sendConfirmation(req: Request, res: Response) {
+    const sendUserConfirmationEmail = new SendUserConfirmationEmail();
+
+    const userId = req.session!.user.id;
+
+    await sendUserConfirmationEmail.execute(userId);
+
+    return res.send();
+  }
+
+  async confirm(req: Request, res: Response) {
+    const confirmUserService = new ConfirmUserService();
+
+    const token = req.params.token;
+
+    await confirmUserService.execute(token);
+
+    return res.redirect(`${WEB_VIEW_URL}/profile`);
   }
 
   async show(req: Request, res: Response) {

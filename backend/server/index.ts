@@ -11,13 +11,23 @@ import './app/database';
 import { errorHandler, routeNotFound } from './app/middlewares/errorMiddleware';
 
 import routes from './app/routes';
-import { COOKIE_NAME, COOKIE_SECRET, __prod__ } from './app/constants';
+import {
+  COOKIE_NAME,
+  COOKIE_SECRET,
+  WEB_VIEW_URL,
+  __prod__,
+} from './app/constants';
 
 const app = express();
 const redisStore = ConnectRedis(session);
 const uploadsPath = path.resolve(__dirname, '..', 'uploads');
 
-app.use(cors());
+app.use(
+  cors({
+    origin: WEB_VIEW_URL,
+    credentials: true,
+  })
+);
 
 app.use(
   session({

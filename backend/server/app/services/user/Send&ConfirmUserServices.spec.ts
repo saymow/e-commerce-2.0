@@ -8,6 +8,7 @@ import {
   fakeUser2,
 } from '../../../__tests__/fixtures/db';
 import ConfirmUserService from './ConfirmUserService';
+import SendUserConfirmationEmail from './SendUserConfirmationEmail';
 
 beforeAll(async () => {
   await setupEnvironment();
@@ -18,6 +19,7 @@ afterAll(tearEnvironment);
 
 describe('User confirmation service', () => {
   it('Should confirm a valid user', async () => {
+    const sendUserConfirmationEmail = new SendUserConfirmationEmail();
     const confirmUserService = new ConfirmUserService();
     const usersRepository = getRepository(User);
 
@@ -27,7 +29,9 @@ describe('User confirmation service', () => {
 
     expect(user?.is_confirmed).toBe(false);
 
-    await confirmUserService.execute(user!.id);
+    const token = await sendUserConfirmationEmail.execute(user!.id);
+
+    await confirmUserService.execute(token);
 
     const updatedUser = await usersRepository.findOne({
       where: { email: fakeUser.email },
@@ -36,7 +40,8 @@ describe('User confirmation service', () => {
     expect(updatedUser?.is_confirmed).toBe(true);
   });
 
-  it('Should not "disconfirm" a already confirmed user', async () => {
+  it('Should not "disconfirm" a already confirmed user, (token expired)', async () => {
+    const sendUserConfirmationEmail = new SendUserConfirmationEmail();
     const confirmUserService = new ConfirmUserService();
     const usersRepository = getRepository(User);
 
@@ -46,13 +51,15 @@ describe('User confirmation service', () => {
 
     expect(user?.is_confirmed).toBe(false);
 
-    await confirmUserService.execute(user!.id);
+    const token = await sendUserConfirmationEmail.execute(user!.id);
+
+    await confirmUserService.execute(token);
 
     const updatedUser = await usersRepository.findOne({
       where: { email: fakeUser2.email },
     });
 
     expect(updatedUser?.is_confirmed).toBe(true);
-    expect(confirmUserService.execute(user!.id)).rejects.toBeTruthy();
+    expect(confirmUserService.execute(token)).rejects.toBeTruthy();
   });
 });
