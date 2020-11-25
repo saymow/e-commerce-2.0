@@ -16,6 +16,7 @@ import { SignInSchema, SignInInitialState } from "../utils/schemas";
 
 const Container = styled.div`
   margin: 1rem 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,10 +24,12 @@ const Container = styled.div`
 `;
 
 const Form = styled.form`
-  width: 90%;
-  max-width: 30rem;
+  background: var(--bg-Color);
 
-  padding: 1rem;
+  width: 90%;
+  max-width: 34rem;
+
+  padding: 2rem;
 
   h1 {
     margin-bottom: 2rem;
@@ -59,7 +62,10 @@ const SignIn: CustomFC = () => {
   }, [error]);
 
   useEffect(() => {
-    if (success) router.push("/profile");
+    if (success && reset) {
+      dispatch(reset());
+      router.push("/profile");
+    }
   }, [success]);
 
   return (

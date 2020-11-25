@@ -19,7 +19,7 @@ export interface ShopPaginationState extends DefaultState {
 
 export type ShopPaginationAction =
   | {
-      type: "SHOP-PAGINATION-SETUP";
+      type: "SHOP_PAGINATION_SETUP";
       payload: {
         products: IProduct[];
         total: number;
@@ -27,17 +27,17 @@ export type ShopPaginationAction =
       };
     }
   | {
-      type: "SHOP-PAGINATION-REQUEST";
+      type: "SHOP_PAGINATION_REQUEST";
     }
   | {
-      type: "SHOP-PAGINATION-SUCCESS";
+      type: "SHOP_PAGINATION_SUCCESS";
       payload: {
         products: IProduct[];
         currentPage: number;
       };
     }
   | {
-      type: "SHOP-PAGINATION-FAIL";
+      type: "SHOP_PAGINATION_FAIL";
       payload: {
         message: String;
       };

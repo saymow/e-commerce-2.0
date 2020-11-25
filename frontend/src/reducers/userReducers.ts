@@ -5,6 +5,8 @@ import {
   LoginState,
   SessionAction,
   SessionState,
+  UserDetailsState,
+  UserDetailsAction,
 } from "../@types/redux/user";
 
 export const userSessionReducer = (
@@ -12,15 +14,15 @@ export const userSessionReducer = (
   action: SessionAction
 ): SessionState => {
   switch (action.type) {
-    case "SESSION-REQUEST":
+    case "SESSION_REQUEST":
       return { ...state, loading: true };
-    case "SESSION-SUCCESS": {
+    case "SESSION_SUCCESS": {
       const { email, name } = action.payload;
       return { ...state, loading: false, user: { email, name }, auth: true };
     }
-    case "SESSION-FAIL":
+    case "SESSION_FAIL":
       return { ...state, loading: false, error: action.payload };
-    case "SESSION-LOGOUT":
+    case "SESSION_LOGOUT":
       return {};
     default:
       return state;
@@ -32,18 +34,19 @@ export const userLoginReducer = (
   action: LoginAction
 ): LoginState => {
   switch (action.type) {
-    case "USER_LOGIN-REQUEST":
+    case "USER_LOGIN_REQUEST":
       return {
         loading: true,
-        reset: () => ({ type: "USER-LOGIN-RESET" }),
+        reset: () => ({ type: "USER_LOGIN_RESET" }),
       };
-    case "USER_LOGIN-SUCCESS": {
+    case "USER_LOGIN_SUCCESS": {
       const { email, name } = action.payload;
       return { ...state, loading: false, user: { email, name }, success: true };
     }
-    case "USER_LOGIN-FAIL":
+    case "USER_LOGIN_FAIL":
       return { ...state, loading: false, error: action.payload };
-    case "USER_LOGIN-RESET":
+    case "USER_LOGIN_RESET":
+      console.log("reseting user login");
       return {};
     default:
       return state;
@@ -55,18 +58,41 @@ export const userRegisterReducer = (
   action: RegisterAction
 ): RegisterState => {
   switch (action.type) {
-    case "USER_REGISTER-REQUEST":
+    case "USER_REGISTER_REQUEST":
       return {
         loading: true,
-        reset: () => ({ type: "USER-REGISTER-RESET" }),
+        reset: () => ({ type: "USER_REGISTER_RESET" }),
       };
-    case "USER_REGISTER-SUCCESS": {
+    case "USER_REGISTER_SUCCESS": {
       const { email, name } = action.payload;
       return { ...state, loading: false, user: { email, name }, success: true };
     }
-    case "USER_REGISTER-FAIL":
+    case "USER_REGISTER_FAIL":
       return { ...state, loading: false, error: action.payload };
-    case "USER_REGISTER-RESET":
+    case "USER_REGISTER_RESET":
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const userDetailsReducer = (
+  state: UserDetailsState = { loading: true },
+  action: UserDetailsAction
+): UserDetailsState => {
+  switch (action.type) {
+    case "USER_DETAILS_REQUEST":
+      return {
+        loading: true,
+        reset: () => ({ type: "USER_DETAILS_RESET" }),
+      };
+    case "USER_DETAILS_SUCCESS": {
+      const user = action.payload;
+      return { ...state, user, loading: false, success: true };
+    }
+    case "USER_DETAILS_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    case "USER_DETAILS_RESET":
       return {};
     default:
       return state;

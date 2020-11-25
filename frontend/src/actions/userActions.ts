@@ -2,6 +2,8 @@ import {
   LoginAction,
   SessionAction,
   RegisterAction,
+  User,
+  UserDetailsAction,
 } from "../@types/redux/user";
 import api from "../services/api";
 import { SignUpInitialState } from "../utils/schemas";
@@ -10,15 +12,15 @@ export const session = () => async (
   dispatch: (arg0: SessionAction) => void
 ) => {
   try {
-    dispatch({ type: "SESSION-REQUEST" });
+    dispatch({ type: "SESSION_REQUEST" });
 
     const { data } = await api.post("/sessions/me");
 
-    dispatch({ type: "SESSION-SUCCESS", payload: data });
+    dispatch({ type: "SESSION_SUCCESS", payload: data });
   } catch (err) {
     console.log(err);
     dispatch({
-      type: "SESSION-FAIL",
+      type: "SESSION_FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },
@@ -32,11 +34,11 @@ export const sessionLogout = () => async (
   try {
     await api.post("/sessions/logout");
 
-    dispatch({ type: "SESSION-LOGOUT" });
+    dispatch({ type: "SESSION_LOGOUT" });
   } catch (err) {
     console.log(err);
     dispatch({
-      type: "SESSION-FAIL",
+      type: "SESSION_FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },
@@ -45,18 +47,19 @@ export const sessionLogout = () => async (
 };
 
 export const login = (email: string, password: string) => async (
-  dispatch: (arg0: LoginAction) => void
+  dispatch: (arg0: LoginAction | SessionAction) => void
 ) => {
   try {
-    dispatch({ type: "USER_LOGIN-REQUEST" });
+    dispatch({ type: "USER_LOGIN_REQUEST" });
 
     const { data } = await api.post("/sessions", { email, password });
 
-    dispatch({ type: "USER_LOGIN-SUCCESS", payload: data });
+    dispatch({ type: "USER_LOGIN_SUCCESS", payload: data });
+    dispatch({ type: "SESSION_SUCCESS", payload: data });
   } catch (err) {
     console.log(err);
     dispatch({
-      type: "USER_LOGIN-FAIL",
+      type: "USER_LOGIN_FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },
@@ -65,18 +68,39 @@ export const login = (email: string, password: string) => async (
 };
 
 export const register = (user: typeof SignUpInitialState) => async (
-  dispatch: (arg0: RegisterAction) => void
+  dispatch: (arg0: RegisterAction | SessionAction) => void
 ) => {
   try {
-    dispatch({ type: "USER_REGISTER-REQUEST" });
+    dispatch({ type: "USER_REGISTER_REQUEST" });
 
     const { data } = await api.post("/users", user);
 
-    dispatch({ type: "USER_REGISTER-SUCCESS", payload: data });
+    dispatch({ type: "USER_REGISTER_SUCCESS", payload: data });
+    dispatch({ type: "SESSION_SUCCESS", payload: data });
   } catch (err) {
     console.log(err);
     dispatch({
-      type: "USER_REGISTER-FAIL",
+      type: "USER_REGISTER_FAIL",
+      payload: {
+        message: err?.response?.data?.message || "Internal server error!",
+      },
+    });
+  }
+};
+
+export const userDetails = () => async (
+  dispatch: (arg0: UserDetailsAction) => void
+) => {
+  try {
+    dispatch({ type: "USER_DETAILS_REQUEST" });
+
+    const { data } = await api.get("/users");
+
+    dispatch({ type: "USER_DETAILS_SUCCESS", payload: data });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: "USER_DETAILS_FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },

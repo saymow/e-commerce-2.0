@@ -13,7 +13,7 @@ export const setupPagination = (
   pages: number
 ) => async (dispatch: (arg0: ShopPaginationAction) => void) => {
   dispatch({
-    type: "SHOP-PAGINATION-SETUP",
+    type: "SHOP_PAGINATION_SETUP",
     payload: { products, total, pages },
   });
 };
@@ -24,7 +24,7 @@ export const shopPaginate = (page: string) => async (
 ) => {
   try {
     dispatch({
-      type: "SHOP-PAGINATION-REQUEST",
+      type: "SHOP_PAGINATION_REQUEST",
     });
 
     const {
@@ -36,7 +36,7 @@ export const shopPaginate = (page: string) => async (
     const { data } = await api.get(`/products?limit=${limit}&offset=${offset}`);
 
     dispatch({
-      type: "SHOP-PAGINATION-SUCCESS",
+      type: "SHOP_PAGINATION_SUCCESS",
       payload: {
         products: data,
         currentPage: parseInt(page),
@@ -45,7 +45,7 @@ export const shopPaginate = (page: string) => async (
   } catch (err) {
     console.log(err);
     dispatch({
-      type: "SHOP-PAGINATION-FAIL",
+      type: "SHOP_PAGINATION_FAIL",
       payload: err.response?.data || { message: "Unexpected error" },
     });
   }

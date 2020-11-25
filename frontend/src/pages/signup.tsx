@@ -23,10 +23,12 @@ const Container = styled.div`
 `;
 
 const Form = styled.form`
-  width: 90%;
-  max-width: 30rem;
+  background: var(--bg-Color);
 
-  padding: 1rem;
+  width: 90%;
+  max-width: 34rem;
+
+  padding: 2rem;
 
   h1 {
     margin-bottom: 2rem;

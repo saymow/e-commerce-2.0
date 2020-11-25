@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SessionState } from "../@types/redux";
+import { SessionState } from "../@types/redux/user";
 import { session } from "../actions/userActions";
 import { reduxStore } from "../store";
 import { ON_SERVER } from "../utils/constants";
@@ -13,7 +13,7 @@ const useSession = () => {
   ) as SessionState;
 
   useEffect(() => {
-    if (ON_SERVER) return;
+    if (ON_SERVER && !user) return;
     dispatch(session());
   }, []);
 

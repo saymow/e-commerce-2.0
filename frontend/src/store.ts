@@ -13,12 +13,14 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userSessionReducer,
+  userDetailsReducer,
 } from "./reducers/userReducers";
 
 export const reduxStore = {
   userSession: userSessionReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,
   sideBar: sideBarReducer,
