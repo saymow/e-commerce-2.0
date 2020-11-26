@@ -15,6 +15,7 @@ import { CONTACT_NUMBER_MASK } from "../../../../utils/masks";
 import { EditProfileSchema } from "../../../../utils/schemas";
 import Button from "../../../ui/Button";
 import Input from "../../../ui/Input";
+import Loading from "../../../ui/Loading";
 
 import { Container, Form } from "./styles";
 
@@ -64,7 +65,7 @@ const EditUserModal: React.FC = () => {
     }
   }, [editSuccess, editReset]);
 
-  if (!initialState) return <h1>Loading...</h1>;
+  if (!initialState) return <Loading />;
 
   return (
     <Container>
@@ -76,7 +77,7 @@ const EditUserModal: React.FC = () => {
           dispatch(userEdit(values));
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>
             <Input id="name" placeholder="Name" />
             <Input id="email" placeholder="Email" />
@@ -85,7 +86,9 @@ const EditUserModal: React.FC = () => {
               mask={CONTACT_NUMBER_MASK}
               placeholder="Contact number"
             />
-            <Button variant="fill">Edit profile</Button>
+            <Button variant="fill" disabled={isSubmitting}>
+              Edit profile
+            </Button>
           </Form>
         )}
       </Formik>

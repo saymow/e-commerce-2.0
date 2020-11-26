@@ -8,6 +8,7 @@ import { userConfirmation, userDetails } from "../../../actions/userActions";
 import { reduxStore } from "../../../store";
 import { dateFormmater } from "../../../utils";
 import Button from "../../ui/Button";
+import Loading from "../../ui/Loading";
 
 import {
   Container,
@@ -79,7 +80,7 @@ const ProfileDetails: React.FC = () => {
 
   const handleOpenEditProfileModal = () => dispatch(openEditProfileModal());
 
-  if (loading || !user) return <h1>Loading...</h1>;
+  if (loading || !user) return <Loading />;
 
   return (
     <Container>

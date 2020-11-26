@@ -1,11 +1,16 @@
 import React, { ButtonHTMLAttributes } from "react";
 
 import styled from "styled-components";
+import Loading from "../Loading";
 
 const Container = styled.button<Props>`
   cursor: pointer;
   font-size: 1.1rem;
   font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   padding: 0.8rem 5rem;
   border: 1px solid var(--primary-Color);
@@ -33,12 +38,14 @@ interface Props {
 
 const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement> & Props> = ({
   children,
+  disabled,
   variant = "normal",
   ...rest
 }) => {
   return (
-    <Container variant={variant} {...rest}>
+    <Container variant={variant} disabled={disabled} {...rest}>
       {children}
+      {disabled && <Loading variant="small" embedded />}
     </Container>
   );
 };
