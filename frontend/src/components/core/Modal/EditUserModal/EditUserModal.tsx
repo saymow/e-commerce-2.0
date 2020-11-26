@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { DefaultState } from "../../../../@types/redux";
-import { EditableUser, UserDetailsState } from "../../../../@types/redux/user";
+import {
+  EditableUser,
+  UserDetailsState,
+  UserEditState,
+} from "../../../../@types/redux/user";
 import { closeModal } from "../../../../actions/uiActions";
 import { userDetails, userEdit } from "../../../../actions/userActions";
 import { reduxStore } from "../../../../store";
@@ -26,9 +30,12 @@ const EditUserModal: React.FC = () => {
   const {
     loading: editLoading,
     success: editSuccess,
+    successCaveatMessage: editSuccessCaveatMessage,
     error: editError,
     reset: editReset,
-  } = useSelector<typeof reduxStore>((state) => state.userEdit) as DefaultState;
+  } = useSelector<typeof reduxStore>(
+    (state) => state.userEdit
+  ) as UserEditState;
 
   useEffect(() => {
     if (!user) dispatch(userDetails());
@@ -52,6 +59,8 @@ const EditUserModal: React.FC = () => {
     if (editSuccess && editReset) {
       dispatch(closeModal());
       dispatch(editReset());
+      if (editSuccessCaveatMessage) toast.warning(editSuccessCaveatMessage);
+      else toast.success("User profile updated successfully");
     }
   }, [editSuccess, editReset]);
 

@@ -8,6 +8,7 @@ import {
 import ChangePasswordService from './ChangePasswordService';
 import ForgotPasswordService from './ForgotPasswordService';
 import LoginService from './LoginService';
+import { TEST_GENERATED_UUID } from '../../constants';
 
 beforeAll(async () => {
   await setupEnvironment();
@@ -24,7 +25,7 @@ describe('Forgot & Change password services', () => {
 
     const token = await forgotPasswordService.execute(fakeUser.email);
 
-    expect(token).toEqual(expect.stringContaining('generatedUUID'));
+    expect(token).toEqual(expect.stringContaining(TEST_GENERATED_UUID));
 
     let newPassword = 'D465s4A56Ss5da';
 
@@ -51,7 +52,7 @@ describe('Forgot & Change password services', () => {
 
     const token = await forgotPasswordService.execute(fakeUser.email);
 
-    expect(token).toEqual(expect.stringContaining('generatedUUID'));
+    expect(token).toEqual(expect.stringContaining(TEST_GENERATED_UUID));
 
     let newPassword = 'invalid';
 
@@ -70,7 +71,7 @@ describe('Forgot & Change password services', () => {
 
     const token = await forgotPasswordService.execute(fakeUser.email);
 
-    expect(token).toEqual(expect.stringContaining('generatedUUID'));
+    expect(token).toEqual(expect.stringContaining(TEST_GENERATED_UUID));
 
     let newPassword = 'D465s4A56Ss5da';
     let newPassword2 = 'dPSJDopkepOK4DKOPAd';

@@ -145,12 +145,17 @@ export type UserConfirmationAction =
     }
   | { type: "USER_CONFIRMATION_MAIL_RESET" };
 
+export interface UserEditState extends DefaultState {
+  successCaveatMessage?: string;
+}
+
 export type UserEditAction =
   | {
       type: "USER_EDIT_REQUEST";
     }
   | {
       type: "USER_EDIT_SUCCESS";
+      payload?: string;
     }
   | {
       type: "USER_EDIT_FAIL";

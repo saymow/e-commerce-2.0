@@ -137,10 +137,12 @@ export const userEdit = (user: EditableUser) => async (
   try {
     dispatch({ type: "USER_EDIT_REQUEST" });
 
-    const { data } = await api.put("/users", user);
+    const {
+      data: { user: updatedUser, caveatMessage },
+    } = await api.put("/users", user);
 
-    dispatch({ type: "USER_EDIT_SUCCESS" });
-    dispatch({ type: "USER_DETAILS_SUCCESS", payload: data });
+    dispatch({ type: "USER_EDIT_SUCCESS", payload: caveatMessage });
+    dispatch({ type: "USER_DETAILS_SUCCESS", payload: updatedUser });
   } catch (err) {
     console.log(err);
     dispatch({

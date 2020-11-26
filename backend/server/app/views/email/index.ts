@@ -17,3 +17,16 @@ export const confirmAccountEmailView = (name: string, token: string) => {
 
   return response;
 };
+
+export const editEmailEmailView = (
+  name: string,
+  token: string,
+  newEmail: string
+) => {
+  let response = '';
+  response += `<h1>Hi ${name}. Do you want to update your email to ${newEmail} ?</h1>`;
+  response += '<p>If thats true you can confirm your update by clicking on ';
+  response += `<a href="${SERVER_URL}/api/users/confirm-email/${token}">this link here</a>. </p>`;
+
+  return response;
+};

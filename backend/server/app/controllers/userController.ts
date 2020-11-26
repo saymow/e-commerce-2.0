@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm';
 import { WEB_VIEW_URL } from '../constants';
 import AppError from '../errors/AppError';
 import User from '../models/User';
+import UpdateConfirmedUserEmailService from '../services/user/UpdateConfirmedUserEmailService';
 import AdminConfirmUserService from '../services/user/AdminConfirmUserService';
 import AdminDeleteUserService from '../services/user/AdminDeleteUserService';
 import AdminUpdateUserService from '../services/user/AdminUpdateUserService';
@@ -11,7 +12,7 @@ import CreateUserService from '../services/user/CreateUserService';
 import SendUserConfirmationEmail from '../services/user/SendUserConfirmationEmail';
 import SetAdminService from '../services/user/SetAdminService';
 import UpdateUserService from '../services/user/UpdateUserService';
-import orphanageView from '../views/api/user_view';
+import userView from '../views/api/user_view';
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -33,7 +34,53 @@ class UserController {
       email: user.email,
     };
 
-    return res.status(201).send(orphanageView.render(user));
+    return res.status(201).send(userView.render(user));
+  }
+
+  async show(req: Request, res: Response) {
+    const usersRepository = getRepository(User);
+
+    const userId = req.session!.user.id;
+
+    const user = await usersRepository.findOne(userId);
+
+    if (!user) throw new AppError('User not found', 404);
+
+    return res.send(user);
+  }
+
+  async update(req: Request, res: Response) {
+    const updateUserService = new UpdateUserService();
+
+    let caveatMessage;
+    const data = req.body;
+    const id = req.session!.user.id;
+
+    const { user, confirmationEmail } = await updateUserService.execute(
+      id,
+      data
+    );
+
+    if (confirmationEmail)
+      caveatMessage =
+        'Its look like that you are trying to update your account email, a confirmation email was sent to your current email.';
+
+    return res.send({
+      user,
+      caveatMessage,
+    });
+  }
+
+  async destroy(req: Request, res: Response) {
+    const usersRepository = getRepository(User);
+
+    const id = req.session!.user.id;
+
+    await usersRepository.delete(id);
+
+    req.session?.destroy(() => {
+      return res.send();
+    });
   }
 
   async sendConfirmation(req: Request, res: Response) {
@@ -56,39 +103,14 @@ class UserController {
     return res.redirect(`${WEB_VIEW_URL}/profile`);
   }
 
-  async show(req: Request, res: Response) {
-    const usersRepository = getRepository(User);
+  async cofirmNewEmail(req: Request, res: Response) {
+    const updateConfirmedUserEmailService = new UpdateConfirmedUserEmailService();
 
-    const userId = req.session!.user.id;
+    const token = req.params.token;
 
-    const user = await usersRepository.findOne(userId);
+    await updateConfirmedUserEmailService.execute(token);
 
-    if (!user) throw new AppError('User not found', 404);
-
-    return res.send(user);
-  }
-
-  async update(req: Request, res: Response) {
-    const updateUserService = new UpdateUserService();
-
-    const data = req.body;
-    const id = req.session!.user.id;
-
-    const user = await updateUserService.execute(id, data);
-
-    return res.send(user);
-  }
-
-  async destroy(req: Request, res: Response) {
-    const usersRepository = getRepository(User);
-
-    const id = req.session!.user.id;
-
-    await usersRepository.delete(id);
-
-    req.session?.destroy(() => {
-      return res.send();
-    });
+    return res.redirect(`${WEB_VIEW_URL}/profile`);
   }
 }
 
@@ -106,7 +128,7 @@ export class AdminUserController extends UserController {
       contact_number,
     });
 
-    return res.status(201).send(orphanageView.render(user));
+    return res.status(201).send(userView.render(user));
   }
 
   async index(req: Request, res: Response) {
