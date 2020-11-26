@@ -5,6 +5,8 @@ import {
   User,
   UserDetailsAction,
   UserConfirmationAction,
+  EditableUser,
+  UserEditAction,
 } from "../@types/redux/user";
 import api from "../services/api";
 import { SignUpInitialState } from "../utils/schemas";
@@ -97,8 +99,6 @@ export const userDetails = () => async (
 
     const { data } = await api.get("/users");
 
-    console.log(data);
-
     dispatch({ type: "USER_DETAILS_SUCCESS", payload: data });
   } catch (err) {
     console.log(err);
@@ -124,6 +124,27 @@ export const userConfirmation = () => async (
     console.log(err);
     dispatch({
       type: "USER_CONFIRMATION_MAIL_FAIL",
+      payload: {
+        message: err?.response?.data?.message || "Internal server error!",
+      },
+    });
+  }
+};
+
+export const userEdit = (user: EditableUser) => async (
+  dispatch: (arg0: UserEditAction | UserDetailsAction) => void
+) => {
+  try {
+    dispatch({ type: "USER_EDIT_REQUEST" });
+
+    const { data } = await api.put("/users", user);
+
+    dispatch({ type: "USER_EDIT_SUCCESS" });
+    dispatch({ type: "USER_DETAILS_SUCCESS", payload: data });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: "USER_EDIT_FAIL",
       payload: {
         message: err?.response?.data?.message || "Internal server error!",
       },

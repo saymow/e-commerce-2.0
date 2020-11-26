@@ -121,3 +121,20 @@ export interface ThemeState {
 export type ThemeAction = {
   type: "SWICTH-THEME";
 };
+
+export interface ModalState {
+  open: boolean;
+  view?: "USER_EDIT_PROFILE" | "USER_CREATE_ADDRESS" | "USER_EDIT_ADDRESS";
+}
+
+export type ModalAction =
+  | {
+      type: "USER_EDIT_PROFILE";
+    }
+  | {
+      type: "USER_CREATE_ADDRESS";
+    }
+  | {
+      type: "USER_EDIT_ADDRESS";
+    }
+  | { type: "CLOSE_MODAL" };

@@ -1,6 +1,8 @@
 import {
   AsideBarAction,
   AsideBarState,
+  ModalAction,
+  ModalState,
   ShopPaginationAction,
   ShopPaginationState,
   ThemeAction,
@@ -47,7 +49,7 @@ export const shopPaginationReducer = (
   action: ShopPaginationAction
 ): ShopPaginationState => {
   switch (action.type) {
-    case "SHOP-PAGINATION-SETUP":
+    case "SHOP_PAGINATION_SETUP":
       const { products, total, pages } = action.payload;
       return {
         ...state,
@@ -57,15 +59,33 @@ export const shopPaginationReducer = (
         currentPage: 1,
         loading: false,
       };
-    case "SHOP-PAGINATION-REQUEST":
+    case "SHOP_PAGINATION_REQUEST":
       return { ...state, loading: true };
-    case "SHOP-PAGINATION-SUCCESS": {
+    case "SHOP_PAGINATION_SUCCESS": {
       const { products, currentPage } = action.payload;
       return { ...state, products, loading: false, currentPage };
     }
-    case "SHOP-PAGINATION-FAIL":
+    case "SHOP_PAGINATION_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
       return { ...state };
+  }
+};
+
+export const modalReducer = (
+  state: ModalState = { open: false },
+  action: ModalAction
+): ModalState => {
+  switch (action.type) {
+    case "USER_EDIT_PROFILE":
+      return { open: true, view: "USER_EDIT_PROFILE" };
+    case "USER_CREATE_ADDRESS":
+      return { open: true, view: "USER_CREATE_ADDRESS" };
+    case "USER_EDIT_ADDRESS":
+      return { open: true, view: "USER_EDIT_ADDRESS" };
+    case "CLOSE_MODAL":
+      return { open: false };
+    default:
+      return state;
   }
 };

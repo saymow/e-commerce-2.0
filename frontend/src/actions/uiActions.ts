@@ -1,6 +1,7 @@
 import { IProduct } from "../@types";
 import {
   AsideBarAction,
+  ModalAction,
   ShopPaginationAction,
   ThemeAction,
 } from "../@types/redux";
@@ -86,4 +87,20 @@ export const switchTheme = () => async (
   const { theme } = getState();
 
   localStorage.setItem(`${LOCAL_STORAGE_PREFIX}theme`, theme.theme);
+};
+
+export const openEditProfileModal = () => async (
+  dispatch: (arg0: ModalAction) => void
+) => {
+  dispatch({
+    type: "USER_EDIT_PROFILE",
+  });
+};
+
+export const closeModal = () => async (
+  dispatch: (arg0: ModalAction) => void
+) => {
+  dispatch({
+    type: "CLOSE_MODAL",
+  });
 };

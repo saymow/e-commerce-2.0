@@ -7,6 +7,7 @@ import {
   sideBarReducer,
   shopPaginationReducer,
   themeReducer,
+  modalReducer,
 } from "./reducers/uiReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import {
@@ -15,6 +16,7 @@ import {
   userSessionReducer,
   userDetailsReducer,
   userConfirmationReducer,
+  userEditReducer,
 } from "./reducers/userReducers";
 
 export const reduxStore = {
@@ -23,11 +25,13 @@ export const reduxStore = {
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userConfirmation: userConfirmationReducer,
+  userEdit: userEditReducer,
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,
   sideBar: sideBarReducer,
   cart: cartReducer,
   theme: themeReducer,
+  modal: modalReducer,
 };
 
 const reducer = combineReducers(reduxStore);

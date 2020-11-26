@@ -9,6 +9,7 @@ import {
   UserDetailsState,
   UserDetailsAction,
   UserConfirmationAction,
+  UserEditAction,
 } from "../@types/redux/user";
 
 export const userSessionReducer = (
@@ -117,6 +118,28 @@ export const userConfirmationReducer = (
     case "USER_CONFIRMATION_MAIL_FAIL":
       return { ...state, loading: false, error: action.payload };
     case "USER_CONFIRMATION_MAIL_RESET":
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const userEditReducer = (
+  state: DefaultState = {},
+  action: UserEditAction
+): DefaultState => {
+  switch (action.type) {
+    case "USER_EDIT_REQUEST":
+      return {
+        loading: true,
+        reset: () => ({ type: "USER_EDIT_RESET" }),
+      };
+    case "USER_EDIT_SUCCESS": {
+      return { ...state, loading: false, success: true };
+    }
+    case "USER_EDIT_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    case "USER_EDIT_RESET":
       return {};
     default:
       return state;

@@ -1,5 +1,13 @@
 import * as Yup from "yup";
 
+export const EditProfileSchema = Yup.object().shape({
+  name: Yup.string().required().max(120).min(3),
+  email: Yup.string().required().email(),
+  contact_number: Yup.string()
+    .required()
+    .matches(/^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$/), // (xx) xxxxx-xxxx
+});
+
 export const SignUpInitialState = {
   name: "",
   email: "",

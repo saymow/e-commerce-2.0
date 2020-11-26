@@ -11,6 +11,7 @@ import Footer from "../Footer";
 import Header from "../Header";
 import { Container, Content } from "./styles";
 import "react-toastify/dist/ReactToastify.css";
+import Modal from "../Modal";
 
 interface Props {
   contained?: boolean;
@@ -29,6 +30,7 @@ const Layout: React.FC<Props> = ({ children, contained = true }) => {
         <Header />
         <Content contained={contained}>{children}</Content>
         <SideBar />
+        <Modal />
         <Footer />
       </Container>
     </ThemeProvider>

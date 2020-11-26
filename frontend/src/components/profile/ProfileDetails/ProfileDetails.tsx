@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { DefaultState } from "../../../@types/redux";
 import { UserDetailsState } from "../../../@types/redux/user";
+import { openEditProfileModal } from "../../../actions/uiActions";
 import { userConfirmation, userDetails } from "../../../actions/userActions";
 import { reduxStore } from "../../../store";
 import { dateFormmater } from "../../../utils";
@@ -76,6 +77,8 @@ const ProfileDetails: React.FC = () => {
     dispatch(userConfirmation());
   };
 
+  const handleOpenEditProfileModal = () => dispatch(openEditProfileModal());
+
   if (loading || !user) return <h1>Loading...</h1>;
 
   return (
@@ -135,7 +138,9 @@ const ProfileDetails: React.FC = () => {
             </>
           )}
         </div>
-        <Button variant="fill">Edit profile</Button>
+        <Button variant="fill" onClick={handleOpenEditProfileModal}>
+          Edit profile
+        </Button>
       </UserOptions>
     </Container>
   );

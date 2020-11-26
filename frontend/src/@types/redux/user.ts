@@ -6,6 +6,12 @@ interface UserOnPing {
   email: string;
 }
 
+export interface EditableUser {
+  name: string;
+  email: string;
+  contact_number: string;
+}
+
 export interface UserOnCreation extends UserOnPing {
   birth_date: string;
   contact_number: string;
@@ -138,3 +144,18 @@ export type UserConfirmationAction =
       };
     }
   | { type: "USER_CONFIRMATION_MAIL_RESET" };
+
+export type UserEditAction =
+  | {
+      type: "USER_EDIT_REQUEST";
+    }
+  | {
+      type: "USER_EDIT_SUCCESS";
+    }
+  | {
+      type: "USER_EDIT_FAIL";
+      payload: {
+        message: String;
+      };
+    }
+  | { type: "USER_EDIT_RESET" };
