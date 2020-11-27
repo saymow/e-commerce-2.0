@@ -59,7 +59,11 @@ class UpdateUserService {
 
     if (!user) throw new AppError('User not found', 404);
 
-    if (user.is_confirmed && updates.includes('email')) {
+    if (
+      user.is_confirmed &&
+      updates.includes('email') &&
+      data['email'] !== user.email
+    ) {
       updates = updates.filter(field => field !== 'email');
       confirmationEmail = true;
       token = await this.confirmEmailUpdate(

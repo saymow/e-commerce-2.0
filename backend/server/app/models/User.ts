@@ -3,9 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Address from './Address';
 
 @Entity('users')
 class User {
@@ -38,6 +41,9 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => Address, address => address.user)
+  addresses: Address[];
 
   @BeforeInsert()
   trimUniqueFields() {
