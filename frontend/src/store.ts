@@ -19,12 +19,21 @@ import {
   userEditReducer,
 } from "./reducers/userReducers";
 
+import {
+  addressCreateReducer,
+  addressDeleteReducer,
+  addressListReducer,
+} from "./reducers/addressReducers";
+
 export const reduxStore = {
   userSession: userSessionReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userConfirmation: userConfirmationReducer,
+  addressList: addressListReducer,
+  addressDelete: addressDeleteReducer,
+  addressCreate: addressCreateReducer,
   userEdit: userEditReducer,
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,
@@ -52,12 +61,12 @@ if (!ON_SERVER) {
     : undefined;
 
   const themeFromStorage = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}theme`)
-    ? localStorage.getItem(`${LOCAL_STORAGE_PREFIX}theme`)
+    ? JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}theme`) as string)
     : undefined;
 
   if (wishListFromStorage) initialState["wishList"] = wishListFromStorage;
   if (cartFromStorage) initialState["cart"] = cartFromStorage;
-  if (themeFromStorage) initialState["theme"] = cartFromStorage;
+  if (themeFromStorage) initialState["theme"] = themeFromStorage;
 }
 
 const middlewares = [thunk];

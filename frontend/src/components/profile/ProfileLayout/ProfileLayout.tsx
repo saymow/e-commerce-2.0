@@ -32,38 +32,42 @@ const ProfileLayout: React.FC = ({ children }) => {
   return (
     <Container>
       <Info>
-        <MainInfo>
-          <UserAvatar>
-            <UserIcon />
-          </UserAvatar>
-          <h1>{user?.name}</h1>
-        </MainInfo>
-        <Navigation>
-          <Tab className={router.pathname === "/profile" ? "active" : ""}>
-            <Link href="/profile">Profile</Link>
-            <ArrowIcon />
-          </Tab>
-          <Tab
-            className={router.pathname === "/profile/history" ? "active" : ""}
-          >
-            <Link href="/profile/history">History</Link>
-            <ArrowIcon />
-          </Tab>
-          <Tab
-            className={router.pathname === "/profile/addresses" ? "active" : ""}
-          >
-            <Link href="/profile/addresses">Address</Link>
-            <ArrowIcon />
-          </Tab>
-          <Tab
-            className={
-              router.pathname === "/profile/change-password" ? "active" : ""
-            }
-          >
-            <Link href="/profile/change-password">Change Password</Link>
-            <ArrowIcon />
-          </Tab>
-        </Navigation>
+        <div>
+          <MainInfo>
+            <UserAvatar>
+              <UserIcon />
+            </UserAvatar>
+            <h1>{user?.name}</h1>
+          </MainInfo>
+          <Navigation>
+            <Tab className={router.pathname === "/profile" ? "active" : ""}>
+              <Link href="/profile">Profile</Link>
+              <ArrowIcon />
+            </Tab>
+            <Tab
+              className={router.pathname === "/profile/history" ? "active" : ""}
+            >
+              <Link href="/profile/history">History</Link>
+              <ArrowIcon />
+            </Tab>
+            <Tab
+              className={
+                router.pathname === "/profile/addresses" ? "active" : ""
+              }
+            >
+              <Link href="/profile/addresses">Address</Link>
+              <ArrowIcon />
+            </Tab>
+            <Tab
+              className={
+                router.pathname === "/profile/change-password" ? "active" : ""
+              }
+            >
+              <Link href="/profile/change-password">Change Password</Link>
+              <ArrowIcon />
+            </Tab>
+          </Navigation>
+        </div>
       </Info>
       <Content>
         <LogoutIcon onClick={handleLogout} />

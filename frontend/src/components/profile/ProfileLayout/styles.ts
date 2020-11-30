@@ -7,14 +7,18 @@ export const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-gap: 1rem;
+  height: 80vh;
+  overflow: hidden;
 `;
 
 export const Info = styled.div`
-  background: var(--bg-Color);
+  div {
+    background: var(--bg-Color);
 
-  box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow);
 
-  padding: 1rem;
+    padding: 1rem;
+  }
 `;
 
 export const Content = styled.main`
@@ -23,7 +27,18 @@ export const Content = styled.main`
   background: var(--bg-Color);
   box-shadow: var(--box-shadow);
 
-  padding: 1rem;
+  padding: 2rem;
+
+  height: 100%;
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    width: 0.4rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--light-Grey);
+    border-radius: 0.4rem;
+  }
 `;
 
 export const LogoutIcon = styled(LogOut)`

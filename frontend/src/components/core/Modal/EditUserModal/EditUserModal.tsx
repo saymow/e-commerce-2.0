@@ -77,7 +77,7 @@ const EditUserModal: React.FC = () => {
           dispatch(userEdit(values));
         }}
       >
-        {({ handleSubmit, isSubmitting }) => (
+        {({ handleSubmit }) => (
           <Form onSubmit={handleSubmit}>
             <Input id="name" placeholder="Name" />
             <Input id="email" placeholder="Email" />
@@ -86,7 +86,7 @@ const EditUserModal: React.FC = () => {
               mask={CONTACT_NUMBER_MASK}
               placeholder="Contact number"
             />
-            <Button variant="fill" disabled={isSubmitting}>
+            <Button variant="fill" disabled={editLoading}>
               Edit profile
             </Button>
           </Form>

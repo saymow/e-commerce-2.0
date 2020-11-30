@@ -86,7 +86,7 @@ export const switchTheme = () => async (
 
   const { theme } = getState();
 
-  localStorage.setItem(`${LOCAL_STORAGE_PREFIX}theme`, theme.theme);
+  localStorage.setItem(`${LOCAL_STORAGE_PREFIX}theme`, JSON.stringify(theme));
 };
 
 export const openEditProfileModal = () => async (
@@ -97,9 +97,19 @@ export const openEditProfileModal = () => async (
   });
 };
 
+export const openCreateAddressModal = () => async (
+  dispatch: (arg0: ModalAction) => void
+) => {
+  dispatch({
+    type: "USER_CREATE_ADDRESS",
+  });
+};
+
 export const closeModal = () => async (
   dispatch: (arg0: ModalAction) => void
 ) => {
+  (document.querySelector("body") as any).style.overflow = "unset";
+
   dispatch({
     type: "CLOSE_MODAL",
   });
