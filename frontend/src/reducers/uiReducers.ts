@@ -81,8 +81,11 @@ export const modalReducer = (
       return { open: true, view: "USER_EDIT_PROFILE" };
     case "USER_CREATE_ADDRESS":
       return { open: true, view: "USER_CREATE_ADDRESS" };
-    case "USER_EDIT_ADDRESS":
-      return { open: true, view: "USER_EDIT_ADDRESS" };
+    case "USER_EDIT_ADDRESS": {
+      const entityId = action.payload.id;
+
+      return { open: true, view: "USER_EDIT_ADDRESS", entityId };
+    }
     case "CLOSE_MODAL":
       return { open: false };
     default:

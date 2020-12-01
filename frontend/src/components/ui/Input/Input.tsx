@@ -1,7 +1,13 @@
 import { useField } from "formik";
 import React, { InputHTMLAttributes } from "react";
 
-import { Container, CustomInput, Label, InputError } from "./styles";
+import {
+  Container,
+  BasicInput,
+  MaskedInput,
+  Label,
+  InputError,
+} from "./styles";
 
 interface Props {
   mask?: any[];
@@ -19,18 +25,21 @@ const Input: React.FC<InputHTMLAttributes<HTMLInputElement> & Props> = ({
 }) => {
   const [field, meta] = useField(props.id as string);
 
+  const inputProps: Record<any, any> = {
+    ...props,
+    ...field,
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+      field.onBlur(e);
+      if (onBlurWatcher) onBlurWatcher(e, meta.error);
+    },
+  };
+
+  if (mask) inputProps.mask = mask;
+
   return (
     <Container>
       <Label htmlFor={props.id}>{placeholder}</Label>
-      <CustomInput
-        {...props}
-        {...field}
-        mask={mask}
-        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          field.onBlur(e);
-          if (onBlurWatcher) onBlurWatcher(e, meta.error);
-        }}
-      />
+      {mask ? <MaskedInput {...inputProps} /> : <BasicInput {...inputProps} />}
       {meta.touched && meta.error && <InputError>{meta.error}</InputError>}
     </Container>
   );

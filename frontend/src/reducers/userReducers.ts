@@ -50,7 +50,6 @@ export const userLoginReducer = (
     case "USER_LOGIN_FAIL":
       return { ...state, loading: false, error: action.payload };
     case "USER_LOGIN_RESET":
-      console.log("reseting user login");
       return {};
     default:
       return state;

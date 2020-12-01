@@ -4,6 +4,9 @@ import {
   AddressesAction,
   AddressDeletionAction,
   AddressCreationAction,
+  AddressEditionAction,
+  AddressShowAction,
+  AddressShowState,
 } from "../@types/redux/address";
 
 export const addressListReducer = (
@@ -72,6 +75,58 @@ export const addressCreateReducer = (
       return { ...state, loading: false, error: action.payload };
     }
     case "USER_ADDRESS_CREATE_RESET":
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const addressEditReducer = (
+  state: DefaultState = {},
+  action: AddressEditionAction
+): DefaultState => {
+  switch (action.type) {
+    case "USER_ADDRESS_EDIT_REQUEST": {
+      return {
+        ...state,
+        loading: true,
+        reset: () => ({ type: "USER_ADDRESS_EDIT_RESET" }),
+      };
+    }
+    case "USER_ADDRESS_EDIT_SUCCESS": {
+      return { ...state, loading: false, success: true };
+    }
+    case "USER_ADDRESS_EDIT_FAIL": {
+      return { ...state, loading: false, error: action.payload };
+    }
+    case "USER_ADDRESS_EDIT_RESET":
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const addressShowReducer = (
+  state: AddressShowState = {},
+  action: AddressShowAction
+): AddressShowState => {
+  switch (action.type) {
+    case "USER_ADDRESS_SHOW_REQUEST": {
+      return {
+        ...state,
+        loading: true,
+        reset: () => ({ type: "USER_ADDRESS_SHOW_RESET" }),
+      };
+    }
+    case "USER_ADDRESS_SHOW_SUCCESS": {
+      const address = action.payload;
+
+      return { ...state, loading: false, success: true, address };
+    }
+    case "USER_ADDRESS_SHOW_FAIL": {
+      return { ...state, loading: false, error: action.payload };
+    }
+    case "USER_ADDRESS_SHOW_RESET":
       return {};
     default:
       return state;

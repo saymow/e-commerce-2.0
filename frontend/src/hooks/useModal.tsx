@@ -4,23 +4,20 @@ import { ModalState } from "../@types/redux";
 import { closeModal } from "../actions/uiActions";
 import CreateAddressModel from "../components/core/Modal/CreateAddressModal";
 import EditUserModal from "../components/core/Modal/EditUserModal";
+import EditAddressModal from "../components/core/Modal/EditAddressModal";
 import { reduxStore } from "../store";
 
-const ElementPerView: Record<string, FC | JSX.Element> = {
+const ElementPerView: Record<string, JSX.Element> = {
   USER_EDIT_PROFILE: <EditUserModal />,
-  USER_CREATE_ADDRESS: () => <CreateAddressModel />,
-  USER_EDIT_ADDRESS: () => <h1>test</h1>,
+  USER_CREATE_ADDRESS: <CreateAddressModel />,
+  USER_EDIT_ADDRESS: <EditAddressModal />,
 };
 
-export default function useModal(): [
-  boolean,
-  FC | JSX.Element | null,
-  () => void
-] {
+export default function useModal(): [boolean, JSX.Element | null, () => void] {
   const dispatch = useDispatch();
 
   const [documentRef, setDocumentRef] = useState<HTMLBodyElement | null>(null);
-  const [Component, setComponent] = useState<FC | JSX.Element | null>(null);
+  const [Component, setComponent] = useState<JSX.Element | null>(null);
 
   const { open, view = null } = useSelector<typeof reduxStore>(
     (state) => state.modal

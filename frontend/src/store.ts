@@ -23,6 +23,8 @@ import {
   addressCreateReducer,
   addressDeleteReducer,
   addressListReducer,
+  addressEditReducer,
+  addressShowReducer,
 } from "./reducers/addressReducers";
 
 export const reduxStore = {
@@ -34,6 +36,8 @@ export const reduxStore = {
   addressList: addressListReducer,
   addressDelete: addressDeleteReducer,
   addressCreate: addressCreateReducer,
+  addressShow: addressShowReducer,
+  addressEdit: addressEditReducer,
   userEdit: userEditReducer,
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,

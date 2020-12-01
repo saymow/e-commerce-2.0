@@ -105,6 +105,15 @@ export const openCreateAddressModal = () => async (
   });
 };
 
+export const openEditAddressModal = (id: string) => async (
+  dispatch: (arg0: ModalAction) => void
+) => {
+  dispatch({
+    type: "USER_EDIT_ADDRESS",
+    payload: { id },
+  });
+};
+
 export const closeModal = () => async (
   dispatch: (arg0: ModalAction) => void
 ) => {

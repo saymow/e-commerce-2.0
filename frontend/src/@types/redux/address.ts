@@ -9,7 +9,7 @@ export interface GivenAddress {
   number: string;
 }
 
-interface Address extends GivenAddress {
+export interface Address extends GivenAddress {
   id: string;
 }
 
@@ -62,3 +62,38 @@ export type AddressCreationAction =
       };
     }
   | { type: "USER_ADDRESS_CREATE_RESET" };
+
+export type AddressEditionAction =
+  | {
+      type: "USER_ADDRESS_EDIT_REQUEST";
+    }
+  | {
+      type: "USER_ADDRESS_EDIT_SUCCESS";
+    }
+  | {
+      type: "USER_ADDRESS_EDIT_FAIL";
+      payload: {
+        message: String;
+      };
+    }
+  | { type: "USER_ADDRESS_EDIT_RESET" };
+
+export interface AddressShowState extends DefaultState {
+  address?: Address;
+}
+
+export type AddressShowAction =
+  | {
+      type: "USER_ADDRESS_SHOW_REQUEST";
+    }
+  | {
+      type: "USER_ADDRESS_SHOW_SUCCESS";
+      payload: Address;
+    }
+  | {
+      type: "USER_ADDRESS_SHOW_FAIL";
+      payload: {
+        message: String;
+      };
+    }
+  | { type: "USER_ADDRESS_SHOW_RESET" };

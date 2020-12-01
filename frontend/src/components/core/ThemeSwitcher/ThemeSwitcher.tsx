@@ -89,8 +89,6 @@ const ThemeSwitcher: React.FC = () => {
     dispatch(switchTheme());
   };
 
-  console.log(theme);
-
   return (
     <Container>
       <Input

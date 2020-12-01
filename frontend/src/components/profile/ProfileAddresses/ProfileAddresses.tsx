@@ -4,7 +4,10 @@ import { toast } from "react-toastify";
 import { DefaultState } from "../../../@types/redux";
 import { AddressesState } from "../../../@types/redux/address";
 import { deleteAddress, listAddress } from "../../../actions/addressActions";
-import { openCreateAddressModal } from "../../../actions/uiActions";
+import {
+  openCreateAddressModal,
+  openEditAddressModal,
+} from "../../../actions/uiActions";
 import { reduxStore } from "../../../store";
 import Loading from "../../ui/Loading";
 
@@ -63,6 +66,10 @@ const ProfileAddresses: React.FC = () => {
     dispatch(openCreateAddressModal());
   };
 
+  const handleAddressEdition = (id: string) => {
+    dispatch(openEditAddressModal(id));
+  };
+
   if (loading) return <Loading />;
 
   return (
@@ -87,7 +94,7 @@ const ProfileAddresses: React.FC = () => {
           <InfoLine>
             <strong>Number</strong>: {address.number}
           </InfoLine>
-          <EditIcon />
+          <EditIcon onClick={() => handleAddressEdition(address.id)} />
           <RemoveIcon onClick={() => handleAddressDeletion(address.id)} />
         </Address>
       ))}

@@ -125,6 +125,7 @@ export type ThemeAction = {
 export interface ModalState {
   open: boolean;
   view?: "USER_EDIT_PROFILE" | "USER_CREATE_ADDRESS" | "USER_EDIT_ADDRESS";
+  entityId?: string;
 }
 
 export type ModalAction =
@@ -136,5 +137,6 @@ export type ModalAction =
     }
   | {
       type: "USER_EDIT_ADDRESS";
+      payload: { id: string };
     }
   | { type: "CLOSE_MODAL" };

@@ -17,6 +17,26 @@ export const SignUpInitialState = {
   contact_number: "",
 };
 
+export const AddressInitialState = {
+  state: "",
+  city: "",
+  neighborhood: "",
+  postal_code: "",
+  street: "",
+  number: "",
+};
+
+export const AddressSchema = Yup.object().shape({
+  state: Yup.string().required(),
+  city: Yup.string().required(),
+  neighborhood: Yup.string().required(),
+  postal_code: Yup.string()
+    .matches(/(\d{5})(-{1})(\d{3})/, "Invalid format")
+    .required(),
+  street: Yup.string().required(),
+  number: Yup.number().required(),
+});
+
 export const SignUpSchema = Yup.object().shape({
   name: Yup.string().required().max(120).min(3),
   email: Yup.string().required().email(),
