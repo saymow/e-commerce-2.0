@@ -53,7 +53,7 @@ const SideBar: React.FC = () => {
 
   if (!show) return null;
 
-  documentRef!.style.overflow = "hidden";
+  if (documentRef) documentRef.style.overflow = "hidden";
 
   return (
     <Wrapper>

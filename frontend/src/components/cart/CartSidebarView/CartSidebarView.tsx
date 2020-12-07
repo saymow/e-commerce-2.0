@@ -8,6 +8,7 @@ import {
 } from "../../../actions/cartActions";
 import { reduxStore } from "../../../store";
 import { priceFormmater } from "../../../utils";
+import Link from "../../core/Link";
 import Button from "../../ui/Button";
 import CartProduct from "../CartProduct";
 import { Container, Details, Information, ProductList } from "./styles";
@@ -38,7 +39,10 @@ const CartSidebarView: React.FC = () => {
             <strong>total</strong> <strong>{priceFormmater(total)}</strong>
           </div>
         </Details>
-        <Button variant="fill">PROCEED TO CHECKOUT</Button>
+
+        <Link href="/checkout">
+          <Button variant="fill">PROCEED TO CHECKOUT</Button>
+        </Link>
       </Information>
     </Container>
   );

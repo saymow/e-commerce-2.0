@@ -1,28 +1,27 @@
 import React from "react";
-import { CartProduct as ICartProduct } from "../../../@types/redux";
 import Image from "next/image";
+
+import { CartProduct } from "../../../../@types/redux";
 
 import {
   Container,
+  Info,
   MinusIcon,
+  Name,
   PlusIcon,
-  ProductDetails,
-  ProductImage,
-  ProductName,
-  ProductPrice,
+  Price,
   QtyContainer,
-  RemoveProductIcon,
+  TrashIcon,
 } from "./styles";
-import { priceFormmater } from "../../../utils";
 import { useDispatch } from "react-redux";
 import {
   addProductToCart,
   removeProductFromCart,
-} from "../../../actions/cartActions";
+} from "../../../../actions/cartActions";
+import { priceFormmater } from "../../../../utils";
 
-const CartProduct: React.FC<{ product: ICartProduct }> = ({ product }) => {
+const CheckoutProduct: React.FC<{ product: CartProduct }> = ({ product }) => {
   const dispatch = useDispatch();
-
   const handleAddProductToCart = () => {
     dispatch(addProductToCart(product));
   };
@@ -33,15 +32,12 @@ const CartProduct: React.FC<{ product: ICartProduct }> = ({ product }) => {
 
   return (
     <Container>
-      <ProductImage>
-        <Image src={product.image} width={80} height={80} layout="intrinsic" />
-      </ProductImage>
-      <ProductDetails>
+      <Image src={product.image} width={220} height={220} layout="intrinsic" />
+      <Info>
         <div>
-          <ProductName>{product.name}</ProductName>
-          <ProductPrice>{priceFormmater(product.price)}</ProductPrice>
+          <Name>{product.name}</Name>
+          <Price>{priceFormmater(product.price)}</Price>
         </div>
-        <RemoveProductIcon onClick={() => handleRemoveProductFromCart(true)} />
         <QtyContainer>
           <button onClick={() => handleRemoveProductFromCart()}>
             <MinusIcon />
@@ -51,9 +47,10 @@ const CartProduct: React.FC<{ product: ICartProduct }> = ({ product }) => {
             <PlusIcon />
           </button>
         </QtyContainer>
-      </ProductDetails>
+        <TrashIcon />
+      </Info>
     </Container>
   );
 };
 
-export default CartProduct;
+export default CheckoutProduct;
