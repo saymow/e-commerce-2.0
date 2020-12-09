@@ -26,6 +26,7 @@ import {
   addressEditReducer,
   addressShowReducer,
 } from "./reducers/addressReducers";
+import { shipmentCalculatorReducer } from "./reducers/servicesReducers";
 
 export const reduxStore = {
   userSession: userSessionReducer,
@@ -38,6 +39,7 @@ export const reduxStore = {
   addressCreate: addressCreateReducer,
   addressShow: addressShowReducer,
   addressEdit: addressEditReducer,
+  shipmentCalculator: shipmentCalculatorReducer,
   userEdit: userEditReducer,
   shopPagination: shopPaginationReducer,
   wishList: wishListReducer,

@@ -9,3 +9,7 @@ export const dateFormmater = (dateAsString: string) => {
 
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 };
+
+// 55,55  => 5555
+export const shippingServicePriceFormmater = (price: string) =>
+  parseInt(price.replace(",", ""));

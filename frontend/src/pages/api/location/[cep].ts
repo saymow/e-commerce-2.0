@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Correios from "node-correios";
-
-let correios = new Correios();
+import { consultarCep } from "correios-brasil";
 
 // let args = {
 //   nCdServico: "04014", // SEDEX/PAC
@@ -18,7 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     const { cep } = req.query;
 
-    const result = await correios.consultaCEP({ cep });
+    const result = await consultarCep(cep);
 
     if (result.erro) res.status(400).send({});
 
