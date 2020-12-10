@@ -15,6 +15,8 @@ import Layout from "../../components/core/Layout";
 import Button from "../../components/ui/Button";
 import { reduxStore } from "../../store";
 import { priceFormmater } from "../../utils";
+import useSession from "../../hooks/useSession";
+import Link from "../../components/core/Link";
 
 const Container = styled.div``;
 
@@ -95,6 +97,7 @@ interface SuccessPostalCodeServiceResponseOnInterface
 
 const Shipment: React.FC = () => {
   const dispatch = useDispatch();
+  const [userSession, userSessionLoading] = useSession();
 
   const [postalCode, setPostalCode] = useState("");
   const [shipmentController, setShipmentController] = useState<{
@@ -164,46 +167,57 @@ const Shipment: React.FC = () => {
   return (
     <Layout>
       <CheckoutLayout title="shipment method">
-        <Container>
-          <InputContainer>
-            <Form onSubmit={handleSubmit}>
-              <Input
-                id="postalCode"
-                name="postalCode"
-                placeholder="XXXXX-XXX"
-                pattern="(\d{5})(-{1})(\d{3})"
-                mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
-                value={postalCode}
-                onChange={(e: any) => setPostalCode(e.target.value)}
-              />
-              <Button variant="fill" disabled={serviceLoading}>
-                CHECK POSTAL CODE
-              </Button>
-            </Form>
-          </InputContainer>
-          {shipmentController.methods.length !== 0 &&
-            shipmentController.postalCode && (
-              <ResultContainer>
-                {shipmentController.methods.map((service) => (
-                  <ShipmentMethod
-                    key={service.code}
-                    selected={service.selected}
-                    onClick={() => handleSelectMethod(service.code)}
-                  >
-                    <TruckIcon />
-                    <strong>{service.name}</strong>
-                    <p>{priceFormmater(service.value)}</p>
-                    <p>Deadline: {service.deadline} working days.</p>
-                  </ShipmentMethod>
-                ))}
-              </ResultContainer>
+        {!userSessionLoading && (
+          <Container>
+            <InputContainer>
+              <Form onSubmit={handleSubmit}>
+                <Input
+                  id="postalCode"
+                  name="postalCode"
+                  placeholder="XXXXX-XXX"
+                  pattern="(\d{5})(-{1})(\d{3})"
+                  required
+                  mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
+                  value={postalCode}
+                  onChange={(e: any) => setPostalCode(e.target.value)}
+                />
+                <Button variant="fill" disabled={serviceLoading}>
+                  CHECK POSTAL CODE
+                </Button>
+              </Form>
+            </InputContainer>
+            {shipmentController.methods.length !== 0 &&
+              shipmentController.postalCode && (
+                <ResultContainer>
+                  {shipmentController.methods.map((service) => (
+                    <ShipmentMethod
+                      key={service.code}
+                      selected={service.selected}
+                      onClick={() => handleSelectMethod(service.code)}
+                    >
+                      <TruckIcon />
+                      <strong>{service.name}</strong>
+                      <p>{priceFormmater(service.value)}</p>
+                      <p>Deadline: {service.deadline} working days.</p>
+                    </ShipmentMethod>
+                  ))}
+                </ResultContainer>
+              )}
+            {showNextButton && (
+              <OptionsContainer>
+                <Link
+                  href={
+                    userSession
+                      ? "/checkout/address"
+                      : "/signin?redirect=checkout/shipment"
+                  }
+                >
+                  <Button variant="fill">CONTINUE CHECKOUT</Button>
+                </Link>
+              </OptionsContainer>
             )}
-          {showNextButton && (
-            <OptionsContainer>
-              <Button variant="fill">CONTINUE CHECKOUT</Button>
-            </OptionsContainer>
-          )}
-        </Container>
+          </Container>
+        )}
       </CheckoutLayout>
     </Layout>
   );

@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import { CustomFC } from "../@types";
 import { RegisterState } from "../@types/redux/user";
 import { register } from "../actions/userActions";
 import Layout from "../components/core/Layout";
+import Link from "../components/core/Link";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import { reduxStore } from "../store";
@@ -45,9 +46,16 @@ const SignUp: CustomFC = () => {
 
   const dispatch = useDispatch();
 
+  const [redirect, setRedirect] = useState<string | undefined>();
+
   const { loading, success, error, reset } = useSelector<typeof reduxStore>(
     (state) => state.userRegister
   ) as RegisterState;
+
+  useEffect(() => {
+    const { redirect: routerRedirect } = router.query;
+    if (routerRedirect) setRedirect(routerRedirect as string);
+  }, [router]);
 
   useEffect(() => {
     if (error && reset) {
@@ -57,7 +65,7 @@ const SignUp: CustomFC = () => {
   }, [error, reset]);
 
   useEffect(() => {
-    if (success) router.push("/profile");
+    if (success) router.push(redirect ? `/${redirect}` : "/profile");
   }, [success]);
 
   return (
@@ -93,6 +101,9 @@ const SignUp: CustomFC = () => {
             </Form>
           )}
         </Formik>
+        <Link href={redirect ? `/signin?redirect=${redirect}` : "/signin"}>
+          Sign in
+        </Link>
       </Container>
     </Layout>
   );
