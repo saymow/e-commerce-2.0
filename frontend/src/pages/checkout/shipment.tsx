@@ -17,6 +17,10 @@ import { reduxStore } from "../../store";
 import { priceFormmater } from "../../utils";
 import useSession from "../../hooks/useSession";
 import Link from "../../components/core/Link";
+import { useRouter } from "next/router";
+import { createShipmentData } from "../../actions/checkoutActions";
+import { DefaultState } from "../../@types/redux";
+import { ShipmentCreateState } from "../../@types/redux/checkout";
 
 const Container = styled.div``;
 
@@ -96,6 +100,7 @@ interface SuccessPostalCodeServiceResponseOnInterface
 }
 
 const Shipment: React.FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [userSession, userSessionLoading] = useSession();
 
@@ -116,6 +121,16 @@ const Shipment: React.FC = () => {
   } = useSelector<typeof reduxStore>(
     (state) => state.shipmentCalculator
   ) as ShipmentCalculatorState;
+
+  const {
+    id: checkoutId,
+    loading: shipmentCreationLoading,
+    success: shipmentCreationSuccess,
+    error: shipmentCreationError,
+    reset: shipmentCreationReset,
+  } = useSelector<typeof reduxStore>(
+    (state) => state.checkoutShipmentCreate
+  ) as ShipmentCreateState;
 
   useEffect(() => {
     if (serviceSuccess) {
@@ -143,6 +158,20 @@ const Shipment: React.FC = () => {
     }
   }, [serviceError, serviceReset]);
 
+  useEffect(() => {
+    if (shipmentCreationError && shipmentCreationReset) {
+      toast.error("Error on saving shipment options");
+      dispatch(shipmentCreationReset());
+    }
+  }, [shipmentCreationError, shipmentCreationReset]);
+
+  useEffect(() => {
+    if (shipmentCreationSuccess && shipmentCreationReset && checkoutId) {
+      router.push(`/checkout/${checkoutId}/address/`);
+      dispatch(shipmentCreationReset());
+    }
+  }, [shipmentCreationSuccess, shipmentCreationReset]);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -162,6 +191,22 @@ const Shipment: React.FC = () => {
       ...shipmentController,
       methods: newMethodsArray,
     });
+  };
+
+  const handleContinueCheckout = () => {
+    if (!userSession) return router.push("/signin?redirect=checkout/shipment");
+
+    const choosenMethod = shipmentController.methods.find(
+      (method) => method.selected
+    ) as SuccessPostalCodeServiceResponseOnInterface;
+
+    const shipmentData = {
+      ...choosenMethod,
+      postalCode: shipmentController.postalCode as string,
+    };
+
+    // this will store the data on redis.
+    dispatch(createShipmentData(shipmentData));
   };
 
   return (
@@ -205,15 +250,13 @@ const Shipment: React.FC = () => {
               )}
             {showNextButton && (
               <OptionsContainer>
-                <Link
-                  href={
-                    userSession
-                      ? "/checkout/address"
-                      : "/signin?redirect=checkout/shipment"
-                  }
+                <Button
+                  variant="fill"
+                  disabled={shipmentCreationLoading}
+                  onClick={handleContinueCheckout}
                 >
-                  <Button variant="fill">CONTINUE CHECKOUT</Button>
-                </Link>
+                  CONTINUE CHECKOUT
+                </Button>
               </OptionsContainer>
             )}
           </Container>

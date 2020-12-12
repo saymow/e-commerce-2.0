@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import Address from '../models/Address';
 import { getRepository } from 'typeorm';
 import CreateAddressService from '../services/address/CreateAddressService';
-import UpdateAddressService from '@services/address/UpdateAddressService';
+import UpdateAddressService from '../services/address/UpdateAddressService';
 
 class AddressController {
   async create(req: Request, res: Response) {
@@ -44,7 +44,7 @@ class AddressController {
     const addressesRepository = getRepository(Address);
 
     const userId = req.session!.user.id;
-    const addressId = req.route.id;
+    const addressId = req.params.id;
 
     const address = await addressesRepository.findOne({
       where: { user_id: userId, id: addressId },
@@ -56,7 +56,7 @@ class AddressController {
   async update(req: Request, res: Response) {
     const updateAddressService = new UpdateAddressService();
 
-    const addressId = req.route.id;
+    const addressId = req.params.id;
     const userId = req.session!.user.id;
 
     const data = req.body;
@@ -69,7 +69,7 @@ class AddressController {
   async destory(req: Request, res: Response) {
     const addressesRepository = getRepository(Address);
 
-    const addressId = req.route.id;
+    const addressId = req.params.id;
     const userId = req.session!.user.id;
 
     await addressesRepository.delete({ id: addressId, user_id: userId });

@@ -27,6 +27,7 @@ import {
   addressShowReducer,
 } from "./reducers/addressReducers";
 import { shipmentCalculatorReducer } from "./reducers/servicesReducers";
+import CheckoutController from "./reducers/checkoutReducers";
 
 export const reduxStore = {
   userSession: userSessionReducer,
@@ -47,6 +48,7 @@ export const reduxStore = {
   cart: cartReducer,
   theme: themeReducer,
   modal: modalReducer,
+  checkoutShipmentCreate: CheckoutController.shipmentCreateReducer,
 };
 
 const reducer = combineReducers(reduxStore);

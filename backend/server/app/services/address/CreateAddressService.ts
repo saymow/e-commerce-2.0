@@ -18,7 +18,9 @@ const schema = Yup.object().shape({
   city: Yup.string().required(),
   neighborhood: Yup.string().required(),
   street: Yup.string().required(),
-  postal_code: Yup.string().required(),
+  postal_code: Yup.string()
+    .required()
+    .matches(/(\d{5})(-{1})(\d{3})/, 'Invalid format'),
   // .matches(/5{\d}-3{\d}/), //format 99999-999
   number: Yup.string().required().max(4),
 });
