@@ -4,7 +4,7 @@ import {
   setupFakeData,
   tearEnvironment,
   fakeAdmin,
-} from '@__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import AdminLoginService from './AdminLoginService';
 import LoginService from './LoginService';
 

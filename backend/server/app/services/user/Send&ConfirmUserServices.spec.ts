@@ -6,16 +6,16 @@ import {
   tearEnvironment,
   fakeUser,
   fakeUser2,
-} from '../../../__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import ConfirmUserService from './ConfirmUserService';
 import SendUserConfirmationEmail from './SendUserConfirmationEmail';
 
-beforeAll(async () => {
+beforeEach(async () => {
   await setupEnvironment();
   await setupFakeData();
 });
 
-afterAll(tearEnvironment);
+afterEach(tearEnvironment);
 
 describe('User confirmation service', () => {
   it('Should confirm a valid user', async () => {

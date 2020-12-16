@@ -1,11 +1,11 @@
-import AdminLoginService from '../services/session/AdminLoginService';
+import AdminLoginService from '@services/session/AdminLoginService';
 import { Request, Response } from 'express';
 import { COOKIE_NAME } from '../constants';
 import UserView from '../views/api/user_view';
 
-import ChangePasswordService from '../services/session/ChangePasswordService';
-import ForgotPasswordService from '../services/session/ForgotPasswordService';
-import LoginService from '../services/session/LoginService';
+import ChangePasswordService from '@services/session/ChangePasswordService';
+import ForgotPasswordService from '@services/session/ForgotPasswordService';
+import LoginService from '@services/session/LoginService';
 
 class SessionController {
   async login(req: Request, res: Response) {

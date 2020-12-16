@@ -2,9 +2,8 @@ import AddressController from '../../controllers/addressController';
 import { authMiddleware } from '../../middlewares/authMiddleware';
 import { Router } from 'express';
 
-const addressController = new AddressController();
-
 const routes = Router();
+const addressController = new AddressController();
 
 routes.post('/', authMiddleware, addressController.create);
 routes.get('/', authMiddleware, addressController.index);

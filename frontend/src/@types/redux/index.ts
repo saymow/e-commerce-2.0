@@ -1,4 +1,5 @@
 import { IProduct } from "../";
+import { ShipmentData } from "./checkout";
 
 export interface DefaultState {
   loading?: boolean;
@@ -90,11 +91,11 @@ interface Address {
 }
 
 export interface CartState {
+  total: number;
   subtotal: number;
   shippingCost: number;
-  total: number;
   products: CartProduct[];
-  address?: Address;
+  shipmentMethod?: ShipmentData;
 }
 
 export type CartAction =
@@ -112,7 +113,8 @@ export type CartAction =
   | { type: "UPDATE_TOTAL_CART" }
   | {
       type: "RESET_CART";
-    };
+    }
+  | { type: "ADD_SHIPMENT_METHOD_CART"; payload: ShipmentData };
 
 export interface ThemeState {
   theme: "dark-mode" | "light-mode";

@@ -26,7 +26,6 @@ export const errorHandler = (
       errorsMap[path] = message;
     });
 
-    console.log(error);
     return res.status(400).send({ type: 'Invalid fields', fields: errorsMap });
   }
 

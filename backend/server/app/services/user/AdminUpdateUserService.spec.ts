@@ -5,7 +5,7 @@ import {
   setupEnvironment,
   setupFakeData,
   tearEnvironment,
-} from '@__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import { getRepository } from 'typeorm';
 import User from '../../models/User';
 import AdminUpdateUserService from './AdminUpdateUserService';

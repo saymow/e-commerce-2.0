@@ -1,10 +1,9 @@
 import { Router } from 'express';
-
 import SessionController from '../../controllers/sessionController';
-import { authMiddleware, authAdmin } from '../../middlewares/authMiddleware';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
-const sessionController = new SessionController();
 const routes = Router();
+const sessionController = new SessionController();
 
 routes.post('/', sessionController.login);
 routes.post('/me', authMiddleware, sessionController.status);

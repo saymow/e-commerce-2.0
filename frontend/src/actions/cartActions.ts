@@ -1,5 +1,6 @@
 import { IProduct } from "../@types";
 import { AsideBarAction, CartAction, CartState } from "../@types/redux";
+import { ShipmentData } from "../@types/redux/checkout";
 import { LOCAL_STORAGE_PREFIX } from "../utils/constants";
 
 const saveCart = (cart: CartState) => {
@@ -33,4 +34,15 @@ export const removeProductFromCart = (
   const { cart } = getState();
 
   saveCart(cart);
+};
+
+export const addShipmmentDataToCart = (shipmentMethod: ShipmentData) => async (
+  dispatch: (arg0: CartAction) => void
+) => {
+  dispatch({ type: "ADD_SHIPMENT_METHOD_CART", payload: shipmentMethod });
+  dispatch({ type: "UPDATE_TOTAL_CART" });
+};
+
+export const resetCart = () => async (dispatch: (arg0: CartAction) => void) => {
+  dispatch({ type: "RESET_CART" });
 };

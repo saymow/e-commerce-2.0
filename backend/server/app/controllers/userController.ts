@@ -3,15 +3,15 @@ import { getRepository } from 'typeorm';
 import { WEB_VIEW_URL } from '../constants';
 import AppError from '../errors/AppError';
 import User from '../models/User';
-import UpdateConfirmedUserEmailService from '../services/user/UpdateConfirmedUserEmailService';
-import AdminConfirmUserService from '../services/user/AdminConfirmUserService';
-import AdminDeleteUserService from '../services/user/AdminDeleteUserService';
-import AdminUpdateUserService from '../services/user/AdminUpdateUserService';
-import ConfirmUserService from '../services/user/ConfirmUserService';
-import CreateUserService from '../services/user/CreateUserService';
-import SendUserConfirmationEmail from '../services/user/SendUserConfirmationEmail';
-import SetAdminService from '../services/user/SetAdminService';
-import UpdateUserService from '../services/user/UpdateUserService';
+import UpdateConfirmedUserEmailService from '@services/user/UpdateConfirmedUserEmailService';
+import AdminConfirmUserService from '@services/user/AdminConfirmUserService';
+import AdminDeleteUserService from '@services/user/AdminDeleteUserService';
+import AdminUpdateUserService from '@services/user/AdminUpdateUserService';
+import ConfirmUserService from '@services/user/ConfirmUserService';
+import CreateUserService from '@services/user/CreateUserService';
+import SendUserConfirmationEmail from '@services/user/SendUserConfirmationEmail';
+import SetAdminService from '@services/user/SetAdminService';
+import UpdateUserService from '@services/user/UpdateUserService';
 import userView from '../views/api/user_view';
 
 class UserController {

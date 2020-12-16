@@ -3,7 +3,7 @@ import {
   setupEnvironment,
   setupFakeData,
   tearEnvironment,
-} from '@__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import LoginService from './LoginService';
 
 beforeAll(async () => {

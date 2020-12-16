@@ -5,8 +5,8 @@ import Product from '../models/Product';
 
 import ProductView from '../views/api/product_view';
 
-import CreateProductService from '../services/product/CreateProductService';
-import UpdateProductService from '../services/product/UpdateProductService';
+import CreateProductService from '@services/product/CreateProductService';
+import UpdateProductService from '@services/product/UpdateProductService';
 import AppError from '../errors/AppError';
 
 class ProductController {

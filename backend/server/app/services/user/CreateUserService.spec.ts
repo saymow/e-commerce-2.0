@@ -3,7 +3,7 @@ import {
   fakeUser2,
   setupEnvironment,
   tearEnvironment,
-} from '@__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import CreateUserService from './CreateUserService';
 
 beforeAll(setupEnvironment);

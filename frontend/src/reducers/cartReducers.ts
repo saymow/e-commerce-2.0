@@ -66,6 +66,11 @@ export const cartReducer = (
 
       return { ...state, total: newTotal, subtotal: newSubtotal };
     }
+    case "ADD_SHIPMENT_METHOD_CART": {
+      const shipmentMethod = action.payload;
+
+      return { ...state, shipmentMethod, shippingCost: shipmentMethod.value };
+    }
     case "RESET_CART":
       return cartInitialState;
     default:

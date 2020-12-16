@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import UserController from '../../controllers/userController';
-import { authAdmin, authMiddleware } from '../../middlewares/authMiddleware';
-
-const userController = new UserController();
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 const routes = Router();
+const userController = new UserController();
 
 routes.post('/', userController.create);
 routes.put('/', authMiddleware, userController.update);

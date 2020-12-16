@@ -1,6 +1,6 @@
 class AppError {
   message: string;
-
+  stack = new Error().stack;
   statusCode: number;
 
   constructor(message: string, statusCode = 400) {

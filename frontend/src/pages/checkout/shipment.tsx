@@ -1,26 +1,28 @@
-import React, { FormEvent, useState } from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { LocalShipping } from "@styled-icons/material-outlined";
+import { useRouter } from "next/router";
+import React, { FormEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MaskedInput from "react-text-mask";
 import { toast } from "react-toastify";
 import styled from "styled-components";
+import { CartState } from "../../@types/redux";
+import {
+  CheckoutCreateState,
+  FilledCartState,
+} from "../../@types/redux/checkout";
 import {
   ShipmentCalculatorState,
   SuccessPostalCodeServiceResponse,
 } from "../../@types/redux/services";
+import { addShipmmentDataToCart } from "../../actions/cartActions";
+import { createCheckout } from "../../actions/checkoutActions";
 import { getShipmentMethods } from "../../actions/servicesActions";
 import CheckoutLayout from "../../components/checkout/CheckoutLayout";
 import Layout from "../../components/core/Layout";
 import Button from "../../components/ui/Button";
+import useSession from "../../hooks/useSession";
 import { reduxStore } from "../../store";
 import { priceFormmater } from "../../utils";
-import useSession from "../../hooks/useSession";
-import Link from "../../components/core/Link";
-import { useRouter } from "next/router";
-import { createShipmentData } from "../../actions/checkoutActions";
-import { DefaultState } from "../../@types/redux";
-import { ShipmentCreateState } from "../../@types/redux/checkout";
 
 const Container = styled.div``;
 
@@ -129,8 +131,12 @@ const Shipment: React.FC = () => {
     error: shipmentCreationError,
     reset: shipmentCreationReset,
   } = useSelector<typeof reduxStore>(
-    (state) => state.checkoutShipmentCreate
-  ) as ShipmentCreateState;
+    (state) => state.checkoutCreate
+  ) as CheckoutCreateState;
+
+  const cartData = useSelector<typeof reduxStore>(
+    (state) => state.cart
+  ) as CartState;
 
   useEffect(() => {
     if (serviceSuccess) {
@@ -186,6 +192,17 @@ const Shipment: React.FC = () => {
       selected: service.code === code,
     }));
 
+    const choosenMethod = shipmentController.methods.find(
+      (method) => method.code
+    ) as SuccessPostalCodeServiceResponseOnInterface;
+
+    const shipmentMethod = {
+      ...choosenMethod,
+      selected: undefined,
+      postalCode: shipmentController.postalCode as string,
+    };
+
+    dispatch(addShipmmentDataToCart(shipmentMethod));
     setShowNextButton(true);
     setShipmentController({
       ...shipmentController,
@@ -196,17 +213,18 @@ const Shipment: React.FC = () => {
   const handleContinueCheckout = () => {
     if (!userSession) return router.push("/signin?redirect=checkout/shipment");
 
-    const choosenMethod = shipmentController.methods.find(
-      (method) => method.selected
-    ) as SuccessPostalCodeServiceResponseOnInterface;
+    let keys = [
+      "products",
+      "total",
+      "shippingCost",
+      "products",
+      "shipmentMethod",
+    ];
+    const cartDataKeys = Object.keys(cartData);
 
-    const shipmentData = {
-      ...choosenMethod,
-      postalCode: shipmentController.postalCode as string,
-    };
-
-    // this will store the data on redis.
-    dispatch(createShipmentData(shipmentData));
+    if (!keys.every((key) => cartDataKeys.includes(key))) {
+      toast.error("Checkout cart data missing");
+    } else dispatch(createCheckout(cartData as FilledCartState));
   };
 
   return (

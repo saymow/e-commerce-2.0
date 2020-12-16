@@ -1,24 +1,34 @@
 import { SuccessPostalCodeServiceResponse } from "./services";
-import { DefaultState } from ".";
+import { CartProduct, DefaultState } from ".";
 
 export type ShipmentData = SuccessPostalCodeServiceResponse;
 
-export interface ShipmentCreateState extends DefaultState {
+export interface FilledCartState {
+  total: number;
+  subtotal: number;
+  shippingCost: number;
+  products: CartProduct[];
+  shipmentMethod: ShipmentData;
+}
+
+export interface CheckoutCreateState extends DefaultState {
   id?: string;
 }
 
-export type ShipmentCreationAction =
+export type CheckoutCreationAction =
   | {
-      type: "SHIPMENT_CREATE_REQUEST";
+      type: "CHECKOUT_CREATE_REQUEST";
     }
   | {
-      type: "SHIPMENT_CREATE_SUCCESS";
-      payload: { id: string };
+      type: "CHECKOUT_CREATE_SUCCESS";
+      payload: {
+        id: string;
+      };
     }
   | {
-      type: "SHIPMENT_CREATE_FAIL";
+      type: "CHECKOUT_CREATE_FAIL";
       payload: {
         message: string;
       };
     }
-  | { type: "SHIPMENT_CREATE_RESET" };
+  | { type: "CHECKOUT_CREATE_RESET" };

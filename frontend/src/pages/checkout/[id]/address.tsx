@@ -6,18 +6,18 @@ import api from "../../../services/api";
 
 import { Address as AddressType } from "../../../@types/redux/address";
 import CheckoutLayout from "../../../components/checkout/CheckoutLayout";
-import { ShipmentData } from "../../../@types/redux/checkout";
+import { FilledCartState, ShipmentData } from "../../../@types/redux/checkout";
 import { CustomFC } from "../../../@types";
 
 // import { Container } from './styles';
 
 interface Props {
   addresses: AddressType;
-  shipmentMethod: ShipmentData;
+  cart: FilledCartState;
 }
 
-const Address: CustomFC<Props> = ({ addresses, shipmentMethod }) => {
-  console.log(addresses, shipmentMethod);
+const Address: CustomFC<Props> = ({ addresses, cart }) => {
+  console.log(addresses, cart);
 
   return (
     <Layout>
@@ -46,13 +46,13 @@ export const getServerSideProps: GetServerSideProps = async ({
     const { data: addressesData } = await api.get("/addresses", authHeader);
 
     const {
-      data: { shipmentMethod },
-    } = await api.get(`/checkout/${checkoutId}/shipment`, authHeader);
+      data: { cart },
+    } = await api.get(`/checkout/${checkoutId}`, authHeader);
 
     return {
       props: {
         addresses: addressesData,
-        shipmentMethod: shipmentMethod,
+        cart,
       },
     };
   } catch (err) {

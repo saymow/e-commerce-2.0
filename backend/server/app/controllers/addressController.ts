@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 
 import Address from '../models/Address';
 import { getRepository } from 'typeorm';
-import CreateAddressService from '../services/address/CreateAddressService';
-import UpdateAddressService from '../services/address/UpdateAddressService';
+import CreateAddressService from '@services/address/CreateAddressService';
+import UpdateAddressService from '@services/address/UpdateAddressService';
 
 class AddressController {
   async create(req: Request, res: Response) {

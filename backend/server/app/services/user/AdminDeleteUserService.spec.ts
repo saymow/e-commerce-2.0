@@ -7,7 +7,7 @@ import {
   setupEnvironment,
   setupFakeData,
   tearEnvironment,
-} from '../../../__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import User from '../../models/User';
 import AdminDeleteUserService from './AdminDeleteUserService';
 

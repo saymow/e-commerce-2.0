@@ -11,8 +11,8 @@
     "test": "env-cmd -f ./config/typeorm.test.env jest --watch --forceExit --runInBand"
   },
   "_moduleAliases": {
-    "@__tests__": "dist/__tests__",
-    "@services": "dist/app/services"
+    "@__tests__": "server/__tests__",
+    "@services": "server/app/services"
   },
   "keywords": [],
   "author": "",
@@ -50,6 +50,7 @@
     "bull": "^3.18.1",
     "bull-board": "^0.9.0",
     "connect-redis": "^5.0.0",
+    "correios-brasil": "^2.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",

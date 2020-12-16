@@ -6,7 +6,7 @@ import {
   setupEnvironment,
   setupFakeData,
   tearEnvironment,
-} from '../../../__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import CreateAddressService from './CreateAddressService';
 import AppError from '../../errors/AppError';
 

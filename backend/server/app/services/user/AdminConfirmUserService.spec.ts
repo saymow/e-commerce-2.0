@@ -7,7 +7,7 @@ import {
   fakeUser,
   fakeAdmin,
   fakeUser2,
-} from '../../../__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import AdminConfirmUserService from './AdminConfirmUserService';
 
 beforeEach(async () => {

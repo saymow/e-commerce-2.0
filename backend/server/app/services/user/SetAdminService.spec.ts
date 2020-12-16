@@ -7,7 +7,7 @@ import {
   fakeUser,
   fakeUser2,
   fakeAdmin,
-} from '../../../__tests__/fixtures/db';
+} from '@__tests__/fixtures';
 import SetAdminService from './SetAdminService';
 
 beforeAll(async () => {
