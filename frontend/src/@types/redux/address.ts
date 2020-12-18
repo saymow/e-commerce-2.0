@@ -1,11 +1,14 @@
 import { DefaultState } from ".";
 
-export interface GivenAddress {
+export interface FetchedAddress {
   state: string;
   city: string;
   neighborhood: string;
   street: string;
   postal_code: string;
+}
+
+export interface GivenAddress extends FetchedAddress {
   number: string;
 }
 

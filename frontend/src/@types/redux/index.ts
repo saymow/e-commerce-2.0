@@ -1,4 +1,5 @@
 import { IProduct } from "../";
+import { Address, FetchedAddress, GivenAddress } from "./address";
 import { ShipmentData } from "./checkout";
 
 export interface DefaultState {
@@ -80,23 +81,14 @@ export interface CartProduct extends IProduct {
   qty: number;
 }
 
-interface Address {
-  street: string;
-  neighborhood: string;
-  postalCode: string;
-  location: {
-    city: string;
-    state: string;
-  };
-}
-
 export interface CartState {
   total: number;
   subtotal: number;
   shippingCost: number;
   products: CartProduct[];
-  shipmentMethod?: ShipmentData;
   locked: boolean;
+  shipmentMethod?: ShipmentData;
+  shipmentAddress?: FetchedAddress | Address;
 }
 
 export type CartAction =
@@ -116,6 +108,7 @@ export type CartAction =
       type: "RESET_CART";
     }
   | { type: "ADD_SHIPMENT_METHOD_CART"; payload: ShipmentData }
+  | { type: "ADD_ADDRESS_CART"; payload: FetchedAddress }
   | { type: "SET_ENTIRE_CART"; payload: CartState }
   | { type: "LOCK_CART" }
   | { type: "UNLOCK_CART" };

@@ -1,7 +1,10 @@
 import { SuccessPostalCodeServiceResponse } from "./services";
 import { CartProduct, DefaultState } from ".";
 
-export type ShipmentData = SuccessPostalCodeServiceResponse;
+export type ShipmentData = SuccessPostalCodeServiceResponse & {
+  postalCode: string;
+  name: string;
+};
 
 export interface FilledCartState {
   total: number;

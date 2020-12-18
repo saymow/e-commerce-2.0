@@ -1,5 +1,6 @@
 import { IProduct } from "../@types";
 import { AsideBarAction, CartAction, CartState } from "../@types/redux";
+import { FetchedAddress } from "../@types/redux/address";
 import { ShipmentData } from "../@types/redux/checkout";
 import { LOCAL_STORAGE_PREFIX } from "../utils/constants";
 
@@ -21,7 +22,7 @@ export const addProductToCart = (product: IProduct) => async (
   dispatch({ type: "UPDATE_TOTAL_CART" });
   dispatch({ type: "ASIDE_SHOW_CART" });
 
-  const { updatedCart } = getState();
+  const { cart: updatedCart } = getState();
 
   saveCart(updatedCart);
 };
@@ -43,7 +44,7 @@ export const removeProductFromCart = (
   dispatch({ type: "UPDATE_TOTAL_CART" });
   dispatch({ type: "ASIDE_SHOW_CART" });
 
-  const { updatedCart } = getState();
+  const { cart: updatedCart } = getState();
 
   saveCart(updatedCart);
 };
@@ -53,6 +54,12 @@ export const addShipmmentDataToCart = (shipmentMethod: ShipmentData) => async (
 ) => {
   dispatch({ type: "ADD_SHIPMENT_METHOD_CART", payload: shipmentMethod });
   dispatch({ type: "UPDATE_TOTAL_CART" });
+};
+
+export const addAddressDataToCart = (address: FetchedAddress) => async (
+  dispatch: (arg0: CartAction) => void
+) => {
+  dispatch({ type: "ADD_ADDRESS_CART", payload: address });
 };
 
 export const resetCart = () => async (dispatch: (arg0: CartAction) => void) => {

@@ -1,7 +1,8 @@
+import { shippingServicePriceFormmater } from '../utils/servicesFormatters';
 import { Any, getRepository } from 'typeorm';
 import * as Yup from 'yup';
 import AppError from '../errors/AppError';
-import CorreiosServiceValidatorService from '../lib/CorreiosServiceValidatorService';
+import ShipmentServices from '../lib/ShipmentServices';
 import Product from '../models/Product';
 import { CartProduct, InitialCart, ShipmentMethod } from './CheckoutManager';
 
@@ -13,18 +14,38 @@ const ShipmentMethodSchema = Yup.object().shape({
   deadline: Yup.string().required(),
 });
 
+export interface ToFillAdress {
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  postal_code: string;
+}
+
+export interface FilledAddress extends ToFillAdress {
+  number: string;
+}
+
 class InitialCartManager implements InitialCart {
   products: CartProduct[];
   total: number;
   subtotal: number;
   shippingCost: number;
   shipmentMethod: ShipmentMethod;
+  shipmentAddress: ToFillAdress | FilledAddress;
   constructor() {}
 
   static async create(data: InitialCart) {
     const cart = new InitialCartManager();
 
-    const { products, shipmentMethod, total, shippingCost, subtotal } = data;
+    const {
+      products,
+      shipmentMethod,
+      total,
+      shippingCost,
+      subtotal,
+      shipmentAddress,
+    } = data;
 
     const validations: Promise<void>[] = [];
 
@@ -37,6 +58,10 @@ class InitialCartManager implements InitialCart {
       })
     );
 
+    validations.push(
+      cart.validateAddress(shipmentAddress, shipmentMethod.postalCode)
+    );
+
     validations.push(cart.validateTotalPrice(subtotal, shippingCost, total));
 
     await Promise.all(validations);
@@ -46,6 +71,7 @@ class InitialCartManager implements InitialCart {
     cart.total = data.total;
     cart.subtotal = data.subtotal;
     cart.shippingCost = data.shippingCost;
+    cart.shipmentAddress = data.shipmentAddress;
 
     return cart;
   }
@@ -57,18 +83,43 @@ class InitialCartManager implements InitialCart {
     shipmentMethod: ShipmentMethod;
     shippingCost: number;
   }) {
-    const correiosServiceValidator = new CorreiosServiceValidatorService();
+    const shipmentServices = new ShipmentServices();
 
     if (shippingCost !== shipmentMethod.value)
       throw new AppError('Invalid checkout data.');
 
-    await correiosServiceValidator.execute(
+    const shipmentTrustedData = await shipmentServices.getShipmentData(
       shipmentMethod.postalCode,
-      shipmentMethod.code,
-      shipmentMethod.value
+      shipmentMethod.code
     );
 
+    const realPrice = shippingServicePriceFormmater(shipmentTrustedData.value);
+
+    if (realPrice !== shipmentMethod.value)
+      throw new AppError('Invalid checkout data');
+
     await ShipmentMethodSchema.validate(shipmentMethod);
+  }
+
+  private async validateAddress(address: ToFillAdress, postalCode: string) {
+    const shipmentServices = new ShipmentServices();
+
+    const addressTrustedData = await shipmentServices.getAddressData(
+      postalCode
+    );
+
+    //-1 if the reference string is sorted before the compareString
+    // 0 if the two strings are equal
+    // 1 if the reference string is sorted after the compareString
+
+    Object.keys(addressTrustedData).forEach(key => {
+      if (
+        ((addressTrustedData as any)[key] as string).localeCompare(
+          (address as any)[key] as string
+        ) !== 0
+      )
+        throw new AppError('Invalid checkout data');
+    });
   }
 
   private async validateCart(data: {

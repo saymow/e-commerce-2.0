@@ -1,10 +1,10 @@
 import { FormikProps } from "formik";
 import { toast } from "react-toastify";
 import localApi from "../services/localApi";
-import { AddressInitialState } from "./schemas";
+import { Address } from "../@types/redux/address";
 
 export async function postalCodeWatcher(
-  this: FormikProps<typeof AddressInitialState>,
+  this: FormikProps<Address>,
   e: React.FocusEvent<HTMLInputElement>,
   error: string | undefined
 ) {

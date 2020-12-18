@@ -16,9 +16,16 @@ export const shipmentCalculatorReducer = (
       };
     }
     case "POSTALCODE_SERVICE_SUCCESS": {
-      const { services, postalCode } = action.payload;
+      const { services, postalCode, address } = action.payload;
 
-      return { ...state, services, postalCode, success: true, loading: false };
+      return {
+        ...state,
+        services,
+        postalCode,
+        address,
+        success: true,
+        loading: false,
+      };
     }
     case "POSTALCODE_SERVICE_FAIL": {
       const error = action.payload;

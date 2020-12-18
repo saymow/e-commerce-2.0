@@ -8,9 +8,11 @@ export const getShipmentMethods = (postalCode: string) => async (
   try {
     dispatch({ type: "POSTALCODE_SERVICE_REQUEST" });
 
-    const { data } = await localApi.get(`/price/${postalCode}`);
+    const { data: serviceData } = await localApi.get(`/price/${postalCode}`);
 
-    const serializedServices = data.map((service: any) => ({
+    const { data: addressData } = await localApi.get(`/location/${postalCode}`);
+
+    const serializedServices = serviceData.map((service: any) => ({
       ...service,
       value: shippingServicePriceFormmater(service.value),
     }));
@@ -20,6 +22,7 @@ export const getShipmentMethods = (postalCode: string) => async (
       payload: {
         postalCode,
         services: serializedServices,
+        address: addressData,
       },
     });
   } catch (err) {

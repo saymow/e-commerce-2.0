@@ -1,4 +1,5 @@
 import { DefaultState } from ".";
+import { FetchedAddress, GivenAddress } from "./address";
 
 export interface SuccessPostalCodeServiceResponse {
   name: string;
@@ -20,8 +21,9 @@ type ApiPostalCodeServiceResponse = SuccessPostalCodeServiceResponse &
   FailPostalCodeServiceResponse;
 
 export interface ShipmentCalculatorState extends DefaultState {
-  postalCode?: string;
   services: ApiPostalCodeServiceResponse[];
+  postalCode?: string;
+  address?: FetchedAddress;
 }
 
 export type ShipmentCalculatorAction =
@@ -33,6 +35,7 @@ export type ShipmentCalculatorAction =
       payload: {
         services: ApiPostalCodeServiceResponse[];
         postalCode: string;
+        address: FetchedAddress;
       };
     }
   | {

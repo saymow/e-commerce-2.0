@@ -87,6 +87,16 @@ export const ProductList = styled.ul`
 export const ContentContainer = styled.main`
   height: 100%;
 
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    width: 0.4em;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--light-Grey);
+    border-radius: 0.4em;
+  }
+
   h1 {
     font-size: 3rem;
     text-transform: uppercase;

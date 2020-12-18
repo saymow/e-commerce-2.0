@@ -10,6 +10,7 @@ import { FilledCartState, ShipmentData } from "../../../@types/redux/checkout";
 import { CustomFC } from "../../../@types";
 import { useDispatch } from "react-redux";
 import { setCheckoutCart } from "../../../actions/cartActions";
+import CheckoutAddress from "../../../components/checkout/CheckoutAddress";
 
 interface Props {
   addresses: AddressType;
@@ -25,11 +26,9 @@ const Address: CustomFC<Props> = ({ addresses, cart }) => {
 
   return (
     <Layout>
-      <CheckoutLayout
-        title="addresses"
-        contentSize="large"
-        detailed
-      ></CheckoutLayout>
+      <CheckoutLayout title="fill the address" contentSize="large" detailed>
+        <CheckoutAddress />
+      </CheckoutLayout>
     </Layout>
   );
 };

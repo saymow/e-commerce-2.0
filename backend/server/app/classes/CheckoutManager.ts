@@ -8,7 +8,10 @@ import redis from '../config/redis';
 
 import AppError from '../errors/AppError';
 import Product from '../models/Product';
-import InitialCartManager from './CheckoutInitialCartManager';
+import InitialCartManager, {
+  FilledAddress,
+  ToFillAdress,
+} from './CheckoutInitialCartManager';
 
 export interface CartProduct {
   id: string;
@@ -40,6 +43,7 @@ export interface InitialCart {
   subtotal: number;
   shippingCost: number;
   shipmentMethod: ShipmentMethod;
+  shipmentAddress: ToFillAdress | FilledAddress;
 }
 
 export type FilledCart = InitialCart;
@@ -133,9 +137,23 @@ class CheckoutManager {
 
     let data = JSON.parse(stringifyedData) as FilledCart;
 
-    const { total, subtotal, shippingCost, shipmentMethod, products } = data;
+    const {
+      total,
+      subtotal,
+      shippingCost,
+      shipmentMethod,
+      products,
+      shipmentAddress,
+    } = data;
 
-    this.cart = { total, subtotal, shippingCost, shipmentMethod, products };
+    this.cart = {
+      total,
+      subtotal,
+      shippingCost,
+      shipmentMethod,
+      products,
+      shipmentAddress,
+    };
   }
 
   async subscribeInitialCheckoutData(cart: FilledCart) {
@@ -144,7 +162,7 @@ class CheckoutManager {
     const stringifyedData = JSON.stringify(initialCart);
 
     await redis.set(this.id, stringifyedData, 'ex', this.redisExTime);
-    await this.generateSignature(initialCart);
+    await this.generateSignature(initialCart.products);
 
     this.cart = cart;
   }

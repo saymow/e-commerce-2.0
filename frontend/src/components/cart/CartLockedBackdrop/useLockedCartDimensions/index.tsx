@@ -27,6 +27,7 @@ const useLockedCartDimensions = () => {
     };
 
     productListRef.current?.addEventListener("scroll", getDimension);
+    getDimension();
 
     return () => {
       productListRef.current?.removeEventListener("scroll", getDimension);

@@ -72,6 +72,11 @@ export const cartReducer = (
 
       return { ...state, shipmentMethod, shippingCost: shipmentMethod.value };
     }
+    case "ADD_ADDRESS_CART": {
+      const shipmentAddress = action.payload;
+
+      return { ...state, shipmentAddress };
+    }
     case "LOCK_CART":
       return { ...state, locked: true };
     case "UNLOCK_CART":

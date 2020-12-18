@@ -6,6 +6,7 @@ import MaskedInput from "react-text-mask";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { CartState } from "../../@types/redux";
+import { FetchedAddress, GivenAddress } from "../../@types/redux/address";
 import {
   CheckoutCreateState,
   FilledCartState,
@@ -18,6 +19,7 @@ import {
   addShipmmentDataToCart,
   unlockCart,
   lockCart,
+  addAddressDataToCart,
 } from "../../actions/cartActions";
 import { createCheckout } from "../../actions/checkoutActions";
 import { getShipmentMethods } from "../../actions/servicesActions";
@@ -114,11 +116,13 @@ const Shipment: React.FC = () => {
   const [shipmentController, setShipmentController] = useState<{
     postalCode?: string;
     methods: SuccessPostalCodeServiceResponseOnInterface[];
+    address?: FetchedAddress;
   }>({ methods: [] });
   const [showNextButton, setShowNextButton] = useState(false);
 
   const {
     services,
+    address,
     postalCode: servicePostalCode,
     loading: serviceLoading,
     success: serviceSuccess,
@@ -143,22 +147,23 @@ const Shipment: React.FC = () => {
   ) as CartState;
 
   useEffect(() => {
-    if (serviceSuccess) {
-      const successfulMethods = [] as SuccessPostalCodeServiceResponse[];
+    if (!serviceSuccess) return;
 
-      services.forEach((service) => {
-        if (service.error) {
-          toast.error(`${service.name}: ${service.error.message}`);
-        } else {
-          successfulMethods.push(service);
-        }
-      });
+    const successfulMethods = [] as SuccessPostalCodeServiceResponse[];
 
-      setShipmentController({
-        postalCode: servicePostalCode,
-        methods: successfulMethods,
-      });
-    }
+    services.forEach((service) => {
+      if (service.error) {
+        toast.error(`${service.name}: ${service.error.message}`);
+      } else {
+        successfulMethods.push(service);
+      }
+    });
+
+    setShipmentController({
+      postalCode: servicePostalCode,
+      methods: successfulMethods,
+      address,
+    });
   }, [serviceSuccess]);
 
   useEffect(() => {
@@ -176,6 +181,12 @@ const Shipment: React.FC = () => {
   }, [shipmentCreationError, shipmentCreationReset]);
 
   useEffect(() => {
+    () => {
+      dispatch(unlockCart());
+    };
+  }, []);
+
+  useEffect(() => {
     if (shipmentCreationSuccess && shipmentCreationReset && checkoutId) {
       router.push(`/checkout/${checkoutId}/address/`);
       dispatch(shipmentCreationReset());
@@ -187,7 +198,7 @@ const Shipment: React.FC = () => {
 
     setShipmentController({ methods: [] });
     setShowNextButton(false);
-    dispatch(unlockCart());
+    dispatch(lockCart());
     dispatch(getShipmentMethods(postalCode));
   };
 
@@ -208,8 +219,10 @@ const Shipment: React.FC = () => {
     };
 
     setShowNextButton(true);
-    dispatch(lockCart());
     dispatch(addShipmmentDataToCart(shipmentMethod));
+    dispatch(
+      addAddressDataToCart(shipmentController.address as FetchedAddress)
+    );
     setShipmentController({
       ...shipmentController,
       methods: newMethodsArray,
@@ -225,6 +238,7 @@ const Shipment: React.FC = () => {
       "shippingCost",
       "products",
       "shipmentMethod",
+      "shipmentAddress",
     ];
     const cartDataKeys = Object.keys(cartData);
 

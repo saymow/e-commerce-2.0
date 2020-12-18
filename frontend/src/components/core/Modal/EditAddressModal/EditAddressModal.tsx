@@ -17,6 +17,7 @@ import {
   showAddress,
 } from "../../../../actions/addressActions";
 import {
+  Address,
   AddressShowAction,
   AddressShowState,
 } from "../../../../@types/redux/address";
@@ -82,7 +83,7 @@ const EditAddressModal: React.FC = () => {
   return (
     <Container>
       <Formik
-        initialValues={{ ...address } as typeof AddressInitialState}
+        initialValues={{ ...address } as Address}
         validationSchema={AddressSchema}
         onSubmit={(values) => {
           dispatch(editAddress(values));
