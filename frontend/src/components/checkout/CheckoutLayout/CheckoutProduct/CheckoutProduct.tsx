@@ -20,7 +20,12 @@ import {
 } from "../../../../actions/cartActions";
 import { priceFormmater } from "../../../../utils";
 
-const CheckoutProduct: React.FC<{ product: CartProduct }> = ({ product }) => {
+interface Props {
+  product: CartProduct;
+  size: "small" | "large";
+}
+
+const CheckoutProduct: React.FC<Props> = ({ product, size }) => {
   const dispatch = useDispatch();
   const handleAddProductToCart = () => {
     dispatch(addProductToCart(product));
@@ -32,7 +37,12 @@ const CheckoutProduct: React.FC<{ product: CartProduct }> = ({ product }) => {
 
   return (
     <Container>
-      <Image src={product.image} width={220} height={220} layout="intrinsic" />
+      <Image
+        src={product.image}
+        width={size === "small" ? 120 : 200}
+        height={size === "small" ? 120 : 200}
+        layout="intrinsic"
+      />
       <Info>
         <div>
           <Name>{product.name}</Name>

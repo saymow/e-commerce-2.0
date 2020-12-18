@@ -14,7 +14,11 @@ import {
   ShipmentCalculatorState,
   SuccessPostalCodeServiceResponse,
 } from "../../@types/redux/services";
-import { addShipmmentDataToCart } from "../../actions/cartActions";
+import {
+  addShipmmentDataToCart,
+  unlockCart,
+  lockCart,
+} from "../../actions/cartActions";
 import { createCheckout } from "../../actions/checkoutActions";
 import { getShipmentMethods } from "../../actions/servicesActions";
 import CheckoutLayout from "../../components/checkout/CheckoutLayout";
@@ -183,6 +187,7 @@ const Shipment: React.FC = () => {
 
     setShipmentController({ methods: [] });
     setShowNextButton(false);
+    dispatch(unlockCart());
     dispatch(getShipmentMethods(postalCode));
   };
 
@@ -193,7 +198,7 @@ const Shipment: React.FC = () => {
     }));
 
     const choosenMethod = shipmentController.methods.find(
-      (method) => method.code
+      (method) => method.code === code
     ) as SuccessPostalCodeServiceResponseOnInterface;
 
     const shipmentMethod = {
@@ -202,8 +207,9 @@ const Shipment: React.FC = () => {
       postalCode: shipmentController.postalCode as string,
     };
 
-    dispatch(addShipmmentDataToCart(shipmentMethod));
     setShowNextButton(true);
+    dispatch(lockCart());
+    dispatch(addShipmmentDataToCart(shipmentMethod));
     setShipmentController({
       ...shipmentController,
       methods: newMethodsArray,
@@ -229,7 +235,7 @@ const Shipment: React.FC = () => {
 
   return (
     <Layout>
-      <CheckoutLayout title="shipment method">
+      <CheckoutLayout title="shipment method" detailed>
         {!userSessionLoading && (
           <Container>
             <InputContainer>

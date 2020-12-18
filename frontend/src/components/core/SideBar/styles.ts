@@ -5,7 +5,7 @@ import { Heart } from "@styled-icons/boxicons-regular";
 
 export const Wrapper = styled.div`
   position: fixed;
-  z-index: 2;
+  z-index: 100;
   top: 0;
   bottom: 0;
   left: 0;

@@ -23,9 +23,13 @@ export const ProductDetails = styled.div`
   justify-content: space-between;
 `;
 
-export const ProductName = styled.h2``;
+export const ProductName = styled.h2`
+  font-size: 2.2em;
+`;
 
-export const ProductPrice = styled.strong``;
+export const ProductPrice = styled.strong`
+  font-size: 1.4em;
+`;
 
 export const QtyContainer = styled.div`
   display: flex;
@@ -50,15 +54,15 @@ export const QtyContainer = styled.div`
 `;
 
 export const MinusIcon = styled(Minus)`
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.4em;
+  height: 1.4em;
 
   cursor: pointer;
 `;
 
 export const PlusIcon = styled(Plus)`
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.4em;
+  height: 1.4rem;
 
   cursor: pointer;
 `;

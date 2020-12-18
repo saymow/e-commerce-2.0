@@ -11,13 +11,19 @@ export const addProductToCart = (product: IProduct) => async (
   dispatch: (arg0: CartAction | AsideBarAction) => void,
   getState: any
 ) => {
+  const {
+    cart: { locked },
+  } = getState();
+
+  if (locked) return;
+
   dispatch({ type: "ADD_PRODUCT_CART", payload: product });
   dispatch({ type: "UPDATE_TOTAL_CART" });
   dispatch({ type: "ASIDE_SHOW_CART" });
 
-  const { cart } = getState();
+  const { updatedCart } = getState();
 
-  saveCart(cart);
+  saveCart(updatedCart);
 };
 
 export const removeProductFromCart = (
@@ -27,13 +33,19 @@ export const removeProductFromCart = (
   dispatch: (arg0: CartAction | AsideBarAction) => void,
   getState: any
 ) => {
+  const {
+    cart: { locked },
+  } = getState();
+
+  if (locked) return;
+
   dispatch({ type: "REMOVE_PRODUCT_CART", payload: { id, force } });
   dispatch({ type: "UPDATE_TOTAL_CART" });
   dispatch({ type: "ASIDE_SHOW_CART" });
 
-  const { cart } = getState();
+  const { updatedCart } = getState();
 
-  saveCart(cart);
+  saveCart(updatedCart);
 };
 
 export const addShipmmentDataToCart = (shipmentMethod: ShipmentData) => async (
@@ -45,4 +57,20 @@ export const addShipmmentDataToCart = (shipmentMethod: ShipmentData) => async (
 
 export const resetCart = () => async (dispatch: (arg0: CartAction) => void) => {
   dispatch({ type: "RESET_CART" });
+};
+
+export const lockCart = () => async (dispatch: (arg0: CartAction) => void) => {
+  dispatch({ type: "LOCK_CART" });
+};
+
+export const unlockCart = () => async (
+  dispatch: (arg0: CartAction) => void
+) => {
+  dispatch({ type: "UNLOCK_CART" });
+};
+
+export const setCheckoutCart = (cart: CartState) => async (
+  dispatch: (arg0: CartAction) => void
+) => {
+  dispatch({ type: "SET_ENTIRE_CART", payload: cart });
 };

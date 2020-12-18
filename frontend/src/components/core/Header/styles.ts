@@ -7,7 +7,7 @@ export const Container = styled.header`
   left: 0;
   width: 100%;
   height: 6rem;
-  z-index: 2;
+  z-index: 99;
 
   background: var(--bg-Color);
 `;

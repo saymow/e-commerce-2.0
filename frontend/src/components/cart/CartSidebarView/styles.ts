@@ -8,13 +8,17 @@ export const Container = styled.div`
 `;
 
 export const ProductList = styled.ul`
+  position: relative;
   overflow-y: auto;
 
   ::-webkit-scrollbar {
     width: 0.4rem;
   }
+
+  font-size: 0.8rem;
+
   ::-webkit-scrollbar-thumb {
-    background-color: #000;
+    background-color: var(--light-Grey);
     border-radius: 0.4rem;
   }
 

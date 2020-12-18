@@ -7,16 +7,20 @@ export const Container = styled.li`
   position: relative;
   display: flex;
 
-  margin: 1rem 0;
-  padding: 2rem 0;
+  margin: 1em 0;
+  padding: 2em 0;
 
   &:not(:first-child) {
     border-top: 1px solid var(--lighter-Grey);
   }
+
+  &:last-child {
+    padding: 2em 0 1rem 0;
+  }
 `;
 
 export const Info = styled.main`
-  margin-left: 2rem;
+  margin-left: 2em;
 
   display: flex;
   flex-direction: column;
@@ -25,22 +29,22 @@ export const Info = styled.main`
 `;
 
 export const Name = styled.h2`
-  font-size: 2.6rem;
+  font-size: 3em;
 `;
 
 export const Price = styled.span`
-  font-size: 2rem;
+  font-size: 2em;
 `;
 
 export const TrashIcon = styled(Trash)`
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 2em;
+  right: 2em;
 
   cursor: pointer;
 
-  width: 2rem;
-  height: 2rem;
+  width: 2em;
+  height: 2em;
   fill: var(--lighter-Grey);
 `;
 
@@ -67,15 +71,15 @@ export const QtyContainer = styled.div`
 `;
 
 export const MinusIcon = styled(Minus)`
-  width: 2rem;
-  height: 2rem;
+  width: 2em;
+  height: 2em;
 
   cursor: pointer;
 `;
 
 export const PlusIcon = styled(Plus)`
-  width: 2rem;
-  height: 2rem;
+  width: 2em;
+  height: 2em;
 
   cursor: pointer;
 `;

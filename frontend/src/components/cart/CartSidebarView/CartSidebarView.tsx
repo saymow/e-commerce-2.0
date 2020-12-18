@@ -1,15 +1,12 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IProduct } from "../../../@types";
+import { useSelector } from "react-redux";
 import { CartState } from "../../../@types/redux";
-import {
-  addProductToCart,
-  removeProductFromCart,
-} from "../../../actions/cartActions";
 import { reduxStore } from "../../../store";
 import { priceFormmater } from "../../../utils";
 import Link from "../../core/Link";
 import Button from "../../ui/Button";
+import CartLockedBackdrop from "../CartLockedBackdrop";
+import useLockedCartDimensions from "../CartLockedBackdrop/useLockedCartDimensions";
 import CartProduct from "../CartProduct";
 import { Container, Details, Information, ProductList } from "./styles";
 
@@ -18,9 +15,12 @@ const CartSidebarView: React.FC = () => {
     typeof reduxStore
   >((state) => state.cart) as CartState;
 
+  const [productListRef, locked, dimensions] = useLockedCartDimensions();
+
   return (
     <Container>
-      <ProductList>
+      <ProductList ref={productListRef}>
+        <CartLockedBackdrop locked={locked} dimensions={dimensions} />
         {products.map((product) => (
           <li key={product.id}>
             <CartProduct product={product} />

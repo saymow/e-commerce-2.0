@@ -13,6 +13,8 @@ export const errorHandler = (
   res: Response,
   _: NextFunction
 ) => {
+  console.log(error);
+
   if (error instanceof AppError) {
     return res.status(error.statusCode).send({
       message: error.message,

@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../../../components/core/Layout";
 import api from "../../../services/api";
 
@@ -8,8 +8,8 @@ import { Address as AddressType } from "../../../@types/redux/address";
 import CheckoutLayout from "../../../components/checkout/CheckoutLayout";
 import { FilledCartState, ShipmentData } from "../../../@types/redux/checkout";
 import { CustomFC } from "../../../@types";
-
-// import { Container } from './styles';
+import { useDispatch } from "react-redux";
+import { setCheckoutCart } from "../../../actions/cartActions";
 
 interface Props {
   addresses: AddressType;
@@ -17,11 +17,19 @@ interface Props {
 }
 
 const Address: CustomFC<Props> = ({ addresses, cart }) => {
-  console.log(addresses, cart);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCheckoutCart({ ...cart, locked: true }));
+  }, []);
 
   return (
     <Layout>
-      <CheckoutLayout title="addresses"></CheckoutLayout>
+      <CheckoutLayout
+        title="addresses"
+        contentSize="large"
+        detailed
+      ></CheckoutLayout>
     </Layout>
   );
 };

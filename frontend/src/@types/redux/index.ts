@@ -96,6 +96,7 @@ export interface CartState {
   shippingCost: number;
   products: CartProduct[];
   shipmentMethod?: ShipmentData;
+  locked: boolean;
 }
 
 export type CartAction =
@@ -114,7 +115,10 @@ export type CartAction =
   | {
       type: "RESET_CART";
     }
-  | { type: "ADD_SHIPMENT_METHOD_CART"; payload: ShipmentData };
+  | { type: "ADD_SHIPMENT_METHOD_CART"; payload: ShipmentData }
+  | { type: "SET_ENTIRE_CART"; payload: CartState }
+  | { type: "LOCK_CART" }
+  | { type: "UNLOCK_CART" };
 
 export interface ThemeState {
   theme: "dark-mode" | "light-mode";

@@ -5,6 +5,7 @@ const cartInitialState = {
   total: 0,
   subtotal: 0,
   shippingCost: 0,
+  locked: false,
 };
 
 export const cartReducer = (
@@ -70,6 +71,14 @@ export const cartReducer = (
       const shipmentMethod = action.payload;
 
       return { ...state, shipmentMethod, shippingCost: shipmentMethod.value };
+    }
+    case "LOCK_CART":
+      return { ...state, locked: true };
+    case "UNLOCK_CART":
+      return { ...state, locked: false };
+    case "SET_ENTIRE_CART": {
+      const cart = action.payload;
+      return { ...cart };
     }
     case "RESET_CART":
       return cartInitialState;

@@ -1,34 +1,79 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { CartState } from "../../../@types/redux";
 import { reduxStore } from "../../../store";
+import { priceFormmater } from "../../../utils";
 import CheckoutProduct from "./CheckoutProduct";
+import CartLockedBackdrop from "../../cart/CartLockedBackdrop";
 import {
   Container,
   ProductList,
-  ProductsContainer,
-  InfoContainer,
+  CartContainer,
+  ContentContainer,
+  CartTotal,
+  CartTotalItem,
 } from "./styles";
+import useLockedCartDimensions from "../../cart/CartLockedBackdrop/useLockedCartDimensions";
 
-const CheckoutLayout: React.FC<{ title: string }> = ({ title, children }) => {
-  const { products } = useSelector<typeof reduxStore>(
-    (state) => state.cart
-  ) as CartState;
+interface Props {
+  title: string;
+  contentSize?: "small" | "large";
+  detailed?: boolean;
+}
+
+const CheckoutLayout: React.FC<Props> = ({
+  title,
+  detailed,
+  contentSize = "small",
+  children,
+}) => {
+  const { products, subtotal, shippingCost, total } = useSelector<
+    typeof reduxStore
+  >((state) => state.cart) as CartState;
+
+  const [
+    productListRef,
+    locked,
+    lockedCartDimension,
+  ] = useLockedCartDimensions();
+
+  const cartSize = contentSize === "small" ? "large" : "small";
 
   return (
-    <Container>
-      <ProductsContainer>
+    <Container contentSize={contentSize}>
+      <CartContainer cartSize={cartSize}>
         <h1>Cart Products</h1>
-        <ProductList>
+        <ProductList ref={productListRef as any}>
+          <CartLockedBackdrop
+            locked={locked}
+            dimensions={lockedCartDimension}
+          />
           {products.map((product) => (
-            <CheckoutProduct key={product.id} product={product} />
+            <CheckoutProduct
+              size={cartSize}
+              key={product.id}
+              product={product}
+            />
           ))}
         </ProductList>
-      </ProductsContainer>
-      <InfoContainer>
+        {detailed && (
+          <CartTotal>
+            <CartTotalItem>
+              <strong>subtotal</strong> {priceFormmater(subtotal)}
+            </CartTotalItem>
+            <CartTotalItem>
+              <strong>Shipping cost</strong> {priceFormmater(shippingCost)}
+            </CartTotalItem>
+            <CartTotalItem highlight>
+              <strong>Total</strong> {priceFormmater(total)}
+            </CartTotalItem>
+          </CartTotal>
+        )}
+      </CartContainer>
+      <ContentContainer>
         <h1>{title}</h1>
         <div>{children}</div>
-      </InfoContainer>
+      </ContentContainer>
     </Container>
   );
 };

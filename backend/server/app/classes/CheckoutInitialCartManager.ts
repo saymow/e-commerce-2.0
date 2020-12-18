@@ -89,10 +89,13 @@ class InitialCartManager implements InitialCart {
     if (trustedProducts.length !== data.products.length)
       throw new AppError('Invalid checkout data.');
 
-    const trustedSubtotal = trustedProducts.reduce(
-      (acumm, next) => acumm + next.price,
-      0
-    );
+    const trustedSubtotal = trustedProducts.reduce((acumm, next) => {
+      const clientProductQty = (data.products.find(
+        _product => _product.id === next.id
+      ) as CartProduct).qty;
+
+      return acumm + next.price * clientProductQty;
+    }, 0);
 
     if (trustedSubtotal !== data.subtotal)
       throw new AppError('Invalid checkout data.');
