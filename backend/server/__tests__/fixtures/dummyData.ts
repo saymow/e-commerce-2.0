@@ -67,6 +67,13 @@ export const fakeInitialCheckout = {
     deadline: '5',
     postalCode: '32603-235',
   },
+  shipmentAddress: {
+    state: 'MG',
+    city: 'Betim',
+    neighborhood: 'Guarujá',
+    postal_code: '32603-235',
+    street: 'Rua Iara',
+  },
   products: [
     {
       id: 'c26ec4b6-2704-4855-873e-92a273798b94',

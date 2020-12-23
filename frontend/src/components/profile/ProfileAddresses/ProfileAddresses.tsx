@@ -3,23 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { DefaultState } from "../../../@types/redux";
 import { AddressesState } from "../../../@types/redux/address";
-import { deleteAddress, listAddress } from "../../../actions/addressActions";
-import {
-  openCreateAddressModal,
-  openEditAddressModal,
-} from "../../../actions/uiActions";
+import { listAddress } from "../../../actions/addressActions";
+import { openCreateAddressModal } from "../../../actions/uiActions";
 import { reduxStore } from "../../../store";
 import Loading from "../../ui/Loading";
-
-import {
-  Container,
-  Address,
-  InfoLine,
-  RemoveIcon,
-  EditIcon,
-  CreateAddress,
-  PlusIcon,
-} from "./styles";
+import AddressArticle from "./AddressArticle";
+import { Container, CreateAddress, PlusIcon } from "./styles";
 
 const ProfileAddresses: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,7 +16,6 @@ const ProfileAddresses: React.FC = () => {
   const { addresses, loading } = useSelector<typeof reduxStore>(
     (state) => state.addressList
   ) as AddressesState;
-
   const {
     success: deletionSuccess,
     error: deletionError,
@@ -55,19 +43,8 @@ const ProfileAddresses: React.FC = () => {
     }
   }, [deletionError, deletionReset]);
 
-  const handleAddressDeletion = (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this address?"))
-      return;
-
-    dispatch(deleteAddress(id));
-  };
-
   const handleAddressCreation = () => {
     dispatch(openCreateAddressModal());
-  };
-
-  const handleAddressEdition = (id: string) => {
-    dispatch(openEditAddressModal(id));
   };
 
   if (loading) return <Loading />;
@@ -75,28 +52,7 @@ const ProfileAddresses: React.FC = () => {
   return (
     <Container>
       {addresses.map((address) => (
-        <Address key={address.id}>
-          <InfoLine>
-            <strong>State</strong>: {address.state}
-          </InfoLine>
-          <InfoLine>
-            <strong>City</strong>: {address.city}
-          </InfoLine>
-          <InfoLine>
-            <strong>Neighborhood</strong>: {address.neighborhood}
-          </InfoLine>
-          <InfoLine>
-            <strong>Postal code</strong>: {address.postal_code}
-          </InfoLine>
-          <InfoLine>
-            <strong>Street</strong>: {address.street}
-          </InfoLine>
-          <InfoLine>
-            <strong>Number</strong>: {address.number}
-          </InfoLine>
-          <EditIcon onClick={() => handleAddressEdition(address.id)} />
-          <RemoveIcon onClick={() => handleAddressDeletion(address.id)} />
-        </Address>
+        <AddressArticle key={address.id} address={address} />
       ))}
       <CreateAddress>
         <div onClick={handleAddressCreation}>

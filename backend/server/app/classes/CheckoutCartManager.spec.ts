@@ -4,7 +4,7 @@ import {
   setupFakeData,
   tearEnvironment,
 } from '@__tests__/fixtures';
-import InitialCartManager from './CheckoutInitialCartManager';
+import CartManager from './CheckoutCartManager';
 
 beforeAll(async () => {
   await setupEnvironment();
@@ -17,9 +17,7 @@ afterAll(async () => {
 
 describe('Checkout: CheckoutInitalCartManager validation tests', () => {
   it('Should correctly validate an inital cart', async () => {
-    expect(
-      InitialCartManager.create(fakeInitialCheckout)
-    ).rejects.not.toBeTruthy();
+    expect(CartManager.create(fakeInitialCheckout)).rejects.not.toBeTruthy();
   });
 
   it('Should not validate an invalid inital cart (total price error)', async () => {
@@ -30,9 +28,7 @@ describe('Checkout: CheckoutInitalCartManager validation tests', () => {
       shippingCost: 2000,
     };
 
-    expect(
-      InitialCartManager.create(invalidInitialCheckout)
-    ).rejects.toBeTruthy();
+    expect(CartManager.create(invalidInitialCheckout)).rejects.toBeTruthy();
   });
 
   it('Should not validate an invalid inital cart (product price error)', async () => {
@@ -43,8 +39,6 @@ describe('Checkout: CheckoutInitalCartManager validation tests', () => {
       total: 33 + fakeInitialCheckout.shippingCost,
     };
 
-    expect(
-      InitialCartManager.create(invalidInitialCheckout)
-    ).rejects.toBeTruthy();
+    expect(CartManager.create(invalidInitialCheckout)).rejects.toBeTruthy();
   });
 });

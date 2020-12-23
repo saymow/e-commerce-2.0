@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ScrollStyles } from "../../../styles/globalStyles";
 
 interface ContainerProsp {
   contentSize: "small" | "large";
@@ -75,31 +76,23 @@ export const ProductList = styled.ul`
   height: 100%;
   overflow: auto;
 
-  ::-webkit-scrollbar {
-    width: 0.4em;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--light-Grey);
-    border-radius: 0.4em;
-  }
+  ${ScrollStyles}
 `;
 
-export const ContentContainer = styled.main`
+export const ContentContainer = styled.main<{ overflow: string }>`
   height: 100%;
 
-  overflow: auto;
+  overflow: ${({ overflow }) => overflow};
 
-  ::-webkit-scrollbar {
-    width: 0.4em;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--light-Grey);
-    border-radius: 0.4em;
-  }
+  ${ScrollStyles}
 
   h1 {
     font-size: 3rem;
     text-transform: uppercase;
     margin-bottom: 1rem;
+  }
+
+  > div {
+    height: 100%;
   }
 `;

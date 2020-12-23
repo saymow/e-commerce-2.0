@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { ArrowIosForwardOutline } from "@styled-icons/evaicons-outline";
 import { User } from "@styled-icons/boxicons-regular";
 import { LogOut } from "@styled-icons/entypo";
+import { ScrollStyles } from "../../../styles/globalStyles";
 
 export const Container = styled.div`
   display: grid;
@@ -32,13 +33,7 @@ export const Content = styled.main`
   height: 100%;
   overflow: auto;
 
-  ::-webkit-scrollbar {
-    width: 0.4rem;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--light-Grey);
-    border-radius: 0.4rem;
-  }
+  ${ScrollStyles}
 `;
 
 export const LogoutIcon = styled(LogOut)`

@@ -5,6 +5,8 @@ import AppError from '../errors/AppError';
 import ShipmentServices from '../lib/ShipmentServices';
 import Product from '../models/Product';
 import { CartProduct, InitialCart, ShipmentMethod } from './CheckoutManager';
+import { schema as filledAddressSchema } from '@services/address/CreateAddressService';
+import { schema as toFillAddressSchema } from '@services/address/UpdateAddressService';
 
 const ShipmentMethodSchema = Yup.object().shape({
   postalCode: Yup.string().required(),
@@ -26,7 +28,7 @@ export interface FilledAddress extends ToFillAdress {
   number: string;
 }
 
-class InitialCartManager implements InitialCart {
+class CartManager implements InitialCart {
   products: CartProduct[];
   total: number;
   subtotal: number;
@@ -36,7 +38,7 @@ class InitialCartManager implements InitialCart {
   constructor() {}
 
   static async create(data: InitialCart) {
-    const cart = new InitialCartManager();
+    const cart = new CartManager();
 
     const {
       products,
@@ -101,8 +103,16 @@ class InitialCartManager implements InitialCart {
     await ShipmentMethodSchema.validate(shipmentMethod);
   }
 
-  private async validateAddress(address: ToFillAdress, postalCode: string) {
+  private async validateAddress(
+    address: FilledAddress | ToFillAdress,
+    postalCode: string
+  ) {
     const shipmentServices = new ShipmentServices();
+
+    if ((address as any).number) {
+      // then is a filled and definitive address
+      await filledAddressSchema.validate(address);
+    } else await toFillAddressSchema.validate(address);
 
     const addressTrustedData = await shipmentServices.getAddressData(
       postalCode
@@ -162,4 +172,4 @@ class InitialCartManager implements InitialCart {
   }
 }
 
-export default InitialCartManager;
+export default CartManager;

@@ -19,12 +19,14 @@ interface Props {
   title: string;
   contentSize?: "small" | "large";
   detailed?: boolean;
+  contentOverflow?: "auto" | "hidden";
 }
 
 const CheckoutLayout: React.FC<Props> = ({
   title,
   detailed,
   contentSize = "small",
+  contentOverflow = "auto",
   children,
 }) => {
   const { products, subtotal, shippingCost, total } = useSelector<
@@ -70,7 +72,7 @@ const CheckoutLayout: React.FC<Props> = ({
           </CartTotal>
         )}
       </CartContainer>
-      <ContentContainer>
+      <ContentContainer overflow={contentOverflow}>
         <h1>{title}</h1>
         <div>{children}</div>
       </ContentContainer>

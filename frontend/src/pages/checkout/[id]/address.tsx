@@ -11,22 +11,28 @@ import { CustomFC } from "../../../@types";
 import { useDispatch } from "react-redux";
 import { setCheckoutCart } from "../../../actions/cartActions";
 import CheckoutAddress from "../../../components/checkout/CheckoutAddress";
+import { listAddress } from "../../../actions/addressActions";
 
 interface Props {
-  addresses: AddressType;
   cart: FilledCartState;
+  checkoutId: string;
 }
 
-const Address: CustomFC<Props> = ({ addresses, cart }) => {
+const Address: CustomFC<Props> = ({ cart, checkoutId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setCheckoutCart({ ...cart, locked: true }));
+    dispatch(setCheckoutCart({ ...cart, locked: true }, checkoutId));
   }, []);
 
   return (
     <Layout>
-      <CheckoutLayout title="fill the address" contentSize="large" detailed>
+      <CheckoutLayout
+        title="fill the address"
+        contentSize="large"
+        contentOverflow="hidden"
+        detailed
+      >
         <CheckoutAddress />
       </CheckoutLayout>
     </Layout>
@@ -50,16 +56,14 @@ export const getServerSideProps: GetServerSideProps = async ({
       withCredentials: true,
     };
 
-    const { data: addressesData } = await api.get("/addresses", authHeader);
-
     const {
       data: { cart },
     } = await api.get(`/checkout/${checkoutId}`, authHeader);
 
     return {
       props: {
-        addresses: addressesData,
         cart,
+        checkoutId,
       },
     };
   } catch (err) {

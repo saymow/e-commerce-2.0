@@ -87,6 +87,7 @@ export interface CartState {
   shippingCost: number;
   products: CartProduct[];
   locked: boolean;
+  checkoutId?: string;
   shipmentMethod?: ShipmentData;
   shipmentAddress?: FetchedAddress | Address;
 }
@@ -109,7 +110,10 @@ export type CartAction =
     }
   | { type: "ADD_SHIPMENT_METHOD_CART"; payload: ShipmentData }
   | { type: "ADD_ADDRESS_CART"; payload: FetchedAddress }
-  | { type: "SET_ENTIRE_CART"; payload: CartState }
+  | {
+      type: "SET_ENTIRE_CART";
+      payload: { cart: CartState; checkoutId: string };
+    }
   | { type: "LOCK_CART" }
   | { type: "UNLOCK_CART" };
 

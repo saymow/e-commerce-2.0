@@ -1,6 +1,14 @@
 import styled from "styled-components";
+import { ScrollStyles } from "../../../../styles/globalStyles";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  height: 90%;
+  overflow-y: auto;
+
+  ${ScrollStyles}
+
+  padding: 0 0.5rem;
+`;
 
 export const Form = styled.form`
   button {

@@ -1,8 +1,9 @@
 import { IProduct } from "../@types";
 import { AsideBarAction, CartAction, CartState } from "../@types/redux";
-import { FetchedAddress } from "../@types/redux/address";
+import { Address, FetchedAddress } from "../@types/redux/address";
 import { ShipmentData } from "../@types/redux/checkout";
 import { LOCAL_STORAGE_PREFIX } from "../utils/constants";
+import { createAddress } from "./addressActions";
 
 const saveCart = (cart: CartState) => {
   localStorage.setItem(`${LOCAL_STORAGE_PREFIX}cart`, JSON.stringify(cart));
@@ -62,6 +63,26 @@ export const addAddressDataToCart = (address: FetchedAddress) => async (
   dispatch({ type: "ADD_ADDRESS_CART", payload: address });
 };
 
+export const addAddressFilledToCart = (address: Address) => async (
+  dispatch: (arg0: any) => void,
+  getState: any
+) => {
+  console.log(address);
+  dispatch({ type: "ADD_ADDRESS_CART", payload: address });
+
+  const {
+    addressList: { addresses },
+  } = getState();
+
+  const addressAlreadyExists = addresses.find(
+    (_address: Address) =>
+      _address.postal_code.localeCompare(address.postal_code) <= 0 &&
+      _address.number === address.number
+  );
+
+  if (!addressAlreadyExists) dispatch(createAddress(address));
+};
+
 export const resetCart = () => async (dispatch: (arg0: CartAction) => void) => {
   dispatch({ type: "RESET_CART" });
 };
@@ -76,8 +97,8 @@ export const unlockCart = () => async (
   dispatch({ type: "UNLOCK_CART" });
 };
 
-export const setCheckoutCart = (cart: CartState) => async (
+export const setCheckoutCart = (cart: CartState, checkoutId: string) => async (
   dispatch: (arg0: CartAction) => void
 ) => {
-  dispatch({ type: "SET_ENTIRE_CART", payload: cart });
+  dispatch({ type: "SET_ENTIRE_CART", payload: { cart, checkoutId } });
 };

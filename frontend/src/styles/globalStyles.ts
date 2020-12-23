@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 import { ThemeType } from "./theme";
 
 export default createGlobalStyle<{ theme: ThemeType }>`
@@ -32,5 +32,15 @@ export default createGlobalStyle<{ theme: ThemeType }>`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+`;
+
+export const ScrollStyles = css`
+  ::-webkit-scrollbar {
+    width: 0.4em;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--light-Grey);
+    border-radius: 0.4em;
   }
 `;

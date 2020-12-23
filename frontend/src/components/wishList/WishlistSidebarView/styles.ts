@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { HeartDislike } from "@styled-icons/ionicons-outline";
+import { ScrollStyles } from "../../../styles/globalStyles";
 
 export const Container = styled.ul`
   display: flex;
@@ -8,13 +9,7 @@ export const Container = styled.ul`
   height: 100%;
   overflow-y: scroll;
 
-  ::-webkit-scrollbar {
-    width: 0.4rem;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--primary-Color);
-    border-radius: 0.4rem;
-  }
+  ${ScrollStyles}
 `;
 
 export const Item = styled.li`

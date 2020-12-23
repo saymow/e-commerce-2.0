@@ -82,8 +82,8 @@ export const cartReducer = (
     case "UNLOCK_CART":
       return { ...state, locked: false };
     case "SET_ENTIRE_CART": {
-      const cart = action.payload;
-      return { ...cart };
+      const { cart, checkoutId } = action.payload;
+      return { ...cart, checkoutId };
     }
     case "RESET_CART":
       return cartInitialState;

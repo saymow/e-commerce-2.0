@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ScrollStyles } from "../../../styles/globalStyles";
 
 export const Container = styled.div`
   height: 100%;
@@ -11,16 +12,9 @@ export const ProductList = styled.ul`
   position: relative;
   overflow-y: auto;
 
-  ::-webkit-scrollbar {
-    width: 0.4rem;
-  }
+  ${ScrollStyles}
 
   font-size: 0.8rem;
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--light-Grey);
-    border-radius: 0.4rem;
-  }
 
   > li {
     &:not(:last-child) {

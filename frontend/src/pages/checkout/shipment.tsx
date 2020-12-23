@@ -29,6 +29,7 @@ import Button from "../../components/ui/Button";
 import useSession from "../../hooks/useSession";
 import { reduxStore } from "../../store";
 import { priceFormmater } from "../../utils";
+import { POSTAL_CODE_MASK } from "../../utils/masks";
 
 const Container = styled.div``;
 
@@ -147,23 +148,24 @@ const Shipment: React.FC = () => {
   ) as CartState;
 
   useEffect(() => {
-    if (!serviceSuccess) return;
+    if (serviceSuccess && serviceReset) {
+      const successfulMethods = [] as SuccessPostalCodeServiceResponse[];
 
-    const successfulMethods = [] as SuccessPostalCodeServiceResponse[];
+      services.forEach((service) => {
+        if (service.error) {
+          toast.error(`${service.name}: ${service.error.message}`);
+        } else {
+          successfulMethods.push(service);
+        }
+      });
 
-    services.forEach((service) => {
-      if (service.error) {
-        toast.error(`${service.name}: ${service.error.message}`);
-      } else {
-        successfulMethods.push(service);
-      }
-    });
-
-    setShipmentController({
-      postalCode: servicePostalCode,
-      methods: successfulMethods,
-      address,
-    });
+      setShipmentController({
+        postalCode: servicePostalCode,
+        methods: successfulMethods,
+        address,
+      });
+      serviceReset();
+    }
   }, [serviceSuccess]);
 
   useEffect(() => {
@@ -260,7 +262,7 @@ const Shipment: React.FC = () => {
                   placeholder="XXXXX-XXX"
                   pattern="(\d{5})(-{1})(\d{3})"
                   required
-                  mask={[/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/]}
+                  mask={POSTAL_CODE_MASK}
                   value={postalCode}
                   onChange={(e: any) => setPostalCode(e.target.value)}
                 />

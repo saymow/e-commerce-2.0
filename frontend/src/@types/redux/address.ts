@@ -9,7 +9,7 @@ export interface FetchedAddress {
 }
 
 export interface GivenAddress extends FetchedAddress {
-  number: string;
+  number: number;
 }
 
 export interface Address extends GivenAddress {

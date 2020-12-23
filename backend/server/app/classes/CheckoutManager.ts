@@ -7,11 +7,10 @@ import { v4 } from 'uuid';
 import redis from '../config/redis';
 
 import AppError from '../errors/AppError';
-import Product from '../models/Product';
-import InitialCartManager, {
+import CartManager, {
   FilledAddress,
   ToFillAdress,
-} from './CheckoutInitialCartManager';
+} from './CheckoutCartManager';
 
 export interface CartProduct {
   id: string;
@@ -53,7 +52,7 @@ class CheckoutManager {
   private userId: string;
   private id: string; // = prefix+userId+serviceId;
 
-  private redisExTime = 60 * 15; // in seconds
+  private redisExTime = 60 * 15 * 100; // in seconds
   private cart: FilledCart;
 
   constructor() {}
@@ -101,8 +100,9 @@ class CheckoutManager {
     }
   }
 
-  private async generateSignature(cart: any) {
-    const stringifyedCart = JSON.stringify(cart);
+  private async generateSignature(data?: any) {
+    const signatureContent = data || this.cart.products;
+    const stringifyedCart = JSON.stringify(signatureContent);
     const signatureId = this.generateSignatureId(this.userId, this.serviceId);
 
     try {
@@ -115,14 +115,18 @@ class CheckoutManager {
     }
   }
 
-  private async validifySignature(cart: any) {
-    const stringifyedCart = JSON.stringify(cart);
+  private async validifySignature(data?: any) {
+    const signatureContent = data || this.cart.products;
+    const stringifyedCart = JSON.stringify(signatureContent);
     const signatureId = this.generateSignatureId(this.userId, this.serviceId);
 
     try {
-      const hash = await argon2.hash(stringifyedCart);
+      const signatureHash = await redis.get(signatureId);
 
-      await redis.set(signatureId, hash, 'ex', this.redisExTime);
+      if (!signatureHash) throw new AppError('Checkout invalid signature');
+
+      if (!(await argon2.verify(signatureHash, stringifyedCart)))
+        throw new AppError('Checkout invalid signature');
     } catch (err) {
       console.error(err);
       throw new Error('Error on checkout');
@@ -157,14 +161,26 @@ class CheckoutManager {
   }
 
   async subscribeInitialCheckoutData(cart: FilledCart) {
-    const initialCart = await InitialCartManager.create(cart);
+    const Cart = await CartManager.create(cart);
 
-    const stringifyedData = JSON.stringify(initialCart);
+    const stringifyedData = JSON.stringify(Cart);
 
     await redis.set(this.id, stringifyedData, 'ex', this.redisExTime);
-    await this.generateSignature(initialCart.products);
+    this.cart = Cart;
 
-    this.cart = cart;
+    await this.generateSignature();
+  }
+
+  async subscribeFullCart(cart: FilledCart) {
+    await this.validifySignature();
+    const Cart = await CartManager.create(cart); // All validation happens here.
+
+    const stringifyedData = JSON.stringify(Cart);
+    await redis.set(this.id, stringifyedData, 'ex', this.redisExTime);
+
+    await this.generateSignature(Cart);
+
+    this.cart = Cart;
   }
 
   get serviceIdetenfier() {

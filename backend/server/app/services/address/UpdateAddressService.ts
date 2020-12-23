@@ -12,7 +12,7 @@ interface GivenAddress {
   number: string;
 }
 
-const schema = Yup.object().shape({
+export const schema = Yup.object().shape({
   state: Yup.string().length(2),
   city: Yup.string(),
   neighborhood: Yup.string(),
