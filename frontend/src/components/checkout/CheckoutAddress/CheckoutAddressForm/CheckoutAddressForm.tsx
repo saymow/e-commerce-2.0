@@ -14,6 +14,7 @@ import { AddressSchema } from "../../../../utils/schemas";
 import { postalCodeWatcher } from "../../../../utils/watchers";
 import Button from "../../../ui/Button";
 import Input from "../../../ui/Input";
+import Loading from "../../../ui/Loading";
 import { CheckoutAddressChildProps } from "../CheckoutAddress";
 import { Container, DoubleInputField, Form } from "./styles";
 
@@ -59,7 +60,7 @@ const CheckoutAddressForm: React.FC<CheckoutAddressChildProps> = ({
     }
   }, [shipmentServicesError, shipmentServicesReset]);
 
-  if (!cart.shipmentAddress) return null;
+  if (!cart.shipmentAddress) return <Loading />;
 
   return (
     <Container>

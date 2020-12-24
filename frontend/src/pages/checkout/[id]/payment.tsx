@@ -1,20 +1,20 @@
 import { GetServerSideProps } from "next";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { CustomFC } from "../../../@types";
 import { FilledCartState } from "../../../@types/redux/checkout";
 import { setCheckoutCart } from "../../../actions/cartActions";
-import CheckoutAddress from "../../../components/checkout/CheckoutAddress";
-import CheckoutLayout from "../../../components/checkout/CheckoutLayout";
 import Layout from "../../../components/core/Layout";
 import api from "../../../services/api";
+import CheckoutLayout from "../../../components/checkout/CheckoutLayout";
+import CheckoutPayment from "../../../components/checkout/CheckoutPayment";
 
 interface Props {
   cart: FilledCartState;
   checkoutId: string;
 }
 
-const Address: CustomFC<Props> = ({ cart, checkoutId }) => {
+const Payment: CustomFC<Props> = ({ cart, checkoutId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,19 +23,14 @@ const Address: CustomFC<Props> = ({ cart, checkoutId }) => {
 
   return (
     <Layout>
-      <CheckoutLayout
-        title="fill the address"
-        contentSize="large"
-        contentOverflow="hidden"
-        detailed
-      >
-        <CheckoutAddress />
+      <CheckoutLayout title="payment" contentSize="large" detailed>
+        <CheckoutPayment />
       </CheckoutLayout>
     </Layout>
   );
 };
 
-Address.restrictVisibility = "private";
+Payment.restrictVisibility = "private";
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -73,4 +68,4 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 };
 
-export default Address;
+export default Payment;

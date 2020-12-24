@@ -26,7 +26,7 @@ const CheckoutLayout: React.FC<Props> = ({
   title,
   detailed,
   contentSize = "small",
-  contentOverflow = "auto",
+  contentOverflow = "unset",
   children,
 }) => {
   const { products, subtotal, shippingCost, total } = useSelector<
