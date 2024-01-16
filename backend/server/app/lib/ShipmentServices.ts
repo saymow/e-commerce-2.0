@@ -1,37 +1,33 @@
 import { calcularPrecoPrazo, consultarCep } from 'correios-brasil';
 
-let args = {
-  // sCepDestino: string;
-  // nCdServico: string; // SEDEX/PAC
+interface DeliveryMethod {
+  name: string;
+  code: string;
+  value: string;
+  deadline: string;
+}
 
-  sCepOrigem: '03937-087', // https://www.4devs.com.br/gerador_de_cep
-  nVlPeso: 0.8, // In KG.
-  nCdFormato: 1, //1 = Formato caixa/pacote 2 = Formato rolo/prisma 3 = Envelope
-  nVlComprimento: 20, // decimal
-  nVlAltura: 15, //decimail
-  nVlLargura: 15, //decimail
-};
+const deliveryMethods: DeliveryMethod[] = [
+  {
+    code: 'standard',
+    name: 'Standard',
+    value: '15,00',
+    deadline: '10',
+  },
+  {
+    code: 'express',
+    name: 'Express',
+    value: '20,00',
+    deadline: '5',
+  },
+];
 
 class ShipmentServices {
-  async getShipmentData(postalCode: string, serviceCode: string) {
-    const { '0': shipmentData } = await calcularPrecoPrazo(
-      Object.assign(args, {
-        sCepDestino: postalCode,
-        nCdServico: [serviceCode],
-      })
-    );
-
-    const formmatedShipmentData = {
-      name: shipmentData.Codigo,
-      value: shipmentData.Valor,
-      code: shipmentData.Codigo,
-      deadline: shipmentData.PrazoEntrega,
-    };
-
-    return formmatedShipmentData;
+  async getDeliveryMethod(postalCode: string, serviceCode: string) {
+    return deliveryMethods.find(item => item.code === serviceCode);
   }
 
-  async getAddressData(postalCode: string) {
+  async getAddress(postalCode: string) {
     const addressData = await consultarCep(postalCode);
 
     const formattedShipmentData = {

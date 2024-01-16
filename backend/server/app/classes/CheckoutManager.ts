@@ -60,9 +60,9 @@ class CheckoutManager {
   static async connect(userId: string, key?: string) {
     const instance = new CheckoutManager();
 
-    if (!key) await instance.generateService(userId);
+    if (!key) await instance.build(userId);
     else {
-      await instance.validifyService(userId, key);
+      await instance.validate(userId, key);
       await instance.populate();
     }
 
@@ -77,7 +77,7 @@ class CheckoutManager {
     return `${CHECKOUT_SERVICE_SIGNATURE_PREFIX}:${userId}:${serviceId}`;
   }
 
-  private async generateService(userId: string) {
+  private async build(userId: string) {
     const serviceId = v4();
     const globalId = this.generateGlobalId(userId, serviceId);
 
@@ -88,7 +88,7 @@ class CheckoutManager {
     this.serviceId = serviceId;
   }
 
-  private async validifyService(userId: string, serviceId: string) {
+  private async validate(userId: string, serviceId: string) {
     const globalId = this.generateGlobalId(userId, serviceId);
 
     if (!(await redis.get(globalId)))
@@ -115,7 +115,7 @@ class CheckoutManager {
     }
   }
 
-  private async validifySignature(data?: any) {
+  private async validateSignature(data?: any) {
     const signatureContent = data || this.cart.products;
     const stringifyedCart = JSON.stringify(signatureContent);
     const signatureId = this.generateSignatureId(this.userId, this.serviceId);
@@ -160,7 +160,7 @@ class CheckoutManager {
     };
   }
 
-  async subscribeInitialCheckoutData(cart: FilledCart) {
+  async bindInitialCheckoutData(cart: FilledCart) {
     const Cart = await CartManager.create(cart);
 
     const stringifyedData = JSON.stringify(Cart);
@@ -171,8 +171,8 @@ class CheckoutManager {
     await this.generateSignature();
   }
 
-  async subscribeFullCart(cart: FilledCart) {
-    await this.validifySignature();
+  async bindFullCheckoutData(cart: FilledCart) {
+    await this.validateSignature();
     const Cart = await CartManager.create(cart); // All validation happens here.
 
     const stringifyedData = JSON.stringify(Cart);

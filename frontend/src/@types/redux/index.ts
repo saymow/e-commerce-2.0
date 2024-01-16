@@ -83,8 +83,8 @@ export interface CartProduct extends IProduct {
 
 export interface CartState {
   total: number;
-  subtotal: number;
   shippingCost: number;
+  subtotal: number;
   products: CartProduct[];
   locked: boolean;
   checkoutId?: string;

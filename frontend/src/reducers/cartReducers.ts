@@ -86,7 +86,7 @@ export const cartReducer = (
       return { ...cart, checkoutId };
     }
     case "RESET_CART":
-      return cartInitialState;
+      return structuredClone(cartInitialState);
     default:
       return state;
   }

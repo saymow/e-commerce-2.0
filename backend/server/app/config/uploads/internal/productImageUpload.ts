@@ -9,7 +9,7 @@ export default {
   directory,
   multer: multer({
     fileFilter(req, file, cb) {
-      if (!file.originalname.match(/\.(jpeg|jpg|png)$/))
+      if (!file.originalname.match(/\.(jpeg|jpg|png|webp)$/))
         return cb((new AppError('Invalid upload format') as unknown) as Error);
 
       return cb(null, true);

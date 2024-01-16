@@ -87,20 +87,22 @@ class CartManager implements InitialCart {
   }) {
     const shipmentServices = new ShipmentServices();
 
+    await ShipmentMethodSchema.validate(shipmentMethod);
+
     if (shippingCost !== shipmentMethod.value)
       throw new AppError('Invalid checkout data.');
 
-    const shipmentTrustedData = await shipmentServices.getShipmentData(
+    const shipmentTrustedData = await shipmentServices.getDeliveryMethod(
       shipmentMethod.postalCode,
       shipmentMethod.code
     );
 
+    if (!shipmentTrustedData) throw new AppError('Invalid checkout data');
+
     const realPrice = shippingServicePriceFormmater(shipmentTrustedData.value);
 
-    if (realPrice !== shipmentMethod.value)
+    if (shippingCost !== realPrice || shipmentMethod.value !== realPrice)
       throw new AppError('Invalid checkout data');
-
-    await ShipmentMethodSchema.validate(shipmentMethod);
   }
 
   private async validateAddress(
@@ -109,27 +111,19 @@ class CartManager implements InitialCart {
   ) {
     const shipmentServices = new ShipmentServices();
 
-    if ((address as any).number) {
-      // then is a filled and definitive address
-      await filledAddressSchema.validate(address);
-    } else await toFillAddressSchema.validate(address);
+    // then is a filled and definitive address
+    if ((address as any).number) await filledAddressSchema.validate(address);
+    else await toFillAddressSchema.validate(address);
 
-    const addressTrustedData = await shipmentServices.getAddressData(
-      postalCode
-    );
+    const addressTrustedData = await shipmentServices.getAddress(postalCode);
 
-    //-1 if the reference string is sorted before the compareString
-    // 0 if the two strings are equal
-    // 1 if the reference string is sorted after the compareString
-
-    Object.keys(addressTrustedData).forEach(key => {
-      if (
-        ((addressTrustedData as any)[key] as string).localeCompare(
-          (address as any)[key] as string
-        ) !== 0
-      )
-        throw new AppError('Invalid checkout data');
-    });
+    if (
+      addressTrustedData.state.localeCompare(address.state) !== 0 ||
+      addressTrustedData.city.localeCompare(address.city) !== 0 ||
+      addressTrustedData.neighborhood.localeCompare(address.neighborhood) !== 0
+    ) {
+      throw new AppError('Invalid checkout data');
+    }
   }
 
   private async validateCart(data: {
@@ -138,18 +132,12 @@ class CartManager implements InitialCart {
     subtotal: number;
   }) {
     const productsRepository = getRepository(Product);
-
     const productsIds = data.products.map(product => product.id);
-
     const trustedProducts = await productsRepository.find({
       where: {
         id: Any(productsIds),
       },
     });
-
-    if (trustedProducts.length !== data.products.length)
-      throw new AppError('Invalid checkout data.');
-
     const trustedSubtotal = trustedProducts.reduce((acumm, next) => {
       const clientProductQty = (data.products.find(
         _product => _product.id === next.id
@@ -158,7 +146,10 @@ class CartManager implements InitialCart {
       return acumm + next.price * clientProductQty;
     }, 0);
 
-    if (trustedSubtotal !== data.subtotal)
+    if (
+      trustedProducts.length !== data.products.length ||
+      trustedSubtotal !== data.subtotal
+    )
       throw new AppError('Invalid checkout data.');
   }
 

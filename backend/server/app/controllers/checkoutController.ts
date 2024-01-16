@@ -7,7 +7,7 @@ class CheckoutController {
     const CartData = req.body;
 
     const checkoutService = await CheckoutManager.connect(userId);
-    await checkoutService.subscribeInitialCheckoutData(CartData);
+    await checkoutService.bindInitialCheckoutData(CartData);
     const serviceIdentifier = checkoutService.serviceIdetenfier;
 
     return res.status(201).send({ id: serviceIdentifier });
@@ -27,11 +27,10 @@ class CheckoutController {
   async store(req: Request, res: Response) {
     const userId = req.session!.user.id;
     const serviceId = req.params.serviceId;
-
     const CartData = req.body;
 
     const checkoutService = await CheckoutManager.connect(userId, serviceId);
-    await checkoutService.subscribeFullCart(CartData);
+    await checkoutService.bindFullCheckoutData(CartData);
 
     return res.sendStatus(200);
   }

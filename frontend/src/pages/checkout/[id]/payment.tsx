@@ -1,13 +1,20 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CustomFC } from "../../../@types";
-import { FilledCartState } from "../../../@types/redux/checkout";
+import {
+  CheckoutCreateState,
+  FilledCartState,
+} from "../../../@types/redux/checkout";
 import { setCheckoutCart } from "../../../actions/cartActions";
 import Layout from "../../../components/core/Layout";
 import api from "../../../services/api";
 import CheckoutLayout from "../../../components/checkout/CheckoutLayout";
 import CheckoutPayment from "../../../components/checkout/CheckoutPayment";
+import { reduxStore } from "../../../store";
+import { CartState } from "../../../@types/redux";
+import { finishCheckout } from "../../../actions/checkoutActions";
+import Loading from "../../../components/ui/Loading";
 
 interface Props {
   cart: FilledCartState;
@@ -17,14 +24,46 @@ interface Props {
 const Payment: CustomFC<Props> = ({ cart, checkoutId }) => {
   const dispatch = useDispatch();
 
+  const checkoutCreate = useSelector<typeof reduxStore>(
+    (state) => state.checkoutCreate
+  ) as CheckoutCreateState;
+
   useEffect(() => {
     dispatch(setCheckoutCart({ ...cart, locked: true }, checkoutId));
   }, []);
 
+  const handlePaymentSuccess = (id: string, source: string) => {
+    dispatch(finishCheckout(cart, checkoutId, id, source));
+  };
+
+  if (checkoutCreate.loading) {
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (checkoutCreate.success) {
+    return (
+      <Layout>
+        <p>Todo: Order placed succesfuly</p>
+      </Layout>
+    );
+  }
+
+  if (checkoutCreate.error) {
+    return (
+      <Layout>
+        <p>Todo: Order failed</p>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <CheckoutLayout title="payment" contentSize="large" detailed>
-        <CheckoutPayment />
+        <CheckoutPayment onPaymentSuccess={handlePaymentSuccess} />
       </CheckoutLayout>
     </Layout>
   );

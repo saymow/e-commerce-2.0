@@ -16,7 +16,11 @@ import {
   Method,
 } from "./styles";
 
-const CheckoutPayment: React.FC = () => {
+interface Props {
+  onPaymentSuccess: (id: string, source: string) => void;
+}
+
+const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
   const dispatch = useDispatch();
 
   const [isReady] = usePaymentSdks();
@@ -25,7 +29,10 @@ const CheckoutPayment: React.FC = () => {
     (state) => state.cart
   ) as CartState;
 
-  const handleSuccessPayment = () => {};
+  const handleSuccessPayment = (details: any, data: any) => {
+    const { orderID, paymentSource } = data;
+    onPaymentSuccess(orderID, paymentSource);
+  };
 
   if (!cart.shipmentAddress) return <Loading />; // still setting state.
 

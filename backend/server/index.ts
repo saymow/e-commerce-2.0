@@ -48,8 +48,6 @@ app.use(
   })
 );
 
-console.log(uploadsPath);
-
 app.use('/uploads', express.static(uploadsPath));
 
 app.use(express.json());

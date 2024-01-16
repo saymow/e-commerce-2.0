@@ -13,14 +13,14 @@ export default function usePaymentSdks() {
 
   useEffect(() => {
     const addPaypalScript = async () => {
-      const {
+      /*const {
         data: { paypal },
-      } = await api.get("/checkout/config");
+      } = await api.get("/checkout/config");*/
 
       const script = document.createElement("script");
 
       script.type = "text/javascript";
-      script.src = `https://www.paypal.com/sdk/js?client-id=${paypal}`;
+      script.src = `https://www.paypal.com/sdk/js?client-id=${"test"}`;
       script.async = true;
       script.onload = () => setSdkReady({ ...sdkReady, paypal: true });
 
