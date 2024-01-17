@@ -1,4 +1,4 @@
-import CheckoutManager from '../classes/CheckoutManager';
+import CheckoutService from '../services/checkout/CheckoutService';
 import { Request, Response } from 'express';
 
 class CheckoutController {
@@ -6,30 +6,30 @@ class CheckoutController {
     const userId = req.session!.user.id;
     const checkoutId = req.params.checkoutId;
 
-    const checkoutService = await CheckoutManager.connect(userId, checkoutId);
+    const checkoutManager = await CheckoutService.connect(userId, checkoutId);
 
-    return res.send({ cart: checkoutService.cartData });
+    return res.send({ cart: checkoutManager.cart });
   }
 
   async create(req: Request, res: Response) {
     const userId = req.session!.user.id;
-    const CartData = req.body;
+    const cart = req.body;
 
-    const checkoutService = await CheckoutManager.connect(userId);
-    await checkoutService.bindInitialCheckoutData(CartData);
-    const serviceIdentifier = checkoutService.serviceIdetenfier;
+    const checkoutManager = new CheckoutService(cart, userId);
+    await checkoutManager.save();
 
-    return res.status(201).send({ id: serviceIdentifier });
+    return res.status(201).send({ id: checkoutManager.serviceIdetenfier });
   }
 
   // Usually, called to attach address to checkout
   async update(req: Request, res: Response) {
     const userId = req.session!.user.id;
     const checkoutId = req.params.checkoutId;
-    const CartData = req.body;
+    const cart = req.body;
 
-    const checkoutService = await CheckoutManager.connect(userId, checkoutId);
-    await checkoutService.bindFullCheckoutData(CartData);
+    const checkoutService = await CheckoutService.connect(userId, checkoutId);
+    checkoutService.cart = cart;
+    await checkoutService.save();
 
     return res.sendStatus(200);
   }
@@ -38,9 +38,15 @@ class CheckoutController {
     const userId = req.session!.user.id;
     const checkoutId = req.params.checkoutId;
     const { paymentId, paymentSource } = req.body;
-    const cart = (await CheckoutManager.connect(userId, checkoutId)).cartData;
+    const cart = (await CheckoutService.connect(userId, checkoutId)).cart;
 
-    console.log({ userId, checkoutId, cart, paymentId, paymentSource });
+    console.log(
+      JSON.stringify(
+        { userId, checkoutId, cart, paymentId, paymentSource },
+        null,
+        2
+      )
+    );
 
     return res.sendStatus(201);
   }

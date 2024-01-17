@@ -2,6 +2,7 @@ node_modules
 
 **/products/**
 
+test-db.sqlite
 .env
 dev.env
 typeorm.env
