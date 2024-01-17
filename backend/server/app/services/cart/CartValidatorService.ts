@@ -1,4 +1,7 @@
 import { Cart } from '@services/checkout/CheckoutService';
+import AppError from '../../errors/AppError';
+import Product from '../../models/Product';
+import { In, getRepository } from 'typeorm';
 import * as yup from 'yup';
 
 const productSchema = yup.object({
@@ -37,7 +40,7 @@ const validationSchema = yup.object({
     .integer()
     .required()
     .test('Total sum is correct', 'Total sum is not correct', function (value) {
-      return value === this.parent.subtotal + this.parent.shippingCOst;
+      return value === this.parent.subtotal + this.parent.shippingCost;
     }),
   subtotal: yup.number().integer().required(),
   shippingCost: yup.number().integer().required(),
@@ -47,6 +50,22 @@ const validationSchema = yup.object({
 class CartValidatorService {
   async execute(cart: Cart) {
     await validationSchema.validate(cart);
+
+    const productsRepository = getRepository(Product);
+    const products = await productsRepository.find({
+      where: { id: In(cart.products.map(product => product.id)) },
+    });
+
+    for (const cartProduct of cart.products) {
+      const product = products.find(item => item.id === cartProduct.id);
+
+      if (!product) {
+        throw new AppError(`Product ${cartProduct.id} does not exist`);
+      }
+      if (product!.count_in_stock < cartProduct.qty) {
+        throw new AppError(`Product ${product?.name} is out of stock`);
+      }
+    }
 
     return Promise.resolve();
   }
