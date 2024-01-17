@@ -87,4 +87,16 @@ describe('CartValidatorService', () => {
 
     await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
   });
+
+  it('Should throw againts invalid cart (products does not exits)', async () => {
+    const cardValidatorService = new CartValidatorService();
+    const invalidCart = await makeValidCart();
+
+    invalidCart.products.push({
+      id: 'non-existent',
+      qty: 5,
+    });
+
+    await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
+  });
 });
