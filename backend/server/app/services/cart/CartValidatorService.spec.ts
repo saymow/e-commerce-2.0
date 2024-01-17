@@ -1,22 +1,33 @@
 import { Cart } from '@services/checkout/CheckoutService';
 import CartValidatorService from './CartValidatorService';
+import {
+  setupEnvironment,
+  setupFakeProducts,
+  tearEnvironment,
+} from '@__tests__/fixtures';
+import { getRepository } from 'typeorm';
+import Product from '../../models/Product';
+import AppError from '../../errors/AppError';
 
-const makeValidCart = (): Cart => {
+beforeAll(async () => {
+  await setupEnvironment();
+  await setupFakeProducts();
+});
+
+afterAll(tearEnvironment);
+
+const makeValidCart = async (): Promise<Cart> => {
+  const productsRepository = getRepository(Product);
+  const products = await productsRepository.find();
+  const total = products.reduce((acc, next, idx) => {
+    return acc + next.price * (idx + 1);
+  }, 0);
+
   return {
-    products: [
-      {
-        id: '0a4054bb-0450-4ee0-a581-b957dba0dd8c',
-        qty: 2,
-      },
-      {
-        id: '3ced88cc-7d03-43fc-88d9-ac411f368e8a',
-        qty: 2,
-      },
-      {
-        id: '2386c796-f7fd-4f57-b21d-e0ad7b785a79',
-        qty: 1,
-      },
-    ],
+    products: products.map((product, idx) => ({
+      id: product.id,
+      qty: idx + 1,
+    })),
     shipmentMethod: {
       code: 'express',
       name: 'Express',
@@ -24,8 +35,8 @@ const makeValidCart = (): Cart => {
       deadline: '5',
       postalCode: '13560-560',
     },
-    total: 232995,
-    subtotal: 230995,
+    total: total,
+    subtotal: total - 2000,
     shippingCost: 2000,
     shipmentAddress: {
       state: 'SP',
@@ -41,14 +52,16 @@ const makeValidCart = (): Cart => {
 describe('CartValidatorService', () => {
   it('Should not throw againts valid cart', async () => {
     const cardValidatorService = new CartValidatorService();
-    const validCart = makeValidCart();
+    const validCart = await makeValidCart();
 
-    await expect(cardValidatorService.execute(validCart)).resolves.not.toThrow()
+    await expect(
+      cardValidatorService.execute(validCart)
+    ).resolves.not.toThrow();
   });
 
   it('Should throw againts invalid cart (invalid product qty)', async () => {
     const cardValidatorService = new CartValidatorService();
-    const invalidCart = makeValidCart();
+    const invalidCart = await makeValidCart();
 
     invalidCart.products[0].qty = -1;
 
@@ -57,11 +70,20 @@ describe('CartValidatorService', () => {
 
   it('Should throw againts invalid cart (subtotal + shippingCost != total)', async () => {
     const cardValidatorService = new CartValidatorService();
-    const invalidCart = makeValidCart();
+    const invalidCart = await makeValidCart();
 
     invalidCart.subtotal = 1;
     invalidCart.shippingCost = 2;
     invalidCart.total = 55;
+
+    await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
+  });
+
+  it('Should throw againts invalid cart (products out of stock)', async () => {
+    const cardValidatorService = new CartValidatorService();
+    const invalidCart = await makeValidCart();
+
+    invalidCart.products[0].qty = 999999999999999;
 
     await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
   });
