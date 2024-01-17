@@ -6,7 +6,8 @@ const router = Router();
 const checkoutController = new CheckoutController();
 
 router.post('/', authMiddleware, checkoutController.create);
-router.get('/:serviceId', authMiddleware, checkoutController.show);
-router.post('/:serviceId', authMiddleware, checkoutController.store);
+router.get('/:checkoutId', authMiddleware, checkoutController.show);
+router.put('/:checkoutId', authMiddleware, checkoutController.update);
+router.post('/:checkoutId', authMiddleware, checkoutController.store);
 
 export default router;

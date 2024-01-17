@@ -21,16 +21,16 @@ describe('User creation service', () => {
   it('Should not create an invalid user (email in use)', async () => {
     const createUserService = new CreateUserService();
 
-    const invalidUser = {
-      ...fakeUser2,
-      email: 'example@example.com',
-    };
+    const validUser = { ...fakeUser, email: 'email@email.com' };
 
-    const creationProcess = createUserService.execute(invalidUser);
+    await createUserService.execute(validUser);
+
+    // Repeating existing email
+    const invalidUser = { ...fakeUser2, email: validUser.email };
 
     // toThrow methods expects an instance of Error Object, not custom errors
     // That's the why i'm only expecting it to reject.
-    await expect(creationProcess).rejects.toBeTruthy();
+    await expect(createUserService.execute(invalidUser)).rejects.toBeTruthy();
   });
 
   it('Should not create an invalid user (invalid birth_date)', async () => {

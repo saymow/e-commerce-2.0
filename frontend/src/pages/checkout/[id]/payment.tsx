@@ -33,7 +33,7 @@ const Payment: CustomFC<Props> = ({ cart, checkoutId }) => {
   }, []);
 
   const handlePaymentSuccess = (id: string, source: string) => {
-    dispatch(finishCheckout(cart, checkoutId, id, source));
+    dispatch(finishCheckout(checkoutId, id, source));
   };
 
   if (checkoutCreate.loading) {

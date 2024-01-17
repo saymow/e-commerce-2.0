@@ -10,7 +10,7 @@ import {
   addAddressDataToCart,
   addShipmmentDataToCart,
 } from "../../../actions/cartActions";
-import { continueAddressCheckout } from "../../../actions/checkoutActions";
+import { updateCheckout } from "../../../actions/checkoutActions";
 import { reduxStore } from "../../../store";
 import CheckoutAddressForm from "./CheckoutAddressForm";
 import CheckoutAddressList from "./CheckoutAddressList";
@@ -118,7 +118,7 @@ const CheckoutAddress: React.FC = () => {
 
     if (isValidAddress && isShipmentMethod) {
       dispatch(
-        continueAddressCheckout(
+        updateCheckout(
           cart as FilledCartState,
           cart.checkoutId as string
         )

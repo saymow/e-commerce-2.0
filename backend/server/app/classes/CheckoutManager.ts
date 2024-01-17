@@ -8,8 +8,9 @@ import redis from '../config/redis';
 
 import AppError from '../errors/AppError';
 import CartManager, {
-  FilledAddress,
-  ToFillAdress,
+  Address,
+  IncompleteAddress,
+  UserAddress,
 } from './CheckoutCartManager';
 
 export interface CartProduct {
@@ -42,10 +43,10 @@ export interface InitialCart {
   subtotal: number;
   shippingCost: number;
   shipmentMethod: ShipmentMethod;
-  shipmentAddress: ToFillAdress | FilledAddress;
+  shipmentAddress: IncompleteAddress | Address | UserAddress;
 }
 
-export type FilledCart = InitialCart;
+export type Cart = InitialCart;
 
 class CheckoutManager {
   private serviceId: string;
@@ -53,7 +54,7 @@ class CheckoutManager {
   private id: string; // = prefix+userId+serviceId;
 
   private redisExTime = 60 * 15 * 100; // in seconds
-  private cart: FilledCart;
+  private cart: Cart;
 
   constructor() {}
 
@@ -139,28 +140,10 @@ class CheckoutManager {
     if (!stringifyedData)
       throw new AppError('Checkout operation data not found.');
 
-    let data = JSON.parse(stringifyedData) as FilledCart;
-
-    const {
-      total,
-      subtotal,
-      shippingCost,
-      shipmentMethod,
-      products,
-      shipmentAddress,
-    } = data;
-
-    this.cart = {
-      total,
-      subtotal,
-      shippingCost,
-      shipmentMethod,
-      products,
-      shipmentAddress,
-    };
+    this.cart = JSON.parse(stringifyedData) as Cart;
   }
 
-  async bindInitialCheckoutData(cart: FilledCart) {
+  async bindInitialCheckoutData(cart: Cart) {
     const Cart = await CartManager.create(cart);
 
     const stringifyedData = JSON.stringify(Cart);
@@ -171,13 +154,13 @@ class CheckoutManager {
     await this.generateSignature();
   }
 
-  async bindFullCheckoutData(cart: FilledCart) {
+  async bindFullCheckoutData(cart: Cart) {
     await this.validateSignature();
     const Cart = await CartManager.create(cart); // All validation happens here.
 
     const stringifyedData = JSON.stringify(Cart);
-    await redis.set(this.id, stringifyedData, 'ex', this.redisExTime);
 
+    await redis.set(this.id, stringifyedData, 'ex', this.redisExTime);
     await this.generateSignature(Cart);
 
     this.cart = Cart;

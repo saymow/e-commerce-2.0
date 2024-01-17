@@ -28,7 +28,7 @@ export const createCheckout =
     }
   };
 
-export const continueAddressCheckout =
+export const updateCheckout =
   (data: FilledCartState, checkoutId: string) =>
   async (dispatch: (arg0: CheckoutCreationAction) => void) => {
     try {
@@ -36,7 +36,7 @@ export const continueAddressCheckout =
         type: "CHECKOUT_CREATE_REQUEST",
       });
 
-      await api.post(`/checkout/${checkoutId}`, data);
+      await api.put(`/checkout/${checkoutId}`, data);
 
       dispatch({
         type: "CHECKOUT_CREATE_SUCCESS",
@@ -61,13 +61,7 @@ export const finishCheckout =
         type: "CHECKOUT_CREATE_REQUEST",
       });
 
-      console.log({
-        checkoutId,
-        paymentId,
-        paymentSource,
-      });
-
-      // await api.post(`/checkout/${checkoutId}`, data);
+      await api.post(`/checkout/${checkoutId}`, { paymentId, paymentSource });
 
       setTimeout(() => {
         dispatch({

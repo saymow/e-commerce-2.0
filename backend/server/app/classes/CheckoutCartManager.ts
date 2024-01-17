@@ -5,8 +5,8 @@ import AppError from '../errors/AppError';
 import ShipmentServices from '../lib/ShipmentServices';
 import Product from '../models/Product';
 import { CartProduct, InitialCart, ShipmentMethod } from './CheckoutManager';
-import { schema as filledAddressSchema } from '@services/address/CreateAddressService';
-import { schema as toFillAddressSchema } from '@services/address/UpdateAddressService';
+import { schema as addressSchema } from '@services/address/CreateAddressService';
+import { schema as incompleteAddressSchema } from '@services/address/UpdateAddressService';
 
 const ShipmentMethodSchema = Yup.object().shape({
   postalCode: Yup.string().required(),
@@ -16,7 +16,7 @@ const ShipmentMethodSchema = Yup.object().shape({
   deadline: Yup.string().required(),
 });
 
-export interface ToFillAdress {
+export interface IncompleteAddress {
   state: string;
   city: string;
   neighborhood: string;
@@ -24,8 +24,12 @@ export interface ToFillAdress {
   postal_code: string;
 }
 
-export interface FilledAddress extends ToFillAdress {
+export interface Address extends IncompleteAddress {
   number: string;
+}
+
+export interface UserAddress extends Address {
+  id: number;
 }
 
 class CartManager implements InitialCart {
@@ -34,7 +38,7 @@ class CartManager implements InitialCart {
   subtotal: number;
   shippingCost: number;
   shipmentMethod: ShipmentMethod;
-  shipmentAddress: ToFillAdress | FilledAddress;
+  shipmentAddress: IncompleteAddress | Address;
   constructor() {}
 
   static async create(data: InitialCart) {
@@ -106,14 +110,14 @@ class CartManager implements InitialCart {
   }
 
   private async validateAddress(
-    address: FilledAddress | ToFillAdress,
+    address: Address | IncompleteAddress,
     postalCode: string
   ) {
     const shipmentServices = new ShipmentServices();
 
     // then is a filled and definitive address
-    if ((address as any).number) await filledAddressSchema.validate(address);
-    else await toFillAddressSchema.validate(address);
+    if ((address as any).number) await addressSchema.validate(address);
+    else await incompleteAddressSchema.validate(address);
 
     const addressTrustedData = await shipmentServices.getAddress(postalCode);
 

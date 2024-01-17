@@ -1,11 +1,12 @@
 import CreateUserService from '@services/user/CreateUserService';
 import User from '../../app/models/User';
+import argon2 from 'argon2';
 import { createConnection, getConnection, getRepository } from 'typeorm';
 import { fakeUser, fakeUser2, fakeAdmin, fakeAdmin2 } from '.';
 
 const setupEnvironment = async () => {
   const connection = await createConnection();
-  await connection.runMigrations();
+  // await connection.runMigrations();
   jest.useFakeTimers();
 
   const entities = connection.entityMetadatas;
@@ -18,22 +19,25 @@ const setupEnvironment = async () => {
 
 const setupFakeData = async () => {
   const usersRepository = getRepository(User);
-  const createUserService = new CreateUserService();
+
+  const hashCraeteUserDataPass = async (user: any) => {
+    user.password = await argon2.hash(user.password);
+
+    return user;
+  };
 
   await Promise.all([
-    createUserService.execute(fakeUser),
-    createUserService.execute(fakeUser2),
     usersRepository.save(
-      usersRepository.create({
-        ...fakeAdmin,
-        is_admin: true,
-      })
+      usersRepository.create(await hashCraeteUserDataPass(fakeUser))
     ),
     usersRepository.save(
-      usersRepository.create({
-        ...fakeAdmin2,
-        is_admin: true,
-      })
+      usersRepository.create(await hashCraeteUserDataPass(fakeUser2))
+    ),
+    usersRepository.save(
+      usersRepository.create(await hashCraeteUserDataPass(fakeAdmin))
+    ),
+    usersRepository.save(
+      usersRepository.create(await hashCraeteUserDataPass(fakeAdmin2))
     ),
   ]);
 };

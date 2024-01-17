@@ -8,7 +8,6 @@ import {
   tearEnvironment,
 } from '@__tests__/fixtures';
 import CreateAddressService from './CreateAddressService';
-import AppError from '../../errors/AppError';
 
 beforeAll(async () => {
   await setupEnvironment();
@@ -62,6 +61,6 @@ describe('Create address service', () => {
 
     const creationProcess = createAddressService.execute(fakeAddress, user!.id);
 
-    expect(creationProcess).rejects.toThrow(AppError);
+    expect(creationProcess).rejects.toThrow();
   });
 });

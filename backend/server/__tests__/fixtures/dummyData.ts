@@ -30,6 +30,8 @@ export const fakeUser = {
   password: 'this_is_my_passwDord25',
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
+  is_confirmed: false,
+  is_admin: false
 };
 
 export const fakeUser2 = {
@@ -38,6 +40,8 @@ export const fakeUser2 = {
   password: 'passwDord126',
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
+  is_confirmed: false,
+  is_admin: false
 };
 
 export const fakeAdmin = {
@@ -46,6 +50,8 @@ export const fakeAdmin = {
   password: 'passwDord126',
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
+  is_confirmed: true,
+  is_admin: true
 };
 
 export const fakeAdmin2 = {
@@ -54,6 +60,8 @@ export const fakeAdmin2 = {
   password: 'passwDord126',
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
+  is_confirmed: true,
+  is_admin: true
 };
 
 export const fakeInitialCheckout = {

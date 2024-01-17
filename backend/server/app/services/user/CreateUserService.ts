@@ -44,6 +44,8 @@ class CreateUserService {
       birth_date,
       contact_number,
       password: hashedPass,
+      is_confirmed: false,
+      is_admin: false
     });
 
     await usersRepository.save(user);
