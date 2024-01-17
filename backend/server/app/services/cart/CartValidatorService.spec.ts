@@ -39,11 +39,19 @@ const makeValidCart = (): Cart => {
 };
 
 describe('CartValidatorService', () => {
-  it('Should return true againts valid cart', async () => {
+  it('Should not throw againts valid cart', async () => {
     const cardValidatorService = new CartValidatorService();
     const validCart = makeValidCart();
 
+    expect(cardValidatorService.execute(validCart)).resolves.toBeTruthy()
+  });
 
-    expect((await cardValidatorService.execute(validCart))).toBeTruthy()
+  it('Should return false againts invalid cart (invalid product qty)', async () => {
+    const cardValidatorService = new CartValidatorService();
+    const invalidCart = makeValidCart();
+
+    invalidCart.products[0].qty = -1;
+
+    expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
   });
 });
