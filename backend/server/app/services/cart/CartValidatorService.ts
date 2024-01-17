@@ -40,7 +40,9 @@ const validationSchema = yup.object({
 
 class CartValidatorService {
   async execute(cart: Cart) {
-    return true;
+    await validationSchema.validate(cart);
+
+    return Promise.resolve();
   }
 }
 
