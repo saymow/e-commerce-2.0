@@ -32,7 +32,13 @@ const shipmentAddressSchema = yup.object({
 const validationSchema = yup.object({
   products: yup.array().of(productSchema).required(),
   shipmentMethod: shipmentMethodSchema.required(),
-  total: yup.number().integer().required(),
+  total: yup
+    .number()
+    .integer()
+    .required()
+    .test('Total sum is correct', 'Total sum is not correct', function (value) {
+      return value === this.parent.subtotal + this.parent.shippingCOst;
+    }),
   subtotal: yup.number().integer().required(),
   shippingCost: yup.number().integer().required(),
   shipmentAddress: shipmentAddressSchema.required(),
