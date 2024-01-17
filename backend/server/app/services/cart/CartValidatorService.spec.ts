@@ -43,15 +43,26 @@ describe('CartValidatorService', () => {
     const cardValidatorService = new CartValidatorService();
     const validCart = makeValidCart();
 
-    expect(cardValidatorService.execute(validCart)).resolves.toBeTruthy()
+    await expect(cardValidatorService.execute(validCart)).resolves.not.toThrow()
   });
 
-  it('Should return false againts invalid cart (invalid product qty)', async () => {
+  it('Should throw againts invalid cart (invalid product qty)', async () => {
     const cardValidatorService = new CartValidatorService();
     const invalidCart = makeValidCart();
 
     invalidCart.products[0].qty = -1;
 
-    expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
+    await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
+  });
+
+  it('Should throw againts invalid cart (subtotal + shippingCost != total)', async () => {
+    const cardValidatorService = new CartValidatorService();
+    const invalidCart = makeValidCart();
+
+    invalidCart.subtotal = 1;
+    invalidCart.shippingCost = 2;
+    invalidCart.total = 55;
+
+    await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
   });
 });
