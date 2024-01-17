@@ -3,7 +3,7 @@ import {
   fakeAdmin2,
   fakeUser,
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
 import { getRepository } from 'typeorm';
@@ -12,7 +12,7 @@ import AdminUpdateUserService from './AdminUpdateUserService';
 
 beforeEach(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 afterEach(tearEnvironment);
 

@@ -1,16 +1,3 @@
-export const fakeProduct = {
-  name: 'Airpods Wireless Bluetooth Headphones',
-  image: 'airpods.jpg',
-  description:
-    'Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working',
-  brand: 'Apple',
-  category: 'Electronics',
-  price: 8999,
-  count_in_stock: 10,
-  rating: 4.5,
-  num_reviews: 12,
-};
-
 export const fakeProduct2 = {
   name: 'iPhone 11 Pro 256GB Memory',
   image: 'phone.jpg',
@@ -24,6 +11,19 @@ export const fakeProduct2 = {
   num_reviews: 8,
 };
 
+export const fakeProduct = {
+  name: 'Airpods Wireless Bluetooth Headphones',
+  image: 'airpods.jpg',
+  description:
+    'Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working',
+  brand: 'Apple',
+  category: 'Electronics',
+  price: 8999,
+  count_in_stock: 10,
+  rating: 4.5,
+  num_reviews: 12,
+};
+
 export const fakeUser = {
   name: 'Gustavo alves',
   email: 'example@example.com',
@@ -31,7 +31,7 @@ export const fakeUser = {
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
   is_confirmed: false,
-  is_admin: false
+  is_admin: false,
 };
 
 export const fakeUser2 = {
@@ -41,7 +41,7 @@ export const fakeUser2 = {
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
   is_confirmed: false,
-  is_admin: false
+  is_admin: false,
 };
 
 export const fakeAdmin = {
@@ -51,7 +51,7 @@ export const fakeAdmin = {
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
   is_confirmed: true,
-  is_admin: true
+  is_admin: true,
 };
 
 export const fakeAdmin2 = {
@@ -61,7 +61,7 @@ export const fakeAdmin2 = {
   birth_date: '2000-10-28',
   contact_number: '(31) 99999-9999',
   is_confirmed: true,
-  is_admin: true
+  is_admin: true,
 };
 
 export const fakeInitialCheckout = {

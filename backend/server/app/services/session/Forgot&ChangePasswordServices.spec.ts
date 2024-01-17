@@ -2,7 +2,7 @@ import { validate } from 'uuid';
 import {
   fakeUser,
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
 import ChangePasswordService from './ChangePasswordService';
@@ -12,7 +12,7 @@ import { TEST_GENERATED_UUID } from '../../constants';
 
 beforeAll(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 
 afterAll(tearEnvironment);

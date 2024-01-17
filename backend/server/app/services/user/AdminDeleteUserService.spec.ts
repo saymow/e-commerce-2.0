@@ -5,7 +5,7 @@ import {
   fakeUser,
   fakeUser2,
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
 import User from '../../models/User';
@@ -13,7 +13,7 @@ import AdminDeleteUserService from './AdminDeleteUserService';
 
 beforeAll(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 
 afterAll(tearEnvironment);

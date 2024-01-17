@@ -13,7 +13,7 @@ export interface IncompleteAddress {
 }
 
 export interface Address extends IncompleteAddress {
-  number: string;
+  number: number;
 }
 
 export interface UserAddress extends Address {

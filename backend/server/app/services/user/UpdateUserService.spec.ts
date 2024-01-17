@@ -3,7 +3,7 @@ import {
   fakeAdmin,
   fakeUser,
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
 import { TEST_GENERATED_UUID } from '../../constants';
@@ -14,7 +14,7 @@ import UpdateUserService from './UpdateUserService';
 
 beforeEach(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 afterEach(tearEnvironment);
 

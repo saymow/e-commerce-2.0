@@ -4,14 +4,14 @@ import {
   fakeUser,
   fakeUser2,
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
 import CreateAddressService from './CreateAddressService';
 
 beforeAll(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 afterAll(tearEnvironment);
 

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import Order from './Order';
 
-@Entity('order_address')
+@Entity('orders_address')
 class OrderAddress {
   @PrimaryColumn()
   order_id: string;

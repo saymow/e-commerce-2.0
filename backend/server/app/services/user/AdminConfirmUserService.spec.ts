@@ -2,7 +2,7 @@ import User from '../../models/User';
 import { getRepository } from 'typeorm';
 import {
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
   fakeUser,
   fakeAdmin,
@@ -12,7 +12,7 @@ import AdminConfirmUserService from './AdminConfirmUserService';
 
 beforeEach(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 
 afterEach(tearEnvironment);

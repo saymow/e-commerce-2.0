@@ -1,7 +1,7 @@
 import {
   fakeUser,
   setupEnvironment,
-  setupFakeData,
+  setupFakeUsers,
   tearEnvironment,
   fakeAdmin,
 } from '@__tests__/fixtures';
@@ -10,7 +10,7 @@ import LoginService from './LoginService';
 
 beforeAll(async () => {
   await setupEnvironment();
-  await setupFakeData();
+  await setupFakeUsers();
 });
 
 afterAll(tearEnvironment);

@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import Product from './Product';
 
-@Entity('order_products')
+@Entity('orders_products')
 class OrderProduct {
   @PrimaryColumn()
   order_id: string;
