@@ -55,6 +55,7 @@ class CartValidatorService {
     const products = await productsRepository.find({
       where: { id: In(cart.products.map(product => product.id)) },
     });
+    let productsTotal = 0;
 
     for (const cartProduct of cart.products) {
       const product = products.find(item => item.id === cartProduct.id);
@@ -65,6 +66,12 @@ class CartValidatorService {
       if (product!.count_in_stock < cartProduct.qty) {
         throw new AppError(`Product ${product?.name} is out of stock`);
       }
+
+      productsTotal += cartProduct.qty * product.price;
+    }
+
+    if (productsTotal != cart.subtotal) {
+      throw new AppError('Invalid cart subtotal');
     }
 
     return Promise.resolve();
