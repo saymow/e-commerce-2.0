@@ -19,15 +19,18 @@ afterAll(tearEnvironment);
 const makeValidCart = async (): Promise<Cart> => {
   const productsRepository = getRepository(Product);
   const products = await productsRepository.find();
-  const total = products.reduce((acc, next, idx) => {
-    return acc + next.price * (idx + 1);
-  }, 0);
+  const cartProducts = products.map((product, idx) => ({
+    id: product.id,
+    qty: idx + 1,
+    price: product.price,
+  }));
+  const cartProductsTotal = cartProducts.reduce(
+    (acc, product) => acc + product.price * product.qty,
+    0
+  );
 
   return {
-    products: products.map((product, idx) => ({
-      id: product.id,
-      qty: idx + 1,
-    })),
+    products: cartProducts,
     shipmentMethod: {
       code: 'express',
       name: 'Express',
@@ -35,8 +38,8 @@ const makeValidCart = async (): Promise<Cart> => {
       deadline: '5',
       postalCode: '13560-560',
     },
-    total: total,
-    subtotal: total - 2000,
+    total: cartProductsTotal + 2000,
+    subtotal: cartProductsTotal,
     shippingCost: 2000,
     shipmentAddress: {
       state: 'SP',
@@ -96,6 +99,16 @@ describe('CartValidatorService', () => {
       id: 'non-existent',
       qty: 5,
     });
+
+    await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
+  });
+
+  it('Should throw againts invalid cart (products sum != subtotal)', async () => {
+    const cardValidatorService = new CartValidatorService();
+    const invalidCart = await makeValidCart();
+
+    invalidCart.subtotal = 10e6;
+    invalidCart.total = invalidCart.subtotal + invalidCart.shippingCost;
 
     await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();
   });
