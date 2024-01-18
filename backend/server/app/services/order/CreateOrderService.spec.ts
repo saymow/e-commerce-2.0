@@ -41,6 +41,29 @@ const makeCartValidatorStub = () => {
   return new CartValidatorService();
 };
 
+const makePaymentRefundFactoryStub = () => {
+  class PaymentRefundFactoryStub {
+    async execute(paymentMethod: string) {
+      return {
+        execute: async (paymentId: string) => {},
+      };
+    }
+  }
+
+  return new PaymentRefundFactoryStub();
+};
+
+const makeSut = () => {
+  const cartValidatorStub = makeCartValidatorStub();
+  const paymentRefundFactoryStub = makePaymentRefundFactoryStub();
+  const sut = new CreateOrderService(
+    cartValidatorStub,
+    paymentRefundFactoryStub
+  );
+
+  return { sut, cartValidatorStub, paymentRefundFactoryStub };
+};
+
 const makeValidCart = async (): Promise<Cart> => {
   const productsRepository = getRepository(Product);
   const products = await productsRepository.find();
@@ -92,40 +115,33 @@ const makeOrderPayload = async (): Promise<OrderPayload> => {
 describe('CreateOrderService', () => {
   it('Should call CartValidator with correct values', async () => {
     const orderPayload = await makeOrderPayload();
-    const cartValidatorService = makeCartValidatorStub();
+    const { sut, cartValidatorStub } = makeSut();
 
-    const cartValidatorServiceSpy = jest.spyOn(cartValidatorService, 'execute');
+    const cartValidatorServiceSpy = jest.spyOn(cartValidatorStub, 'execute');
 
-    const createOrderService = new CreateOrderService(cartValidatorService);
-
-    await createOrderService.execute(orderPayload);
+    await sut.execute(orderPayload);
 
     expect(cartValidatorServiceSpy).toHaveBeenCalledWith(orderPayload.cart);
   });
 
   it('Should throw if CartValidator throws', async () => {
     const orderPayload = await makeOrderPayload();
-    const cartValidatorService = makeCartValidatorStub();
+    const { sut, cartValidatorStub } = makeSut();
 
-    jest.spyOn(cartValidatorService, 'execute').mockImplementation(() => {
+    jest.spyOn(cartValidatorStub, 'execute').mockImplementation(() => {
       throw new Error();
     });
 
-    const createOrderService = new CreateOrderService(cartValidatorService);
-
-    await expect(createOrderService.execute(orderPayload)).rejects.toThrow();
+    await expect(sut.execute(orderPayload)).rejects.toThrow();
   });
 
   it('Should craete an order on success', async () => {
+    const { sut } = makeSut();
     const orderRepository = getRepository(Order);
     const orderPayload = await makeOrderPayload();
     const cartValidatorService = makeCartValidatorStub();
 
-    const createOrderService = new CreateOrderService(cartValidatorService);
-
-    await expect(
-      createOrderService.execute(orderPayload)
-    ).resolves.not.toThrow();
+    await expect(sut.execute(orderPayload)).resolves.not.toThrow();
 
     const order = await orderRepository.findOne(orderPayload.checkoutId);
 
@@ -169,10 +185,9 @@ describe('CreateOrderService', () => {
   });
 
   it('Should discount products in_stock property', async () => {
-    const orderRepository = getRepository(Order);
+    const { sut } = makeSut();
     const productsRepository = getRepository(Product);
     const orderPayload = await makeOrderPayload();
-    const cartValidatorService = makeCartValidatorStub();
     const productsDesiredStockAfterOrder = await Promise.all(
       orderPayload.cart.products.map(async cartProduct => {
         const product = await productsRepository.findOne(cartProduct.id);
@@ -184,11 +199,7 @@ describe('CreateOrderService', () => {
       })
     );
 
-    const createOrderService = new CreateOrderService(cartValidatorService);
-
-    await expect(
-      createOrderService.execute(orderPayload)
-    ).resolves.not.toThrow();
+    await expect(sut.execute(orderPayload)).resolves.not.toThrow();
 
     const products = await productsRepository.find({
       where: {
@@ -211,5 +222,23 @@ describe('CreateOrderService', () => {
         );
       }
     );
+  });
+
+  it('Should call PaymentRefundFactory with correct paymentMethod if order is not created', async () => {
+    const { sut, paymentRefundFactoryStub } = makeSut();
+    const orderPayload = await makeOrderPayload();
+
+    orderPayload.cart.total = -1;
+
+    const paymentRefundFactorySpy = jest.spyOn(
+      paymentRefundFactoryStub,
+      'execute'
+    );
+
+    try {
+      await sut.execute(orderPayload);
+    } catch {}
+
+    expect(paymentRefundFactorySpy).toBeCalledWith(orderPayload.paymentSource);
   });
 });
