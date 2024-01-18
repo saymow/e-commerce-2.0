@@ -85,4 +85,17 @@ describe('CreateOrderService', () => {
 
     expect(cartValidatorServiceSpy).toHaveBeenCalledWith(orderPayload.cart);
   });
+
+  it('Should throw if CartValidator throws', async () => {
+    const orderPayload = await makeOrderPayload();
+    const cartValidatorService = makeCartValidatorStub();
+
+    jest.spyOn(cartValidatorService, 'execute').mockImplementation(() => {
+      throw new Error();
+    });
+
+    const createOrderService = new CreateOrderService(cartValidatorService);
+
+    await expect(createOrderService.execute(orderPayload)).rejects.toThrow();
+  });
 });
