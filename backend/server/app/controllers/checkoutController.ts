@@ -1,5 +1,8 @@
-import CheckoutService from '../services/checkout/CheckoutService';
+import CreateOrderService from '@services/order/CreateOrderService';
+import CheckoutService, { Cart } from '../services/checkout/CheckoutService';
 import { Request, Response } from 'express';
+import CartValidatorService from '@services/cart/CartValidatorService';
+import { PaymentRefundFactory } from '@services/payment/PaymentRefundFactory';
 
 class CheckoutController {
   async show(req: Request, res: Response) {
@@ -38,15 +41,20 @@ class CheckoutController {
     const userId = req.session!.user.id;
     const checkoutId = req.params.checkoutId;
     const { paymentId, paymentSource } = req.body;
-    const cart = (await CheckoutService.connect(userId, checkoutId)).cart;
-
-    console.log(
-      JSON.stringify(
-        { userId, checkoutId, cart, paymentId, paymentSource },
-        null,
-        2
-      )
+    const createOrderService = new CreateOrderService(
+      new CartValidatorService(),
+      new PaymentRefundFactory()
     );
+    const cart = (await CheckoutService.connect(userId, checkoutId))
+      .cart as Cart;
+
+    await createOrderService.execute({
+      userId,
+      checkoutId,
+      cart,
+      paymentId,
+      paymentSource,
+    });
 
     return res.sendStatus(201);
   }

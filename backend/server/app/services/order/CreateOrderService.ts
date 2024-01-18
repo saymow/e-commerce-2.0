@@ -40,6 +40,9 @@ class CreateOrderService {
 
       await this.cartValidatorService.execute(cart);
 
+      // It is extremely necessary that, in the very same way we handled the refund using this.paymentRefundFactory.execute,
+      // we handle the payment confirmation here, before creating the order.
+
       await getConnection().transaction(async transactionEntityManager => {
         const order = orderRepository.create({
           id: checkoutId,
