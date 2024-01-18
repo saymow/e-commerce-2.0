@@ -98,6 +98,7 @@ describe('CartValidatorService', () => {
     invalidCart.products.push({
       id: 'non-existent',
       qty: 5,
+      price: 5 * 7700
     });
 
     await expect(cardValidatorService.execute(invalidCart)).rejects.toThrow();

@@ -1,22 +1,17 @@
 jest.useFakeTimers();
 
-import CreateUserService from '@services/user/CreateUserService';
-import User from '../../app/models/User';
 import argon2 from 'argon2';
 import { createConnection, getConnection, getRepository } from 'typeorm';
 import {
-  fakeUser,
-  fakeUser2,
   fakeAdmin,
   fakeAdmin2,
   fakeProduct,
   fakeProduct2,
+  fakeUser,
+  fakeUser2,
 } from '.';
-import Order from '../../app/models/Order';
 import Product from '../../app/models/Product';
-import Address from '../../app/models/Address';
-import OrderAddress from '../../app/models/OrderAddress';
-import OrderProduct from '../../app/models/OrderProduct';
+import User from '../../app/models/User';
 
 const setupEnvironment = async () => {
   try {
@@ -24,12 +19,19 @@ const setupEnvironment = async () => {
 
     await connection.runMigrations();
 
-    const entities = connection.entityMetadatas;
+    await connection.query('DELETE FROM orders_address;');
+    await connection.query('DELETE FROM orders_products;');
+    await connection.query('DELETE FROM orders;');
+    await connection.query('DELETE FROM users;');
+    await connection.query('DELETE FROM products;');
+    await connection.query('DELETE FROM addresses;');
 
-    for (const entity of entities) {
-      const repository = connection.getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.tableName};`);
-    }
+    // const entities = connection.entityMetadatas;
+
+    // for (const entity of entities) {
+    //   const repository = connection.getRepository(entity.name);
+    //   await repository.query(`DELETE FROM ${entity.tableName};`);
+    // }
   } catch (err) {
     console.error(err);
   }
@@ -75,4 +77,4 @@ const tearEnvironment = async () => {
   await connection.close();
 };
 
-export { setupEnvironment, setupFakeUsers, setupFakeProducts, tearEnvironment };
+export { setupEnvironment, setupFakeProducts, setupFakeUsers, tearEnvironment };

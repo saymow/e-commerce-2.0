@@ -31,6 +31,7 @@ const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
 
   const handleSuccessPayment = (details: any, data: any) => {
     const { orderID, paymentSource } = data;
+    console.log(data, details)
     onPaymentSuccess(orderID, paymentSource);
   };
 

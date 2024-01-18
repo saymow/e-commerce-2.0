@@ -9,9 +9,19 @@ import {
   OneToMany,
   JoinColumn,
   OneToOne,
+  ManyToOne,
+  AfterLoad,
 } from 'typeorm';
 import OrderProduct from './OrderProduct';
 import OrderAddress from './OrderAddress';
+import User from './User';
+
+export enum OrderState {
+  IN_PROGRESS = 'IN-PROGRESS',
+  IN_TRANSIT = 'IN-TRANSIT',
+  DELIVERED = 'DELIVERED',
+  CANCELED = 'CANCELED',
+}
 
 @Entity('orders')
 @Check(
@@ -22,6 +32,13 @@ export class Order {
   id: string;
 
   @Column()
+  user_id: string;
+
+  @ManyToOne(() => User, user => user.id, { eager: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @Column()
   subtototal: number;
 
   @Column()
@@ -30,13 +47,16 @@ export class Order {
   @Column()
   total: number;
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order_id, {
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   products: OrderProduct[];
 
-  @OneToOne(() => OrderAddress, (orderAddress) => orderAddress.order_id)
-  address: OrderAddress; 
+  @OneToOne(() => OrderAddress, orderAddress => orderAddress.order, {
+    eager: true,
+  })
+  address: OrderAddress;
 
   @Column()
   shipment_code: string;
@@ -64,6 +84,13 @@ export class Order {
     },
   })
   state: string;
+
+  @AfterLoad()
+  convertNumbers() {
+    this.total = parseInt(this.total as any)
+    this.subtototal = parseInt(this.subtototal as any)
+    this.shipment_cost = parseInt(this.shipment_cost as any)
+  }
 }
 
 export default Order;

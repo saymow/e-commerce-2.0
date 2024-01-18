@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import Order from './Order';
 
 @Entity('orders_address')
@@ -7,7 +14,7 @@ class OrderAddress {
   order_id: string;
 
   @OneToOne(() => Order, order => order.id)
-  @JoinColumn({ name: 'order_id' })
+  @JoinColumn({ name: 'order_id', referencedColumnName: 'id' })
   order: Order;
 
   @Column()
@@ -17,7 +24,7 @@ class OrderAddress {
   city: string;
 
   @Column()
-  neighboorhod: string;
+  neighborhood: string;
 
   @Column()
   postal_code: string;
@@ -27,6 +34,11 @@ class OrderAddress {
 
   @Column()
   number: number;
+
+  @AfterLoad()
+  convertNumbers() {
+    this.number = parseInt(this.number as any);
+  }
 }
 
 export default OrderAddress;

@@ -12,4 +12,4 @@ export const CHECKOUT_SERVICE_SIGNATURE_PREFIX =
 export const WEB_VIEW_URL = process.env.WEB_VIEW_URL || 'http://localhost:3000';
 export const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3333';
 
-export const TEST_GENERATED_UUID = 'generatedUUID';
+export const TEST_GENERATED_UUID = 'acf99500-7e2f-4bc6-b44f-eedfcda84ffd';

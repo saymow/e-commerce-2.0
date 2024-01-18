@@ -23,6 +23,7 @@ export interface UserAddress extends Address {
 export interface CartProduct {
   id: string;
   qty: number;
+  price: number;
 }
 
 export interface ShipmentMethod {
