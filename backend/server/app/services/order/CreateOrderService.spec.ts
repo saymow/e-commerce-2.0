@@ -1,17 +1,32 @@
-import CartValidatorService from '@services/cart/CartValidatorService';
 import CreateOrderService, { OrderPayload } from './CreateOrderService';
 import { Cart } from '@services/checkout/CheckoutService';
 import {
+  fakeUser,
   setupEnvironment,
   setupFakeProducts,
+  setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
-import { getRepository } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import Product from '../../models/Product';
+import { v4 } from 'uuid';
+import User from '../../models/User';
+import Order, { OrderState } from '../../models/Order';
+import OrderAddress from '../../models/OrderAddress';
+import OrderProduct from '../../models/OrderProduct';
 
 beforeAll(async () => {
   await setupEnvironment();
+  await setupFakeUsers();
   await setupFakeProducts();
+});
+
+beforeEach(async () => {
+  const connection = getConnection();
+
+  await connection.query('DELETE FROM orders_address;');
+  await connection.query('DELETE FROM orders_products;');
+  await connection.query('DELETE FROM orders;');
 });
 
 afterAll(tearEnvironment);
@@ -63,9 +78,11 @@ const makeValidCart = async (): Promise<Cart> => {
 };
 
 const makeOrderPayload = async (): Promise<OrderPayload> => {
+  const user = await getRepository(User).findOne({ email: fakeUser.email });
+
   return {
-    userId: 'user-id',
-    checkoutId: 'checkout-id',
+    userId: user!.id,
+    checkoutId: v4(),
     paymentId: 'payment-id',
     paymentSource: 'payment-source',
     cart: await makeValidCart(),
@@ -97,5 +114,57 @@ describe('CreateOrderService', () => {
     const createOrderService = new CreateOrderService(cartValidatorService);
 
     await expect(createOrderService.execute(orderPayload)).rejects.toThrow();
+  });
+
+  it('Should craete an order on success', async () => {
+    const orderRepository = getRepository(Order);
+    const orderPayload = await makeOrderPayload();
+    const cartValidatorService = makeCartValidatorStub();
+
+    const createOrderService = new CreateOrderService(cartValidatorService);
+
+    await expect(
+      createOrderService.execute(orderPayload)
+    ).resolves.not.toThrow();
+
+    const order = await orderRepository.findOne(orderPayload.checkoutId);
+
+    expect(order).toBeDefined();
+    expect(order?.user_id).toBe(orderPayload.userId);
+    expect(order?.products.length).toBe(orderPayload.cart.products.length);
+    expect(order?.total).toBe(orderPayload.cart.total);
+    expect(order?.subtototal).toBe(orderPayload.cart.subtotal);
+    expect(order?.shipment_cost).toBe(orderPayload.cart.shippingCost);
+    expect(order?.state).toBe(OrderState.IN_PROGRESS);
+    expect(order?.payment_id).toBe(orderPayload.paymentId);
+    expect(order?.address.state).toBe(orderPayload.cart.shipmentAddress.state);
+    expect(order?.address.city).toBe(orderPayload.cart.shipmentAddress.city);
+    expect(order?.address.neighborhood).toBe(
+      orderPayload.cart.shipmentAddress.neighborhood
+    );
+    expect(order?.address.street).toBe(
+      orderPayload.cart.shipmentAddress.street
+    );
+    expect(order?.address.postal_code).toBe(
+      orderPayload.cart.shipmentAddress.postal_code
+    );
+    expect(order?.address.number).toBe(
+      orderPayload.cart.shipmentAddress.number
+    );
+
+    const sortedPayloadProducts = orderPayload.cart.products.sort((a, b) =>
+      a.id.localeCompare(b.id)
+    );
+    const sortedProducts = order!.products.sort((a, b) =>
+      a.product_id.localeCompare(b.product_id)
+    );
+
+    sortedPayloadProducts.forEach((payloadProduct, idx) => {
+      const product = sortedProducts[idx];
+
+      expect(product).toBeDefined();
+      expect(product.unit_price).toEqual(payloadProduct.price) 
+      expect(product.qty).toEqual(payloadProduct.qty) 
+    });
   });
 });
