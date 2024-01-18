@@ -7,7 +7,7 @@ import {
   setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
-import { getConnection, getRepository } from 'typeorm';
+import { In, getConnection, getRepository } from 'typeorm';
 import Product from '../../models/Product';
 import { v4 } from 'uuid';
 import User from '../../models/User';
@@ -155,16 +155,61 @@ describe('CreateOrderService', () => {
     const sortedPayloadProducts = orderPayload.cart.products.sort((a, b) =>
       a.id.localeCompare(b.id)
     );
-    const sortedProducts = order!.products.sort((a, b) =>
+    const sortedOrderProducts = order!.products.sort((a, b) =>
       a.product_id.localeCompare(b.product_id)
     );
 
     sortedPayloadProducts.forEach((payloadProduct, idx) => {
-      const product = sortedProducts[idx];
+      const product = sortedOrderProducts[idx];
 
       expect(product).toBeDefined();
-      expect(product.unit_price).toEqual(payloadProduct.price) 
-      expect(product.qty).toEqual(payloadProduct.qty) 
+      expect(product.unit_price).toEqual(payloadProduct.price);
+      expect(product.qty).toEqual(payloadProduct.qty);
     });
+  });
+
+  it('Should discount products in_stock property', async () => {
+    const orderRepository = getRepository(Order);
+    const productsRepository = getRepository(Product);
+    const orderPayload = await makeOrderPayload();
+    const cartValidatorService = makeCartValidatorStub();
+    const productsDesiredStockAfterOrder = await Promise.all(
+      orderPayload.cart.products.map(async cartProduct => {
+        const product = await productsRepository.findOne(cartProduct.id);
+
+        return {
+          productId: product!.id,
+          count_in_stock: product!.count_in_stock - cartProduct.qty,
+        };
+      })
+    );
+
+    const createOrderService = new CreateOrderService(cartValidatorService);
+
+    await expect(
+      createOrderService.execute(orderPayload)
+    ).resolves.not.toThrow();
+
+    const products = await productsRepository.find({
+      where: {
+        id: In(productsDesiredStockAfterOrder.map(item => item.productId)),
+      },
+    });
+
+    const sortedProductsDesiredStockAfterOrder = productsDesiredStockAfterOrder.sort(
+      (a, b) => a.productId.localeCompare(b.productId)
+    );
+    const sortedProducts = products.sort((a, b) => a.id.localeCompare(b.id));
+
+    sortedProductsDesiredStockAfterOrder.forEach(
+      (productsDesiredStock, idx) => {
+        const orderProduct = sortedProducts[idx];
+
+        expect(productsDesiredStock.productId).toBe(orderProduct.id);
+        expect(productsDesiredStock.count_in_stock).toBe(
+          orderProduct.count_in_stock
+        );
+      }
+    );
   });
 });
