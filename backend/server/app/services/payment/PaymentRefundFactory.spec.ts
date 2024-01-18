@@ -9,4 +9,10 @@ describe('PaymentRefundFactory', () => {
       PaypalRefundService
     );
   });
+
+  it('Should throw an error if unknown service is provided', async () => {
+    const paymentRefundFactory = new PaymentRefundFactory();
+
+    await expect(paymentRefundFactory.execute('unknown')).rejects.toThrow();
+  });
 });
