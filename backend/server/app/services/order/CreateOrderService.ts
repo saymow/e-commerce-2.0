@@ -1,10 +1,12 @@
 import CartValidatorService from '@services/cart/CartValidatorService';
 import { Cart } from '@services/checkout/CheckoutService';
 import Order, { OrderState } from '../../models/Order';
-import { getConnection, getRepository } from 'typeorm';
+import { EntityManager, In, getConnection, getRepository } from 'typeorm';
 import OrderProduct from '../../models/OrderProduct';
 import OrderAddress from '../../models/OrderAddress';
 import { addDays } from '../../utils/date';
+import Product from '../../models/Product';
+import AppError from '../../errors/AppError';
 
 export interface OrderPayload {
   cart: Cart;
@@ -66,6 +68,24 @@ class CreateOrderService {
         orderProducts.map(item => transactionEntityManager.save(item))
       );
       await transactionEntityManager.save(orderAddress);
+      await transactionEntityManager
+        .createQueryBuilder(Product, 'product')
+        .setLock('pessimistic_write')
+        .where({ id: In(orderProducts.map(item => item.product_id)) })
+        .getMany()
+        .then(async products => {
+          for (const product of products) {
+            const orderProduct = orderProducts.find(
+              item => item.product_id === product.id
+            );
+
+            if (orderProduct!.qty > product.count_in_stock)
+              throw new AppError(`Product ${product?.name} is out of stock`);
+
+            product.count_in_stock -= orderProduct!.qty;
+            await transactionEntityManager.save(product);
+          }
+        });
     });
   }
 }
