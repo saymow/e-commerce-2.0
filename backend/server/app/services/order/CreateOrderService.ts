@@ -8,6 +8,7 @@ import { addDays } from '../../utils/date';
 import Product from '../../models/Product';
 import AppError from '../../errors/AppError';
 import { PaymentRefundFactory } from '@services/payment/PaymentRefundFactory';
+import { PaymentConfirmationFactory } from '@services/payment/PaymentConfirmationFactory';
 
 export interface OrderPayload {
   cart: Cart;
@@ -20,6 +21,7 @@ export interface OrderPayload {
 class CreateOrderService {
   constructor(
     private readonly cartValidatorService: CartValidatorService,
+    private readonly paymentConfirmationFactory: PaymentConfirmationFactory,
     private readonly paymentRefundFactory: PaymentRefundFactory
   ) {}
 
@@ -37,11 +39,12 @@ class CreateOrderService {
       const orderRepository = getRepository(Order);
       const orderProductsRepository = getRepository(OrderProduct);
       const orderAddressRepository = getRepository(OrderAddress);
+      const paymentConfirmation = await this.paymentConfirmationFactory.execute(
+        paymentSource
+      );
 
       await this.cartValidatorService.execute(cart);
-
-      // It is extremely necessary that, in the very same way we handled the refund using this.paymentRefundFactory.execute,
-      // we handle the payment confirmation here, before creating the order.
+      await paymentConfirmation.execute(orderPayload.paymentId);
 
       await getConnection().transaction(async transactionEntityManager => {
         const order = orderRepository.create({

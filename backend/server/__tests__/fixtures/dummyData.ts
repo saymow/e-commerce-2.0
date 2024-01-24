@@ -6,7 +6,7 @@ export const fakeProduct2 = {
   brand: 'Apple',
   category: 'Electronics',
   price: 59999,
-  count_in_stock: 7,
+  count_in_stock: 15,
   rating: 4.0,
   num_reviews: 8,
 };
