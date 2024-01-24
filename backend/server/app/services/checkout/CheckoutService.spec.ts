@@ -37,10 +37,19 @@ describe('CheckoutService', () => {
     await oldCheckoutService.save();
 
     expect(
-      CheckoutService.connect(
-        user2Id,
-        oldCheckoutService.serviceIdetenfier
-      )
+      CheckoutService.connect(user2Id, oldCheckoutService.serviceIdetenfier)
+    ).rejects.toThrow();
+  });
+
+  it('Should be able to evict checkout data', async () => {
+    const fakeCart = {} as InitialCart;
+    const userId = 'userId';
+
+    const oldCheckoutService = new CheckoutService(fakeCart, userId);
+    await oldCheckoutService.evict();
+
+    expect(
+      CheckoutService.connect(userId, oldCheckoutService.serviceIdetenfier)
     ).rejects.toThrow();
   });
 });
