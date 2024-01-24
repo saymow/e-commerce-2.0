@@ -95,6 +95,10 @@ class CheckoutService {
     await redis.set(this.id, JSON.stringify(this.cart), 'ex', this.redisExTime);
   }
 
+  async evict() {
+    await redis.del(this.id);
+  }
+
   get serviceIdetenfier() {
     return this.serviceId;
   }
