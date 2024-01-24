@@ -3,6 +3,7 @@ import CheckoutService, { Cart } from '../services/checkout/CheckoutService';
 import { Request, Response } from 'express';
 import CartValidatorService from '@services/cart/CartValidatorService';
 import { PaymentRefundFactory } from '@services/payment/PaymentRefundFactory';
+import { PaymentConfirmationFactory } from '@services/payment/PaymentConfirmationFactory';
 
 class CheckoutController {
   async show(req: Request, res: Response) {
@@ -43,10 +44,11 @@ class CheckoutController {
     const { paymentId, paymentSource } = req.body;
     const createOrderService = new CreateOrderService(
       new CartValidatorService(),
+      new PaymentConfirmationFactory(),
       new PaymentRefundFactory()
     );
-    const cart = (await CheckoutService.connect(userId, checkoutId))
-      .cart as Cart;
+    const checkoutService = await CheckoutService.connect(userId, checkoutId);
+    const cart = checkoutService.cart as Cart;
 
     await createOrderService.execute({
       userId,
@@ -55,6 +57,7 @@ class CheckoutController {
       paymentId,
       paymentSource,
     });
+    await checkoutService.evict();
 
     return res.sendStatus(201);
   }
