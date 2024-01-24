@@ -1,5 +1,3 @@
-import CreateOrderService, { OrderPayload } from './CreateOrderService';
-import { Cart } from '@services/checkout/CheckoutService';
 import {
   fakeUser,
   setupEnvironment,
@@ -7,13 +5,13 @@ import {
   setupFakeUsers,
   tearEnvironment,
 } from '@__tests__/fixtures';
+import { Cart } from '@services/checkout/CheckoutService';
 import { In, getConnection, getRepository } from 'typeorm';
-import Product from '../../models/Product';
 import { v4 } from 'uuid';
-import User from '../../models/User';
 import Order, { OrderState } from '../../models/Order';
-import OrderAddress from '../../models/OrderAddress';
-import OrderProduct from '../../models/OrderProduct';
+import Product from '../../models/Product';
+import User from '../../models/User';
+import CreateOrderService, { OrderPayload } from './CreateOrderService';
 
 beforeAll(async () => {
   await setupEnvironment();
@@ -53,15 +51,34 @@ const makePaymentRefundFactoryStub = () => {
   return new PaymentRefundFactoryStub();
 };
 
+const makePaymentConfirmationFactoryStub = () => {
+  class PaymentConfirmationFactoryStub {
+    async execute(paymentMethod: string) {
+      return {
+        execute: async (paymentId: string) => {},
+      };
+    }
+  }
+
+  return new PaymentConfirmationFactoryStub();
+};
+
 const makeSut = () => {
   const cartValidatorStub = makeCartValidatorStub();
+  const paymentConfirmationFactoryStub = makePaymentConfirmationFactoryStub();
   const paymentRefundFactoryStub = makePaymentRefundFactoryStub();
   const sut = new CreateOrderService(
     cartValidatorStub,
+    paymentConfirmationFactoryStub,
     paymentRefundFactoryStub
   );
 
-  return { sut, cartValidatorStub, paymentRefundFactoryStub };
+  return {
+    sut,
+    cartValidatorStub,
+    paymentConfirmationFactoryStub,
+    paymentRefundFactoryStub,
+  };
 };
 
 const makeValidCart = async (): Promise<Cart> => {
@@ -131,6 +148,41 @@ describe('CreateOrderService', () => {
     jest.spyOn(cartValidatorStub, 'execute').mockImplementation(() => {
       throw new Error();
     });
+
+    await expect(sut.execute(orderPayload)).rejects.toThrow();
+  });
+
+  it('Should call PaymentConfirmationFactory with correct paymentMethod', async () => {
+    const { sut, paymentConfirmationFactoryStub } = makeSut();
+    const orderPayload = await makeOrderPayload();
+
+    orderPayload.cart.total = -1;
+
+    const paymentRefundFactorySpy = jest.spyOn(
+      paymentConfirmationFactoryStub,
+      'execute'
+    );
+
+    await sut.execute(orderPayload);
+
+    expect(paymentRefundFactorySpy).toBeCalledWith(orderPayload.paymentSource);
+  });
+
+  it('Should throw PaymentConfirmationFactory PaymentConfirmationService throws', async () => {
+    const { sut, paymentConfirmationFactoryStub } = makeSut();
+    const orderPayload = await makeOrderPayload();
+
+    orderPayload.cart.total = -1;
+
+    jest
+      .spyOn(paymentConfirmationFactoryStub, 'execute')
+      .mockImplementation(() =>
+        Promise.resolve({
+          execute: async (paymentId: string) => {
+            throw new Error();
+          },
+        })
+      );
 
     await expect(sut.execute(orderPayload)).rejects.toThrow();
   });
@@ -225,10 +277,12 @@ describe('CreateOrderService', () => {
   });
 
   it('Should call PaymentRefundFactory with correct paymentMethod if order is not created', async () => {
-    const { sut, paymentRefundFactoryStub } = makeSut();
+    const { sut, cartValidatorStub, paymentRefundFactoryStub } = makeSut();
     const orderPayload = await makeOrderPayload();
 
-    orderPayload.cart.total = -1;
+    jest.spyOn(cartValidatorStub, 'execute').mockImplementation(async () => {
+      throw new Error();
+    });
 
     const paymentRefundFactorySpy = jest.spyOn(
       paymentRefundFactoryStub,
