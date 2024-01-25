@@ -4,6 +4,8 @@ import { Request, Response } from 'express';
 import CartValidatorService from '@services/cart/CartValidatorService';
 import { PaymentRefundFactory } from '@services/payment/PaymentRefundFactory';
 import { PaymentConfirmationFactory } from '@services/payment/PaymentConfirmationFactory';
+import ListOrdersService from '@services/order/ListOrdersService';
+import order_view from '../views/api/order_view';
 
 class CheckoutController {
   async show(req: Request, res: Response) {
@@ -60,6 +62,14 @@ class CheckoutController {
     await checkoutService.evict();
 
     return res.sendStatus(201);
+  }
+
+  async listOrders(req: Request, res: Response) {
+    const userId = req.session!.user.id;
+    const listUsersService = new ListOrdersService();
+    const orders = await listUsersService.execute(userId);
+
+    return res.send(order_view.renderMany(orders));
   }
 }
 

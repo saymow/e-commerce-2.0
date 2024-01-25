@@ -37,7 +37,7 @@ const setupEnvironment = async () => {
   }
 };
 
-const setupFakeUsers = async () => {
+const setupFakeUsers = async (): Promise<User[]> => {
   const usersRepository = getRepository(User);
 
   const hashCraeteUserDataPass = async (user: any) => {
@@ -46,7 +46,7 @@ const setupFakeUsers = async () => {
     return user;
   };
 
-  await Promise.all([
+  return Promise.all([
     usersRepository.save(
       usersRepository.create(await hashCraeteUserDataPass(fakeUser))
     ),
@@ -59,7 +59,7 @@ const setupFakeUsers = async () => {
     usersRepository.save(
       usersRepository.create(await hashCraeteUserDataPass(fakeAdmin2))
     ),
-  ]);
+  ]) as unknown as Promise<User[]>;
 };
 
 const setupFakeProducts = async () => {

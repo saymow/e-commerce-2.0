@@ -23,7 +23,7 @@ class OrderProduct {
   @PrimaryColumn()
   product_id: string;
 
-  @OneToOne(() => Product, product => product.id)
+  @OneToOne(() => Product, product => product.id, { eager: true })
   @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
   product: Product;
 

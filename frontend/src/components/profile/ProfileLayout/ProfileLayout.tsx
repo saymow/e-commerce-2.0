@@ -15,7 +15,7 @@ import {
   Tab,
   UserAvatar,
   UserIcon,
-  LogoutIcon,
+  LogoutButton,
 } from "./styles";
 
 const ProfileLayout: React.FC = ({ children }) => {
@@ -45,9 +45,9 @@ const ProfileLayout: React.FC = ({ children }) => {
               <ArrowIcon />
             </Tab>
             <Tab
-              className={router.pathname === "/profile/history" ? "active" : ""}
+              className={router.pathname === "/profile/orders" ? "active" : ""}
             >
-              <Link href="/profile/history">History</Link>
+              <Link href="/profile/orders">History</Link>
               <ArrowIcon />
             </Tab>
             <Tab
@@ -66,13 +66,14 @@ const ProfileLayout: React.FC = ({ children }) => {
               <Link href="/profile/change-password">Change Password</Link>
               <ArrowIcon />
             </Tab>
+            <Tab>
+              <LogoutButton onClick={handleLogout}>Sign out</LogoutButton>
+              <ArrowIcon />
+            </Tab>
           </Navigation>
         </div>
       </Info>
-      <Content>
-        <LogoutIcon onClick={handleLogout} />
-        {children}
-      </Content>
+      <Content>{children}</Content>
     </Container>
   );
 };

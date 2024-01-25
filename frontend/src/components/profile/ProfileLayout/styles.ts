@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { ArrowIosForwardOutline } from "@styled-icons/evaicons-outline";
 import { User } from "@styled-icons/boxicons-regular";
-import { LogOut } from "@styled-icons/entypo";
 import { ScrollStyles } from "../../../styles/globalStyles";
 
 export const Container = styled.div`
@@ -34,19 +33,6 @@ export const Content = styled.main`
   overflow: auto;
 
   ${ScrollStyles}
-`;
-
-export const LogoutIcon = styled(LogOut)`
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-
-  cursor: pointer;
-
-  width: 2rem;
-  height: 2rem;
-
-  fill: var(--primary-Color);
 `;
 
 export const MainInfo = styled.main`
@@ -112,6 +98,10 @@ export const Tab = styled.li`
       fill: var(--secondary-Color);
     }
   }
+`;
+
+export const LogoutButton = styled.span`
+  cursor: pointer;
 `;
 
 export const ArrowIcon = styled(ArrowIosForwardOutline)`

@@ -15,6 +15,7 @@ import {
   PaymentMethods,
   Method,
 } from "./styles";
+import DataCard from "../../ui/DataCard";
 
 interface Props {
   onPaymentSuccess: (id: string, source: string) => void;
@@ -31,7 +32,7 @@ const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
 
   const handleSuccessPayment = (details: any, data: any) => {
     const { orderID, paymentSource } = data;
-    console.log(data, details)
+    console.log(data, details);
     onPaymentSuccess(orderID, paymentSource);
   };
 
@@ -41,57 +42,47 @@ const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
     <Container>
       <PaymentDetails>
         <h2>Details</h2>
-        <DetailsSection>
-          <h3>Address</h3>
-          <DetailsField>
-            <strong>state:</strong>
-            <p>{cart.shipmentAddress?.state}</p>
-          </DetailsField>
-
-          <DetailsField>
-            <strong>city:</strong>
-            <p>{cart.shipmentAddress?.city}</p>
-          </DetailsField>
-
-          <DetailsField>
-            <strong>neighborhood:</strong>
-            <p>{cart.shipmentAddress?.neighborhood}</p>
-          </DetailsField>
-
-          <DetailsField>
-            <strong>postal Code:</strong>
-            <p>{cart.shipmentAddress?.postal_code}</p>
-          </DetailsField>
-
-          <DetailsField>
-            <strong>street:</strong>
-            <p>{cart.shipmentAddress?.street}</p>
-          </DetailsField>
-
-          <DetailsField>
-            <strong>number:</strong>
-            <p>{(cart.shipmentAddress as any)!.number}</p>
-          </DetailsField>
-        </DetailsSection>
-        <DetailsSection>
-          <h3>shipment</h3>
-          <DetailsField>
-            <strong>service code:</strong>
-            <p>{cart.shipmentMethod?.code}</p>
-          </DetailsField>
-          <DetailsField>
-            <strong>service name:</strong>
-            <p>{cart.shipmentMethod?.name}</p>
-          </DetailsField>
-          <DetailsField>
-            <strong>deadline:</strong>
-            <p>{cart.shipmentMethod?.deadline} days</p>
-          </DetailsField>
-          <DetailsField>
-            <strong>price:</strong>
-            <p>{priceFormmater(cart.shipmentMethod?.value as number)}</p>
-          </DetailsField>
-        </DetailsSection>
+        <DataCard
+          title="Address"
+          fields={[
+            { label: "State", value: cart.shipmentAddress.state },
+            {
+              label: "City",
+              value: cart.shipmentAddress.city,
+            },
+            {
+              label: "Neighborhood",
+              value: cart.shipmentAddress.neighborhood,
+            },
+            {
+              label: "Postal code",
+              value: cart.shipmentAddress.postal_code,
+            },
+            {
+              label: "Street",
+              value: cart.shipmentAddress.street,
+            },
+            {
+              label: "Number",
+              value: (cart.shipmentAddress as any).number,
+            },
+          ]}
+        />
+        <DataCard
+          title="Shipment"
+          fields={[
+            { label: "Service code", value: cart.shipmentMethod!.code },
+            { label: "Service name", value: cart.shipmentMethod!.name },
+            {
+              label: "Deadline",
+              value: `${cart.shipmentMethod!.deadline} days`,
+            },
+            {
+              label: "Price",
+              value: priceFormmater(cart.shipmentMethod?.value as number),
+            },
+          ]}
+        />
       </PaymentDetails>
 
       <PaymentMethods>
