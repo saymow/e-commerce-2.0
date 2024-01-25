@@ -1,20 +1,20 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomFC } from "../../../@types";
+import { CustomFC } from "../../../../@types";
 import {
   CheckoutCreateState,
   FilledCartState,
-} from "../../../@types/redux/checkout";
-import { setCheckoutCart } from "../../../actions/cartActions";
-import Layout from "../../../components/core/Layout";
-import api from "../../../services/api";
-import CheckoutLayout from "../../../components/checkout/CheckoutLayout";
-import CheckoutPayment from "../../../components/checkout/CheckoutPayment";
-import { reduxStore } from "../../../store";
-import { CartState } from "../../../@types/redux";
-import { finishCheckout } from "../../../actions/checkoutActions";
-import Loading from "../../../components/ui/Loading";
+} from "../../../../@types/redux/checkout";
+import { setCheckoutCart } from "../../../../actions/cartActions";
+import Layout from "../../../../components/core/Layout";
+import api from "../../../../services/api";
+import CheckoutLayout from "../../../../components/checkout/CheckoutLayout";
+import CheckoutPayment from "../../../../components/checkout/CheckoutPayment";
+import { reduxStore } from "../../../../store";
+import { finishCheckout } from "../../../../actions/checkoutActions";
+import Loading from "../../../../components/ui/Loading";
+import CheckoutSuccess from "../../../../components/checkout/CheckoutSuccess";
 
 interface Props {
   cart: FilledCartState;
@@ -47,7 +47,7 @@ const Payment: CustomFC<Props> = ({ cart, checkoutId }) => {
   if (checkoutCreate.success) {
     return (
       <Layout>
-        <p>Todo: Order placed succesfuly</p>
+        <CheckoutSuccess />
       </Layout>
     );
   }
