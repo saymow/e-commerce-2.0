@@ -6,7 +6,7 @@ import {
   CheckoutCreateState,
   FilledCartState,
 } from "../../../../@types/redux/checkout";
-import { setCheckoutCart } from "../../../../actions/cartActions";
+import { resetCart, setCheckoutCart } from "../../../../actions/cartActions";
 import Layout from "../../../../components/core/Layout";
 import api from "../../../../services/api";
 import CheckoutLayout from "../../../../components/checkout/CheckoutLayout";
@@ -31,6 +31,10 @@ const Payment: CustomFC<Props> = ({ cart, checkoutId }) => {
   useEffect(() => {
     dispatch(setCheckoutCart({ ...cart, locked: true }, checkoutId));
   }, []);
+
+  useEffect(() => {
+    if (checkoutCreate.success) dispatch(resetCart());
+  }, [checkoutCreate.success]);
 
   const handlePaymentSuccess = (id: string, source: string) => {
     dispatch(finishCheckout(checkoutId, id, source));
