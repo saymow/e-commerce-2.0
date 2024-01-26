@@ -5,7 +5,7 @@ export const lightTheme = {
   lighterGrey: "#e8e8e8",
   primaryColor: "#000",
   secondaryColor: "#5f00ba",
-  tertiaryColor: "#cdd1d5",
+  tertiaryColor: "#f3f3f3",
 };
 
 export const darkTheme = {

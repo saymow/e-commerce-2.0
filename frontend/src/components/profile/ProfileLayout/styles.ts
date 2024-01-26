@@ -8,7 +8,7 @@ export const Container = styled.div`
   grid-template-columns: 1fr 3fr;
   grid-gap: 1rem;
   height: 80vh;
-  overflow: hidden;
+  overflow-y: hidden;
 `;
 
 export const Info = styled.div`
@@ -26,10 +26,10 @@ export const Content = styled.main`
 
   background: var(--bg-Color);
   box-shadow: var(--box-shadow);
-
+  
+  margin: 0 .5rem .5rem 0;
   padding: 2rem;
 
-  height: 100%;
   overflow: auto;
 
   ${ScrollStyles}

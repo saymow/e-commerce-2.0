@@ -10,7 +10,7 @@ const List = styled.ul`
   
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
   
   border: 1px solid var(--lighter-Grey);
   padding: 1rem;

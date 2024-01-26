@@ -7,7 +7,7 @@ export const dateFormmater = (dateAsString: string) => {
 
   // for some reason getMonth is 0 indexed.
 
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
 };
 
 // 55,55  => 5555

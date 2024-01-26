@@ -12,7 +12,7 @@ export default createGlobalStyle<{ theme: ThemeType }>`
     --secondary-Color: ${({ theme }) => theme.secondaryColor};
     --tertiary-Color: ${({ theme }) => theme.tertiaryColor};
 
-    --box-shadow: 5px 5px 15px -3px rgba(0, 0, 0, 0.3);
+    --box-shadow: 3px 3px 5px 1px rgba(0,0,0,0.3);
   }
 
   body {

@@ -10,17 +10,20 @@ import Button from "../../components/ui/Button";
 import WishButton from "../../components/wishList/WishButton";
 import api from "../../services/api";
 import { REVALIDATE_DEFAULT_TIME } from "../../utils/constants";
+import { ArrowBack } from "@styled-icons/boxicons-regular/ArrowBack";
+import { useRouter } from "next/router";
 
-const Container = styled.div`
+const Container = styled.section`
+  position: relative;
   display: grid;
   grid-template-columns: 2fr 3fr;
 
-  padding: 1rem;
+  padding: 2rem 0;
 `;
 
-const ImageContainer = styled.div``;
+const ImageContainer = styled.article``;
 
-const DetailsContainer = styled.div`
+const DetailsContainer = styled.article`
   position: relative;
   padding: 0 2rem;
 `;
@@ -62,16 +65,47 @@ const Options = styled.div`
   }
 `;
 
+const BackButton = styled.span`
+  position: absolute;
+
+  display: flex;
+  justify-content: center;
+
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+
+  transition: 200ms opacity ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  svg {
+    margin-right: 0.5rem;
+  }
+`;
+
 const Product: React.FC<{ product: IProduct }> = ({ product }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleAddProductToCart = () => {
     dispatch(addProductToCart(product));
   };
 
+  const handleGoBack = () => {
+    router.back();
+  };
+
   return (
     <Layout>
       <Container>
+        <BackButton onClick={handleGoBack}>
+          <ArrowBack height="1.5rem" width="1.5rem" />
+          Back
+        </BackButton>
         <ImageContainer>
           <Image
             src={product.image}
