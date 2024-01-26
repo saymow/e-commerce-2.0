@@ -5,7 +5,7 @@ export const lightTheme = {
   lighterGrey: "#e8e8e8",
   primaryColor: "#000",
   secondaryColor: "#5f00ba",
-  tertiaryColor: "#343a40",
+  tertiaryColor: "#cdd1d5",
 };
 
 export const darkTheme = {
@@ -15,7 +15,7 @@ export const darkTheme = {
   lighterGrey: "#e8e8e81a",
   primaryColor: "#fff",
   secondaryColor: "#5f00ba",
-  tertiaryColor: "#343a40",
+  tertiaryColor: "#252525",
 };
 
 export type ThemeType = typeof lightTheme;

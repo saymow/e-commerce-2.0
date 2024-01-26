@@ -29,11 +29,11 @@ export const Info = styled.main`
 `;
 
 export const Name = styled.h2`
-  font-size: 3em;
+  font-size: 2em;
 `;
 
 export const Price = styled.span`
-  font-size: 2em;
+  font-size: 1;
 `;
 
 export const TrashIcon = styled(Trash)`

@@ -68,7 +68,7 @@ const CheckoutAddressList: React.FC<CheckoutAddressChildProps> = ({
 
   useEffect(() => {
     if (deletionError && deletionReset) {
-      toast.success(deletionError.message);
+      toast.error(deletionError.message);
       dispatch(deletionReset());
     }
   }, [deletionError, deletionReset]);
@@ -106,9 +106,7 @@ const CheckoutAddressList: React.FC<CheckoutAddressChildProps> = ({
   const handleContinueCheckout = () => {
     if (!selectedAddress) return;
 
-    if (selectedAddress.postal_code !== cart.shipmentMethod!.postalCode)
-      dispatch(getShipmentMethods(selectedAddress.postal_code));
-    else dispatch(addAddressDataToCart(selectedAddress));
+    dispatch(addAddressDataToCart(selectedAddress));
   };
 
   return (

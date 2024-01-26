@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Lock } from "@styled-icons/boxicons-solid";
 
-export const Container = styled.div``;
+export const Container = styled.li``;
 
 export const Backdrop = styled.div<{ height: number }>`
   position: absolute;

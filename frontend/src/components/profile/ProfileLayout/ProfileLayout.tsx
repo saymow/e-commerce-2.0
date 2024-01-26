@@ -55,7 +55,7 @@ const ProfileLayout: React.FC = ({ children }) => {
                 router.pathname === "/profile/addresses" ? "active" : ""
               }
             >
-              <Link href="/profile/addresses">Address</Link>
+              <Link href="/profile/addresses">Addresses</Link>
               <ArrowIcon />
             </Tab>
             <Tab

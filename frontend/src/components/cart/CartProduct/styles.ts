@@ -24,7 +24,7 @@ export const ProductDetails = styled.div`
 `;
 
 export const ProductName = styled.h2`
-  font-size: 2.2em;
+  font-size: 2em;
 `;
 
 export const ProductPrice = styled.strong`
