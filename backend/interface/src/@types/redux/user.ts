@@ -18,7 +18,7 @@ export interface User extends UserOnCreation {
   updated_at: string;
 }
 
-export type UserLoginAction =
+export type UserSessionAction =
   | { type: 'USER_LOGIN_REQUEST' }
   | {
       type: 'USER_LOGIN_SUCCESS';

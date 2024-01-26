@@ -1,24 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
+  Chevron,
   Container,
-  Title,
+  Header,
+  LogoutIcon,
   Nav,
   NavItem,
-  ProductIcon,
-  UsersIcon,
   OrdersIcon,
+  ProductIcon,
+  Title,
+  UsersIcon,
 } from './styles';
+import { useDispatch } from 'react-redux';
+import { userLogout } from '../../actions/userActions';
 
 const SideBar: React.FC = () => {
+  const dispatch = useDispatch();
+  const [isClosed, setIsClosed] = useState(false);
   const { pathname } = useLocation();
 
+  const handleLogout = () => {
+    dispatch(userLogout());
+  };
+
+  const handleToggleBar = () => {
+    setIsClosed(prev => !prev);
+  };
+
   return (
-    <Container>
-      <Link to="/panel">
-        <Title>Ecommerce2.0</Title>
-      </Link>
+    <Container className={isClosed ? 'closed' : ''}>
+      <Header>
+        <Title>Ecommerce</Title>
+        <Chevron
+          className={isClosed ? 'rotate' : ''}
+          onClick={handleToggleBar}
+        />
+      </Header>
       <Nav>
         <NavItem>
           <Link
@@ -26,7 +45,7 @@ const SideBar: React.FC = () => {
             to="/panel/products"
           >
             <ProductIcon />
-            Products
+            <span className="link-name">Products</span>
           </Link>
         </NavItem>
         <NavItem>
@@ -35,7 +54,7 @@ const SideBar: React.FC = () => {
             to="/panel/users"
           >
             <UsersIcon />
-            Users
+            <span className="link-name">Users</span>
           </Link>
         </NavItem>
         <NavItem>
@@ -44,8 +63,12 @@ const SideBar: React.FC = () => {
             to="/panel/orders"
           >
             <OrdersIcon />
-            Orders
+            <span className="link-name">Orders</span>
           </Link>
+        </NavItem>
+        <NavItem className="logout" onClick={handleLogout}>
+          <LogoutIcon />
+          Sign out
         </NavItem>
       </Nav>
     </Container>

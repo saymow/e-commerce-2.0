@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+`;
 
 export const PanelRouteWrapper = styled.main`
-  margin-left: 14rem;
+  flex: 1;
   padding: 1rem;
 `;

@@ -5,6 +5,7 @@ import GlobalStyles from './styles/globalStyles';
 import store from './store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './styles.css'
 
 function App() {
   return (

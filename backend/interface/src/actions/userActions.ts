@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Dispatch } from '../@types/redux';
 import {
-  UserLoginAction,
+  UserSessionAction,
   UsersConfirmAction,
   UsersCreateAction,
   UsersDeleteAction,
@@ -12,7 +12,7 @@ import {
 } from '../@types/redux/user';
 
 export const userLogin = (email: string, password: string) => async (
-  dispatch: Dispatch<UserLoginAction>
+  dispatch: Dispatch<UserSessionAction>
 ) => {
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });
@@ -29,8 +29,26 @@ export const userLogin = (email: string, password: string) => async (
   }
 };
 
+export const userLogout = () => async (
+  dispatch: (arg0: UserSessionAction) => void
+) => {
+  try {
+    await axios.post('/sessions/logout');
+
+    dispatch({ type: 'USER_LOGOUT' });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: 'USER_LOGIN_FAIL',
+      payload: {
+        message: err?.response?.data?.message || 'Internal server error!',
+      },
+    });
+  }
+};
+
 export const getAuthStatus = () => async (
-  dispatch: Dispatch<UserLoginAction>
+  dispatch: Dispatch<UserSessionAction>
 ) => {
   try {
     dispatch({ type: 'USER_LOGIN_REQUEST' });

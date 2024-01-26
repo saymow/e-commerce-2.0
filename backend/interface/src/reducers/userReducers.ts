@@ -1,5 +1,5 @@
 import {
-  UserLoginAction,
+  UserSessionAction,
   UsersListState,
   UsersListAction,
   UsersConfirmAction,
@@ -17,7 +17,7 @@ import {
 
 export const userLoginReducer = (
   state: UsersLoginState = { user: {} },
-  action: UserLoginAction
+  action: UserSessionAction
 ): UsersLoginState => {
   switch (action.type) {
     case 'USER_LOGIN_REQUEST':
