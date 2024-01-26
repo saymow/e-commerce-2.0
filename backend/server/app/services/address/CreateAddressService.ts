@@ -4,7 +4,7 @@ import Address from '../../models/Address';
 import User from '../../models/User';
 import AppError from '../../errors/AppError';
 
-interface GivenAddress {
+export interface AddressData {
   state: string;
   city: string;
   neighborhood: string;
@@ -26,7 +26,7 @@ export const schema = Yup.object().shape({
 });
 
 class CreateAddressService {
-  async execute(data: GivenAddress, userId: string) {
+  async execute(data: AddressData, userId: string) {
     const addressesRepository = getRepository(Address);
     const usersRepository = getRepository(User);
 

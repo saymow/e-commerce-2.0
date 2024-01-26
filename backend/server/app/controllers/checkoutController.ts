@@ -6,6 +6,9 @@ import { PaymentRefundFactory } from '@services/payment/PaymentRefundFactory';
 import { PaymentConfirmationFactory } from '@services/payment/PaymentConfirmationFactory';
 import ListOrdersService from '@services/order/ListOrdersService';
 import order_view from '../views/api/order_view';
+import CreateAddressService, {
+  AddressData,
+} from '@services/address/CreateAddressService';
 
 class CheckoutController {
   async show(req: Request, res: Response) {
@@ -49,6 +52,7 @@ class CheckoutController {
       new PaymentConfirmationFactory(),
       new PaymentRefundFactory()
     );
+    const createUserAddressService = new CreateAddressService();
     const checkoutService = await CheckoutService.connect(userId, checkoutId);
     const cart = checkoutService.cart as Cart;
 
@@ -60,6 +64,24 @@ class CheckoutController {
       paymentSource,
     });
     await checkoutService.evict();
+
+    if (!('id' in cart.shipmentAddress)) {
+      // Then it is a new user address
+      try {
+        await createUserAddressService.execute(
+          {
+            ...cart.shipmentAddress,
+            number: cart.shipmentAddress.number.toString(),
+          } as AddressData,
+          userId
+        );
+      } catch (err) {
+        console.log(
+          `Failed to create user address for order ${checkoutId}: `,
+          err
+        );
+      }
+    }
 
     return res.sendStatus(201);
   }
