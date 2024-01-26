@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AsideBarState } from "../../../@types/redux";
 import {
@@ -14,6 +14,7 @@ import {
   AsideHeader,
   AsideNav,
   AsideNavItem,
+  Backdrop,
   CartIcon,
   CloseIcon,
   Container,
@@ -24,28 +25,41 @@ import {
 } from "./styles";
 import UserInfo from "./UserInfo";
 
+const SLIDE_DURATION = 300;
+
 const SideBar: React.FC = () => {
   const dispatch = useDispatch();
   const asideRef = useRef<HTMLDivElement>(null);
   const [documentRef, setDocumentRef] = useState<HTMLBodyElement | null>(null);
 
-  const SLIDE_DURATION = 300;
-
   const { show, content } = useSelector<typeof reduxStore>(
     (state) => state.sideBar
   ) as AsideBarState;
+
+  const handleCloseAsideBar = useCallback(
+    (options?: { force: boolean }) => {
+      const delay = options?.force ? 0 : SLIDE_DURATION;
+
+      asideRef.current?.classList.add("slide-out");
+      if (documentRef) documentRef.style.overflow = "unset";
+      const timeoutId = setTimeout(() => {
+        dispatch(closeAsidebar());
+      }, delay);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    },
+    [documentRef]
+  );
 
   useEffect(() => {
     setDocumentRef(document.querySelector("body"));
   }, []);
 
-  const handleCloseAsideBar = () => {
-    asideRef.current?.classList.add("slide-out");
-    documentRef!.style.overflow = "unset";
-    setTimeout(() => {
-      dispatch(closeAsidebar());
-    }, SLIDE_DURATION);
-  };
+  useEffect(() => {
+    handleCloseAsideBar({ force: true });
+  }, []);
 
   const handleNavToCartView = () => dispatch(openCart());
 
@@ -57,12 +71,13 @@ const SideBar: React.FC = () => {
 
   return (
     <Wrapper>
+      <Backdrop onClick={() => handleCloseAsideBar()} />
       <Container ref={asideRef} duration={SLIDE_DURATION}>
         <Options>
           <ThemeSwitcher />
           <UserInfo />
         </Options>
-        <CloseIcon onClick={handleCloseAsideBar} />
+        <CloseIcon onClick={() => handleCloseAsideBar()} />
         <AsideHeader>
           <AsideNav>
             <AsideNavItem

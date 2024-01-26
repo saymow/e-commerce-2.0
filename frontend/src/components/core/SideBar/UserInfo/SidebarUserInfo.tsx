@@ -23,7 +23,7 @@ const UserInfo: React.FC = () => {
           <Link href="/profile">
             <UserIcon />
           </Link>
-          <ActionText onClick={handleLogout}>Logout</ActionText>
+          <ActionText onClick={handleLogout}>Sign out</ActionText>
         </>
       ) : (
         <Link href="/signin">
