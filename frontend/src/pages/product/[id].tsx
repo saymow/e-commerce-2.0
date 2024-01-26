@@ -18,7 +18,7 @@ const Container = styled.section`
   display: grid;
   grid-template-columns: 2fr 3fr;
 
-  padding: 2rem 0;
+  padding: 3rem 0;
 `;
 
 const ImageContainer = styled.article``;

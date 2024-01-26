@@ -20,7 +20,7 @@ export default function usePaymentSdks() {
       const script = document.createElement("script");
 
       script.type = "text/javascript";
-      script.src = `https://www.paypal.com/sdk/js?client-id=${"test"}`;
+      script.src = `https://www.paypal.com/sdk/js?client-id=${"test"}&currency=BRL`;
       script.async = true;
       script.onload = () => setSdkReady({ ...sdkReady, paypal: true });
 

@@ -47,7 +47,7 @@ const ProfileLayout: React.FC = ({ children }) => {
             <Tab
               className={router.pathname === "/profile/orders" ? "active" : ""}
             >
-              <Link href="/profile/orders">History</Link>
+              <Link href="/profile/orders">Orders</Link>
               <ArrowIcon />
             </Tab>
             <Tab

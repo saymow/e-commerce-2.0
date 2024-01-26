@@ -20,38 +20,6 @@ export const PaymentDetails = styled.section`
   padding-right: 1rem;
 `;
 
-export const DetailsSection = styled.article`
-  display: flex;
-  flex-direction: column;
-
-  h3 {
-    text-transform: uppercase;
-    font-size: 1.4rem;
-    text-align: center;
-    line-height: 2.2rem;
-  }
-
-  border: 1px solid var(--lighter-Grey);
-
-  margin: 1rem 0;
-  padding: 1rem;
-`;
-
-export const DetailsField = styled.div`
-  display: flex;
-  align-items: center;
-
-  strong {
-    text-transform: uppercase;
-    margin-right: 0.5rem;
-  }
-
-  strong,
-  p {
-    font-size: 1.2rem;
-  }
-`;
-
 export const PaymentMethods = styled.section`
   padding: 0.5rem;
 
@@ -68,7 +36,7 @@ export const Method = styled.article`
   padding: 0.5rem;
   border: 1px solid var(--lighter-Grey);
 
-  max-height: 30vh;
+  max-height: 40vh;
   overflow: auto;
   ${ScrollStyles}
 `;

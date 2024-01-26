@@ -20,8 +20,6 @@ const Orders: CustomFC = () => {
     (state) => state.listOrders
   ) as ListOrdersState;
 
-  console.log(orders);
-
   return (
     <Layout>
       <ProfileLayout>

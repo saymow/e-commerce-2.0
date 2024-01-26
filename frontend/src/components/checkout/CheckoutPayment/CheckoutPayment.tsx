@@ -1,5 +1,5 @@
 import React from "react";
-import { PayPalButton } from "react-paypal-button-v2";
+import { PayPalButton, PayPalButtonProps } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import { CartState } from "../../../@types/redux";
 import usePaymentSdks from "../../../hooks/usePaymentSdks";
@@ -7,14 +7,7 @@ import { reduxStore } from "../../../store";
 import { priceFormmater } from "../../../utils";
 import Loading from "../../ui/Loading";
 
-import {
-  Container,
-  PaymentDetails,
-  DetailsSection,
-  DetailsField,
-  PaymentMethods,
-  Method,
-} from "./styles";
+import { Container, PaymentDetails, PaymentMethods, Method } from "./styles";
 import DataCard from "../../ui/DataCard";
 
 interface Props {
@@ -22,8 +15,6 @@ interface Props {
 }
 
 const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
-  const dispatch = useDispatch();
-
   const [isReady] = usePaymentSdks();
 
   const cart = useSelector<typeof reduxStore>(
@@ -32,7 +23,6 @@ const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
 
   const handleSuccessPayment = (details: any, data: any) => {
     const { orderID, paymentSource } = data;
-    console.log(data, details);
     onPaymentSuccess(orderID, paymentSource);
   };
 
@@ -92,7 +82,8 @@ const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
         ) : (
           <Method>
             <PayPalButton
-              amount={cart.total}
+              amount={cart.total / 100}
+              currency="BRL"
               onSuccess={handleSuccessPayment}
             />
           </Method>

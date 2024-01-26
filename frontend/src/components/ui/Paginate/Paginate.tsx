@@ -24,12 +24,12 @@ const Paginate: React.FC<{ pages: number }> = ({ pages }) => {
     router.push(`?page=${page}`, undefined, { shallow: true });
   };
 
+  console.log([...Array(pages)], currentPage)
+
   useEffect(() => {
-    const page = router.query.page as string;
+    const page = router.query.page as string ?? 1;
 
-    if (!page) return;
-
-    dispatch(shopPaginate(router.query.page as string));
+    dispatch(shopPaginate(page as string));
     setArrowsNavDisp({
       back: parseInt(page) !== 1,
       forward: parseInt(page) !== pages,

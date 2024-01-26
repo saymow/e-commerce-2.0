@@ -23,7 +23,7 @@ const CheckIcon = styled(CheckAll)`
 const CheckoutSuccess: React.FC = () => {
   return (
     <Section>
-      <h1>Order placed successfuly</h1>
+      <h1>Order placed successfully</h1>
       <CheckIcon />
       <p>
         Visit <Link href={"/profile/orders"}>my orders</Link> for more

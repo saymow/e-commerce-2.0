@@ -6,6 +6,7 @@ import {
   CheckoutCreateState,
   FilledCartState,
 } from "../../../../@types/redux/checkout";
+import { toast } from "react-toastify";
 import { resetCart, setCheckoutCart } from "../../../../actions/cartActions";
 import Layout from "../../../../components/core/Layout";
 import api from "../../../../services/api";
@@ -39,6 +40,10 @@ const Payment: CustomFC<Props> = ({ cart, checkoutId }) => {
   const handlePaymentSuccess = (id: string, source: string) => {
     dispatch(finishCheckout(checkoutId, id, source));
   };
+
+  useEffect(() => {
+    if (checkoutCreate.success) toast.success("Order placed successfully!",);
+  }, [checkoutCreate.success]);
 
   if (checkoutCreate.loading) {
     return (

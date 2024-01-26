@@ -1,4 +1,3 @@
-import { DefaultState } from '../@types/redux';
 import {
   UserLoginAction,
   UsersListState,

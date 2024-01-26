@@ -32,7 +32,7 @@ const TopRatedProducts: React.FC<Props> = ({ products }) => {
           <Details>
             <Name>{product.name}</Name>
             <RatingContainer>
-              <Rating value={product.rating} />
+              <Rating value={4.5} />
             </RatingContainer>
             <Price>{priceFormmater(product.price)}</Price>
           </Details>
