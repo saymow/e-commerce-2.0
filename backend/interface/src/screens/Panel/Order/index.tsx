@@ -9,10 +9,11 @@ import {
 } from '../../../@types/redux/order';
 import { dateFormatter, priceFormatter, shortenUUID } from '../../../utils';
 import { Message } from 'styled-icons/boxicons-regular';
-import { Button, Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Loader from '../../../components/Loader';
+import Table, { Row } from '../../../components/Table';
 
-const COLUMNS: Record<string, string> = {
+const COLUMNS = {
   id: 'ID',
   userEmail: 'User Email',
   paymentSource: 'Payment Source',
@@ -23,7 +24,7 @@ const COLUMNS: Record<string, string> = {
   details: 'Details',
 };
 
-const makeOrderRows = (orders: OrderModel[]): Array<Record<string, any>> => {
+const makeOrderRows = (orders: OrderModel[]): Array<Row<typeof COLUMNS>> => {
   return orders.map(order => ({
     id: shortenUUID(order.id),
     userEmail: order.user.email,
@@ -32,7 +33,11 @@ const makeOrderRows = (orders: OrderModel[]): Array<Record<string, any>> => {
     state: order.state,
     createdAt: dateFormatter(order.created_at),
     shipmentDate: dateFormatter(order.shipment_deadline),
-    details: <Button>Show</Button>,
+    details: (
+      <Button variant="secondary" size="sm">
+        Show
+      </Button>
+    ),
   }));
 };
 
@@ -41,11 +46,12 @@ const Order: React.FC = () => {
   const { orders, loading, error } = useSelector<typeof ReduxState>(
     state => state.orderList
   ) as ListOrdersState;
-  const tableRows = useMemo(() => makeOrderRows(orders), [orders]);
 
   useEffect(() => {
     dispatch(listOrders);
   }, [dispatch]);
+
+  const rows = useMemo(() => makeOrderRows(orders), [orders]);
 
   return (
     <Container>
@@ -57,24 +63,7 @@ const Order: React.FC = () => {
       ) : error ? (
         <Message>{error}</Message>
       ) : (
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              {Object.keys(COLUMNS).map(key => (
-                <th key={key}>{COLUMNS[key]}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {tableRows.map(order => (
-              <tr key={order.id}>
-                {Object.keys(order).map(key => (
-                  <td key={key}>{order[key]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Table columns={COLUMNS} idColumn="id" rows={rows} />
       )}
     </Container>
   );

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { Button, Table as BsTable } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
+  Product,
   ProductsDefaultInteractionState,
   ProductsListState,
 } from '../../../@types/redux/product';
@@ -13,6 +14,53 @@ import Message from '../../../components/Message';
 import { ReduxState } from '../../../store';
 import { Container, DeleteIcon, Options } from './styles';
 import { priceFormatter } from '../../../utils';
+import Table, { Row } from '../../../components/Table';
+
+const COLUMNS = {
+  count: '#',
+  name: 'Name',
+  brand: 'Brand',
+  category: 'Category',
+  rating: 'Rating',
+  price: 'Price',
+  qty: 'Qty in stock',
+  edit: 'Edit',
+  delete: 'Delete',
+};
+
+const makeRows = (
+  products: Product[],
+  handleDeleteProduct: (id: string, name: string) => void,
+  handleEditProduct: (id: string) => void
+): Array<Row<typeof COLUMNS>> => {
+  return products.map((product, index) => ({
+    count: index + 1,
+    name: product.name,
+    brand: product.brand,
+    category: product.category,
+    rating: product.rating ? product.rating : 'NRY',
+    price: priceFormatter(product.price),
+    qty: product.count_in_stock,
+    edit: (
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => handleEditProduct(product.id)}
+      >
+        Edit
+      </Button>
+    ),
+    delete: (
+      <Button
+        variant="danger"
+        size="sm"
+        onClick={() => handleDeleteProduct(product.id, product.name)}
+      >
+        <DeleteIcon />
+      </Button>
+    ),
+  }));
+};
 
 const Products: React.FC = () => {
   const history = useHistory();
@@ -54,14 +102,25 @@ const Products: React.FC = () => {
     history.push('/panel/products/create');
   }
 
-  function handleEditProduct(id: string) {
-    history.push(`/panel/products/${id}/edit`);
-  }
+  const handleEditProduct = useCallback(
+    (id: string) => {
+      history.push(`/panel/products/${id}/edit`);
+    },
+    [history]
+  );
 
-  function handleDeleteProduct(id: string, name: string) {
-    if (window.confirm(`Do you really wanna delete ${name} ?`))
-      dispatch(deleteProduct(id, name));
-  }
+  const handleDeleteProduct = useCallback(
+    (id: string, name: string) => {
+      if (window.confirm(`Do you really wanna delete ${name} ?`))
+        dispatch(deleteProduct(id, name));
+    },
+    [dispatch]
+  );
+
+  const rows = useMemo(
+    () => makeRows(products ?? [], handleDeleteProduct, handleEditProduct),
+    [handleDeleteProduct, handleEditProduct, products]
+  );
 
   return (
     <Container>
@@ -76,54 +135,7 @@ const Products: React.FC = () => {
       ) : error ? (
         <Message>{error.message}</Message>
       ) : (
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Brand</th>
-              <th>Category</th>
-              <th>Rating</th>
-              <th>Price</th>
-              <th>Qty in stock</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products?.map((product, i) => (
-              <tr key={product.id}>
-                <td>{i + 1}</td>
-                <td>{product.name}</td>
-                <td>{product.brand}</td>
-                <td>{product.category}</td>
-                <td>{product.rating ? product.rating : 'NRY'}</td>
-                <td>{priceFormatter(product.price)}</td>
-                <td>{product.count_in_stock}</td>
-                <td>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => handleEditProduct(product.id)}
-                  >
-                    Edit
-                  </Button>
-                </td>
-                <td>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() =>
-                      handleDeleteProduct(product.id, product.name)
-                    }
-                  >
-                    <DeleteIcon />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Table columns={COLUMNS} idColumn="name" rows={rows} />
       )}
     </Container>
   );

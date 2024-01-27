@@ -1,6 +1,6 @@
 import { DefaultState } from '.';
 
-interface UserOnPing {
+export interface UserOnPing {
   id: string;
   name: string;
   email: string;

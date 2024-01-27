@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
+  User,
+  UserOnPing,
   UsersDefaultInteractionState,
   UsersListState,
   UsersLoginState,
 } from '../../../@types/redux/user';
-import { Table, Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-
 import {
   confirmUser,
   deleteUser,
@@ -18,17 +19,82 @@ import {
 import Loader from '../../../components/Loader';
 import Message from '../../../components/Message';
 import { ReduxState } from '../../../store';
+import Table, { Row } from '../../../components/Table';
+import { Checked, Container, DeleteIcon, Options, Unchecked } from './styles';
 
-import { Container, Options, Checked, Unchecked, DeleteIcon } from './styles';
+const COLUMNS = {
+  count: '#',
+  name: 'Name',
+  email: 'Email',
+  phone: 'Contact number',
+  confirmed: 'Confirmed',
+  admin: 'Admin',
+  edit: 'Edit',
+  delete: 'Delete',
+};
+
+const makeRows = (
+  users: User[],
+  currentAdmin: UserOnPing,
+  handleToggleConfirmUser: (
+    id: string,
+    email: string,
+    isConfirmed: boolean
+  ) => void,
+  handleToggleUserAdmin: (id: string, email: string) => void,
+  handleDeleteUser: (id: string, email: string) => void,
+  handleEditUser: (id: string) => void
+): Array<Row<typeof COLUMNS>> => {
+  return users.map((user, idx) => ({
+    count: idx + 1,
+    name: user.name,
+    email: user.email,
+    phone: user.contact_number,
+    confirmed: (
+      <span
+        onClick={() =>
+          handleToggleConfirmUser(user.id, user.email, user.is_confirmed)
+        }
+      >
+        {user.is_confirmed ? <Checked /> : <Unchecked />}
+      </span>
+    ),
+    admin: user.is_admin ? (
+      <Checked className="no-action" />
+    ) : (
+      <Unchecked onClick={() => handleToggleUserAdmin(user.id, user.email)} />
+    ),
+    edit:
+      !user.is_admin ||
+      (user.id === currentAdmin.id && (
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => handleEditUser(user.id)}
+        >
+          Edit
+        </Button>
+      )),
+    delete:
+      !user.is_admin ||
+      (user.id === currentAdmin.id && (
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={() => handleDeleteUser(user.id, user.email)}
+        >
+          <DeleteIcon />
+        </Button>
+      )),
+  }));
+};
 
 const Users: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
   const { loading, users, error } = useSelector<typeof ReduxState>(
     state => state.userList
   ) as UsersListState;
-
   const { user: signedAdmin } = useSelector<typeof ReduxState>(
     state => state.userLogin
   ) as UsersLoginState;
@@ -122,36 +188,64 @@ const Users: React.FC = () => {
     history.push('/panel/users/create');
   }
 
-  function handleEditUser(id: string) {
-    history.push(`/panel/users/${id}/edit`);
-  }
+  const handleEditUser = useCallback(
+    (id: string) => {
+      history.push(`/panel/users/${id}/edit`);
+    },
+    [history]
+  );
 
-  function handleDeleteUser(id: string, email: string) {
-    if (window.confirm(`Do you really wanna delete ${email}?`)) {
-      dispatch(deleteUser(id, email));
-    }
-  }
+  const handleDeleteUser = useCallback(
+    (id: string, email: string) => {
+      if (window.confirm(`Do you really wanna delete ${email}?`)) {
+        dispatch(deleteUser(id, email));
+      }
+    },
+    [dispatch]
+  );
 
-  function handleToggleUserAdmin(id: string, email: string) {
-    if (window.confirm(`Do you really want to set ${email} as admin?`)) {
-      dispatch(setUserAdmin(id, email));
-    }
-  }
+  const handleToggleUserAdmin = useCallback(
+    (id: string, email: string) => {
+      if (window.confirm(`Do you really want to set ${email} as admin?`)) {
+        dispatch(setUserAdmin(id, email));
+      }
+    },
+    [dispatch]
+  );
 
-  function handleToggleConfirmUser(
-    id: string,
-    email: string,
-    isConfirmed: boolean
-  ) {
-    if (
-      window.confirm(
-        `Do you really want to ${
-          isConfirmed ? 'DISCONFIRM' : 'CONFIRM'
-        } the user ${email}?`
+  const handleToggleConfirmUser = useCallback(
+    (id: string, email: string, isConfirmed: boolean) => {
+      if (
+        window.confirm(
+          `Do you really want to ${
+            isConfirmed ? 'DISCONFIRM' : 'CONFIRM'
+          } the user ${email}?`
+        )
       )
-    )
-      dispatch(confirmUser(id, email));
-  }
+        dispatch(confirmUser(id, email));
+    },
+    [dispatch]
+  );
+
+  const rows = useMemo(
+    () =>
+      makeRows(
+        users ?? [],
+        signedAdmin as UserOnPing,
+        handleToggleConfirmUser,
+        handleToggleUserAdmin,
+        handleDeleteUser,
+        handleEditUser
+      ),
+    [
+      handleDeleteUser,
+      handleEditUser,
+      handleToggleConfirmUser,
+      handleToggleUserAdmin,
+      signedAdmin,
+      users,
+    ]
+  );
 
   return (
     <Container>
@@ -167,80 +261,7 @@ const Users: React.FC = () => {
       ) : error ? (
         <Message>{error.message}</Message>
       ) : (
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact number</th>
-              <th>Confirmed</th>
-              <th>Admin</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.map((user, i) => (
-              <tr key={user.id}>
-                <td>{i + 1}</td>
-                <td>
-                  {user.id === (signedAdmin as any).id ? (
-                    <strong>{user.name}</strong>
-                  ) : (
-                    user.name
-                  )}
-                </td>
-                <td>{user.email}</td>
-                <td>{user.contact_number}</td>
-                <td>
-                  <span
-                    onClick={() =>
-                      handleToggleConfirmUser(
-                        user.id,
-                        user.email,
-                        user.is_confirmed
-                      )
-                    }
-                  >
-                    {user.is_confirmed ? <Checked /> : <Unchecked />}
-                  </span>
-                </td>
-                <td>
-                  {user.is_admin ? (
-                    <Checked className="no-action" />
-                  ) : (
-                    <Unchecked
-                      onClick={() => handleToggleUserAdmin(user.id, user.email)}
-                    />
-                  )}
-                </td>
-                <td>
-                  {(!user.is_admin || user.id === (signedAdmin as any).id) && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleEditUser(user.id)}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                </td>
-                <td>
-                  {(!user.is_admin || user.id === (signedAdmin as any).id) && (
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => handleDeleteUser(user.id, user.email)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Table columns={COLUMNS} idColumn="email" rows={rows} />
       )}
     </Container>
   );
