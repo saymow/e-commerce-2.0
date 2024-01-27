@@ -1,10 +1,10 @@
-export type DefaultState<t> = {
+export type DefaultState<T> = {
   loading?: boolean;
   success?: boolean;
   error?: {
     message: string;
   };
   reset?: () => { type: string };
-} & t;
+} & T;
 
-export type Dispatch<t> = (arg0: t) => void;
+export type Dispatch<T> = (arg0: T) => void;

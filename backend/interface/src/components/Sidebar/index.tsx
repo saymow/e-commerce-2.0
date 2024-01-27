@@ -41,20 +41,20 @@ const SideBar: React.FC = () => {
       <Nav>
         <NavItem>
           <Link
-            className={pathname.startsWith('/panel/products') ? 'active' : ''}
-            to="/panel/products"
-          >
-            <ProductIcon />
-            <span className="link-name">Products</span>
-          </Link>
-        </NavItem>
-        <NavItem>
-          <Link
             className={pathname.startsWith('/panel/users') ? 'active' : ''}
             to="/panel/users"
           >
             <UsersIcon />
-            <span className="link-name">Users</span>
+            Users
+          </Link>
+        </NavItem>
+        <NavItem>
+          <Link
+            className={pathname.startsWith('/panel/products') ? 'active' : ''}
+            to="/panel/products"
+          >
+            <ProductIcon />
+            Products
           </Link>
         </NavItem>
         <NavItem>
@@ -63,7 +63,7 @@ const SideBar: React.FC = () => {
             to="/panel/orders"
           >
             <OrdersIcon />
-            <span className="link-name">Orders</span>
+            Orders
           </Link>
         </NavItem>
         <NavItem className="logout" onClick={handleLogout}>

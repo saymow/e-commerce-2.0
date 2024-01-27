@@ -7,7 +7,7 @@ import { ReduxState } from '../../store';
 
 interface Props extends RouteProps {
   authenticate?: boolean;
-  fallback?: '/' | '/panel';
+  fallback?: '/' | '/panel' | '/panel/users';
 }
 
 const RestrictedRoute: React.FC<Props> = ({

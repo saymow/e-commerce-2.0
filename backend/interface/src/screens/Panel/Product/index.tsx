@@ -12,6 +12,7 @@ import Loader from '../../../components/Loader';
 import Message from '../../../components/Message';
 import { ReduxState } from '../../../store';
 import { Container, DeleteIcon, Options } from './styles';
+import { priceFormatter } from '../../../utils';
 
 const Products: React.FC = () => {
   const history = useHistory();
@@ -97,7 +98,7 @@ const Products: React.FC = () => {
                 <td>{product.brand}</td>
                 <td>{product.category}</td>
                 <td>{product.rating ? product.rating : 'NRY'}</td>
-                <td>{product.price}</td>
+                <td>{priceFormatter(product.price)}</td>
                 <td>{product.count_in_stock}</td>
                 <td>
                   <Button

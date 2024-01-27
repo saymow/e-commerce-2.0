@@ -9,6 +9,7 @@ import order_view from '../views/api/order_view';
 import CreateAddressService, {
   AddressData,
 } from '@services/address/CreateAddressService';
+import ListAllOrdersService from '@services/order/ListAllOrdersService';
 
 class CheckoutController {
   async show(req: Request, res: Response) {
@@ -90,6 +91,16 @@ class CheckoutController {
     const userId = req.session!.user.id;
     const listUsersService = new ListOrdersService();
     const orders = await listUsersService.execute(userId);
+
+    return res.send(order_view.renderMany(orders));
+  }
+}
+
+export class AdminCheckoutController extends CheckoutController {
+  async listAllOrders(req: Request, res: Response) {
+    const userId = req.session!.user.id;
+    const listUsersService = new ListAllOrdersService();
+    const orders = await listUsersService.execute();
 
     return res.send(order_view.renderMany(orders));
   }

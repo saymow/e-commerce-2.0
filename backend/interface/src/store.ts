@@ -18,6 +18,7 @@ import {
   productEditReducer,
   productShowReducer,
 } from './reducers/productReducers';
+import { listOrdersReducer } from './reducers/orderReducers';
 
 export const ReduxState = {
   userLogin: userLoginReducer,
@@ -33,6 +34,7 @@ export const ReduxState = {
   productDelete: productDeleteReducer,
   productShow: productShowReducer,
   productEdit: productEditReducer,
+  orderList: listOrdersReducer,
 };
 
 const reducer = combineReducers(ReduxState);

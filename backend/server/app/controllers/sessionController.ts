@@ -31,7 +31,7 @@ class SessionController {
   }
 
   async logout(req: Request, res: Response) {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       req.session?.destroy(err => {
         res.clearCookie(COOKIE_NAME);
 

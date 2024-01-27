@@ -10,12 +10,13 @@ import { getAuthStatus } from '../actions/userActions';
 
 const Router: React.FC = () => {
   useDispatch()(getAuthStatus());
+
   return (
     <BrowserRouter>
       <Switch>
         <RestrictedRoute
           path="/"
-          fallback="/panel"
+          fallback="/panel/users"
           authenticate={false}
           exact
           component={Authentication}

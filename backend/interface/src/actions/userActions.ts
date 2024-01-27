@@ -33,7 +33,7 @@ export const userLogout = () => async (
   dispatch: (arg0: UserSessionAction) => void
 ) => {
   try {
-    await axios.post('/sessions/logout');
+    await axios.post('/api/sessions/logout');
 
     dispatch({ type: 'USER_LOGOUT' });
   } catch (err) {
