@@ -48,6 +48,10 @@ export type ListOrdersState = DefaultState<{
   orders: Order[];
 }>;
 
+export type ShowOrderState = DefaultState<{
+  order?: Order; 
+}>;
+
 export type ListOrdersAction =
   | {
       type: 'LIST_ORDERS_REQUEST';
@@ -65,3 +69,21 @@ export type ListOrdersAction =
       };
     }
   | { type: 'LIST_ORDERS_RESET' };
+
+export type ShowOrderAction =
+  | {
+      type: 'SHOW_ORDER_REQUEST';
+    }
+  | {
+      type: 'SHOW_ORDER_SUCCESS';
+      payload: {
+        order: Order;
+      };
+    }
+  | {
+      type: 'SHOW_ORDER_FAIL';
+      payload: {
+        message: string;
+      };
+    }
+  | { type: 'SHOW_ORDER_RESET' };

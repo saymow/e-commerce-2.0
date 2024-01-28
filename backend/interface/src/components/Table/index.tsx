@@ -22,7 +22,7 @@ const Table: React.FC<Props> = props => {
   const rowsJsx = useMemo(
     () =>
       rows.map(row => (
-        <tr key={idColumn}>
+        <tr key={(row as any)[idColumn]}>
           {Object.keys(row).map(key => (
             <td key={key}>{(row as any)[key]}</td>
           ))}

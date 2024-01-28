@@ -9,4 +9,6 @@ export const Container = styled.div`
 export const PanelRouteWrapper = styled.main`
   flex: 1;
   padding: 1rem;
+  height: 100%;
+  overflow: auto;
 `;

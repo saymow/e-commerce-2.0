@@ -11,6 +11,7 @@ import User from './User';
 import CreateUser from './User/CreateUser';
 import EditUser from './User/EditUser';
 import Order from './Order';
+import ShowOrder from './Order/ShowOrder';
 
 const Panel: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const Panel: React.FC = () => {
           <Route path="/panel/users/create" component={CreateUser} />
           <Route path="/panel/users/:id/edit" component={EditUser} />
           <Route path="/panel/orders" exact component={Order} />
+          <Route path="/panel/orders/:id" exact component={ShowOrder} />
         </Switch>
       </PanelRouteWrapper>
     </Container>

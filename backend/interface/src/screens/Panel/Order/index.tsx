@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Container, Options } from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { listOrders } from '../../../actions/orderActions';
@@ -12,8 +12,10 @@ import { Message } from 'styled-icons/boxicons-regular';
 import { Button } from 'react-bootstrap';
 import Loader from '../../../components/Loader';
 import Table, { Row } from '../../../components/Table';
+import { useHistory } from 'react-router-dom';
 
 const COLUMNS = {
+  count: '#',
   id: 'ID',
   userEmail: 'User Email',
   paymentSource: 'Payment Source',
@@ -24,8 +26,12 @@ const COLUMNS = {
   details: 'Details',
 };
 
-const makeOrderRows = (orders: OrderModel[]): Array<Row<typeof COLUMNS>> => {
-  return orders.map(order => ({
+const makeOrderRows = (
+  orders: OrderModel[],
+  handleShowDetails: (orderId: string) => void
+): Array<Row<typeof COLUMNS>> => {
+  return orders.map((order, idx) => ({
+    count: idx + 1,
     id: shortenUUID(order.id),
     userEmail: order.user.email,
     paymentSource: order.payment_source,
@@ -34,7 +40,11 @@ const makeOrderRows = (orders: OrderModel[]): Array<Row<typeof COLUMNS>> => {
     createdAt: dateFormatter(order.created_at),
     shipmentDate: dateFormatter(order.shipment_deadline),
     details: (
-      <Button variant="secondary" size="sm">
+      <Button
+        onClick={() => handleShowDetails(order.id)}
+        variant="secondary"
+        size="sm"
+      >
         Show
       </Button>
     ),
@@ -42,6 +52,7 @@ const makeOrderRows = (orders: OrderModel[]): Array<Row<typeof COLUMNS>> => {
 };
 
 const Order: React.FC = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector<typeof ReduxState>(
     state => state.orderList
@@ -51,7 +62,17 @@ const Order: React.FC = () => {
     dispatch(listOrders);
   }, [dispatch]);
 
-  const rows = useMemo(() => makeOrderRows(orders), [orders]);
+  const handleShowOrderDetails = useCallback(
+    (id: string) => {
+      history.push(`/panel/orders/${id}`);
+    },
+    [history]
+  );
+
+  const rows = useMemo(() => makeOrderRows(orders, handleShowOrderDetails), [
+    handleShowOrderDetails,
+    orders,
+  ]);
 
   return (
     <Container>
@@ -61,7 +82,7 @@ const Order: React.FC = () => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message>{error}</Message>
+        <Message>{error.message}</Message>
       ) : (
         <Table columns={COLUMNS} idColumn="id" rows={rows} />
       )}

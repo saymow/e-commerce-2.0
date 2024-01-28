@@ -1,4 +1,4 @@
-import { ListOrdersAction, ListOrdersState } from '../@types/redux/order';
+import { ListOrdersAction, ListOrdersState, ShowOrderState, ShowOrderAction } from '../@types/redux/order';
 
 const initialState: ListOrdersState = {
   orders: [],
@@ -34,6 +34,46 @@ export const listOrdersReducer = (
       };
     }
     case 'LIST_ORDERS_RESET':
+      return {
+        ...state,
+        orders: [],
+      };
+    default:
+      return state;
+  }
+};
+
+
+export const showOrderReducer = (
+  state: ShowOrderState = {},
+  action: ShowOrderAction
+) => {
+  switch (action.type) {
+    case 'SHOW_ORDER_REQUEST': {
+      return {
+        ...state,
+        loading: true,
+        reset: () => ({ type: 'SHOW_ORDER_RESET' }),
+      };
+    }
+    case 'SHOW_ORDER_SUCCESS': {
+      const { order } = action.payload;
+
+      return {
+        ...state,
+        order,
+        loading: false,
+        success: true,
+      };
+    }
+    case 'SHOW_ORDER_FAIL': {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    }
+    case 'SHOW_ORDER_RESET':
       return {
         ...state,
         orders: [],

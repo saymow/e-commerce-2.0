@@ -10,6 +10,7 @@ import CreateAddressService, {
   AddressData,
 } from '@services/address/CreateAddressService';
 import ListAllOrdersService from '@services/order/ListAllOrdersService';
+import ShowOrderService from '@services/order/ShowOrderService';
 
 class CheckoutController {
   async show(req: Request, res: Response) {
@@ -103,6 +104,14 @@ export class AdminCheckoutController extends CheckoutController {
     const orders = await listUsersService.execute();
 
     return res.send(order_view.renderMany(orders));
+  }
+
+  async showOrder(req: Request, res: Response) {
+    const orderId = req.params.id;
+    const showOrderService = new ShowOrderService();
+    const order = await showOrderService.execute(orderId);
+
+    return res.send(order_view.render(order));
   }
 }
 

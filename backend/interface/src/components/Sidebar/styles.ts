@@ -9,6 +9,7 @@ export const Container = styled.nav`
   background: #f8f9fa;
   border-right: 1px solid #ddd;
 
+  flex-shrink: 0;
   max-width: 16rem;
   width: 100%;
   transition: max-width 200ms ease;
