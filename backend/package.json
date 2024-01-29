@@ -6,7 +6,7 @@
     "dev": "npm-run-all -p dev:*",
     "dev:server": "env-cmd -f ./config/dev.env tsnd --transpile-only --ignore-watch node_modules ./server/server.ts",
     "dev:queue": "env-cmd -f ./config/dev.env tsnd --transpile-only --ignore-watch node_modules ./server/queue.ts",
-    "dev:interface": "set PORT=3006 && npm start --prefix ./interface",
+    "dev:interface": "set PORT=3006 && npm start --prefix ./admin-panel",
     "typeorm": "env-cmd -f ./config/typeorm.env tsnd ./node_modules/typeorm/cli.js",
     "test": "env-cmd -f ./config/typeorm.test.env jest --watch --forceExit --runInBand"
   },

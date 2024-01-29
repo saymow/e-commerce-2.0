@@ -8,3 +8,5 @@ dev.env
 typeorm.env
 typeorm.test.env
 ormconfig.env
+
+.github

@@ -39,6 +39,7 @@ export const Label = styled.div`
   > span {
     font-size: 1.4;
     text-transform: uppercase;
+    color: var(--bg-Color);
     z-index: 2;
   }
 

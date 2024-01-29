@@ -54,9 +54,10 @@ export const Button = styled.button`
   font-size: 1.2rem;
 
   cursor: pointer;
-  padding: 0.8125rem;
+  padding: 0.7rem;
   border: 0;
 
   background: var(--tertiary-Color);
-  color: var(--bg-Color);
+  color: var(--primary-Color);
+  border: 1px solid var(--primary-Color)
 `;

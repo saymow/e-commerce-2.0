@@ -77,7 +77,7 @@ const SideBar: React.FC = () => {
           <ThemeSwitcher />
           <UserInfo />
         </Options>
-        <CloseIcon onClick={() => handleCloseAsideBar()} />
+        <CloseIcon className="close-sider-bar-button" onClick={() => handleCloseAsideBar()} />
         <AsideHeader>
           <AsideNav>
             <AsideNavItem

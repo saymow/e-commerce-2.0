@@ -65,8 +65,7 @@ const makeRows = (
       <Unchecked onClick={() => handleToggleUserAdmin(user.id, user.email)} />
     ),
     edit:
-      !user.is_admin ||
-      (user.id === currentAdmin.id && (
+      (!user.is_admin || user.id === currentAdmin.id) && (
         <Button
           variant="secondary"
           size="sm"
@@ -74,7 +73,7 @@ const makeRows = (
         >
           Edit
         </Button>
-      )),
+      ),
     delete:
       !user.is_admin ||
       (user.id === currentAdmin.id && (

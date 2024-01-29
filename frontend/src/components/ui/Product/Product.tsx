@@ -15,9 +15,20 @@ import {
 
 const Product: React.FC<{ product: IProduct }> = ({ product }) => {
   const randomColor = useProvideRandomColors();
-  const [isWishListed, addToWishList, removeFromWishList] = useWishList(
-    product
-  );
+  const [isWishListed, addToWishList, removeFromWishList] =
+    useWishList(product);
+
+  const handleAddToWishList: React.MouseEventHandler<SVGSVGElement> = (e) => {
+    e.stopPropagation();
+    addToWishList();
+  };
+
+  const handleRemoveFromWishList: React.MouseEventHandler<SVGSVGElement> = (
+    e
+  ) => {
+    e.stopPropagation();
+    removeFromWishList();
+  };
 
   return (
     <Container detailBgColor={randomColor}>
@@ -31,9 +42,9 @@ const Product: React.FC<{ product: IProduct }> = ({ product }) => {
         <Name>{product.name}</Name>
         <Price>{priceFormmater(product.price)}</Price>
         {isWishListed ? (
-          <UnsetWishListIcon onClick={removeFromWishList} />
+          <UnsetWishListIcon className="remove-from-wish-list" onClick={handleRemoveFromWishList} />
         ) : (
-          <WishListIcon onClick={addToWishList} />
+          <WishListIcon className="add-to-wish-list" onClick={handleAddToWishList} />
         )}
       </Details>
     </Container>

@@ -118,10 +118,7 @@ const CheckoutAddress: React.FC = () => {
 
     if (isValidAddress && isShipmentMethod) {
       dispatch(
-        updateCheckout(
-          cart as FilledCartState,
-          cart.checkoutId as string
-        )
+        updateCheckout(cart as FilledCartState, cart.checkoutId as string)
       );
     }
   }, [cart.shipmentAddress, cart.shipmentMethod]);
@@ -151,7 +148,8 @@ const CheckoutAddress: React.FC = () => {
     <Container>
       <PrimaryView>
         <Label onClick={handleSwitchView}>
-          <span>switch to {views.secondary.title}</span> <div />
+          <span>switch to {views.secondary.title}</span>
+          <div />
         </Label>
         {views.primary.Component}
       </PrimaryView>

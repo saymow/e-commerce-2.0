@@ -1,15 +1,17 @@
 import { CartState, CartAction } from "../@types/redux";
 
-const cartInitialState = {
-  products: [],
-  total: 0,
-  subtotal: 0,
-  shippingCost: 0,
-  locked: false,
-};
+const makeInitialState = (): CartState => {
+  return {
+    products: [],
+    total: 0,
+    subtotal: 0,
+    shippingCost: 0,
+    locked: false,
+  };
+}
 
 export const cartReducer = (
-  state: CartState = cartInitialState,
+  state: CartState = makeInitialState(),
   action: CartAction
 ): CartState => {
   switch (action.type) {
@@ -86,7 +88,7 @@ export const cartReducer = (
       return { ...cart, checkoutId };
     }
     case "RESET_CART":
-      return structuredClone(cartInitialState);
+      return makeInitialState();
     default:
       return state;
   }

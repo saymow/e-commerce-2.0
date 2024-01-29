@@ -65,7 +65,7 @@ const Checkout: React.FC = () => {
             </DataRow>
           </Details>
           <Button variant="fill">
-            <Link href="/checkout/shipment"> SHIPMENT METHOD </Link>
+            <Link href="/checkout/shipment"> CONTINUE CHECKOUT </Link>
           </Button>
         </Container>
       </CheckoutLayout>

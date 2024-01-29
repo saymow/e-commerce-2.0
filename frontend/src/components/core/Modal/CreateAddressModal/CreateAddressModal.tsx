@@ -48,7 +48,7 @@ const CreateAddressModel: React.FC = () => {
         initialValues={AddressInitialState}
         validationSchema={AddressSchema}
         onSubmit={(values) => {
-          dispatch(createAddress(values));
+          dispatch(createAddress(values as any));
         }}
       >
         {(formik) => (
@@ -56,7 +56,7 @@ const CreateAddressModel: React.FC = () => {
             <Input
               id="postal_code"
               mask={POSTAL_CODE_MASK}
-              onBlurWatcher={postalCodeWatcher.bind(formik)}
+              onBlurWatcher={postalCodeWatcher.bind(formik as any)}
               placeholder="Postal Code"
             />
             <DoubleInputField invert>

@@ -31,7 +31,7 @@ const WishButton: React.FC<{ product: IProduct }> = ({ product }) => {
   const [isOnWishList, addToWishList, removeFromWisList] = useWishList(product);
 
   return (
-    <Container>
+    <Container className="product-wish-button">
       {isOnWishList ? (
         <Unwish onClick={removeFromWisList} />
       ) : (

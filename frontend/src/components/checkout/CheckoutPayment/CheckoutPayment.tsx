@@ -26,6 +26,10 @@ const CheckoutPayment: React.FC<Props> = ({ onPaymentSuccess }) => {
     onPaymentSuccess(orderID, paymentSource);
   };
 
+  if (typeof window !== "undefined") {
+    (window as any).handleSuccessPayment = handleSuccessPayment;
+  }
+
   if (!cart.shipmentAddress) return <Loading />; // still setting state.
 
   return (

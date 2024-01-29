@@ -18,7 +18,7 @@ const Container = styled.section`
   display: grid;
   grid-template-columns: 2fr 3fr;
 
-  padding: 3rem 0;
+  padding: 5rem 0 3rem;
 `;
 
 const ImageContainer = styled.article``;
@@ -140,7 +140,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 };
 

@@ -24,12 +24,13 @@ const ProductsSection = styled.section`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 1rem;
+  padding: 2rem;  
+  margin-bottom: 2rem;
 
   a {
     flex: 0 1 32%;
 
-    margin: 1rem 0;
+    margin: 2rem 0;
 
     &:nth-child(3n + 2) {
       margin-left: 2%;

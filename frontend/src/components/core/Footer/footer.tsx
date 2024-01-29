@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
               <Link href="/contact-me">contact me</Link>
             </Item>
             <Item>
-              <Link href="/proile">profile</Link>
+              <Link href="/profile">profile</Link>
             </Item>
           </ItemList>
         </Section>
@@ -37,15 +37,15 @@ const Footer: React.FC = () => {
           <h1>Recent relases</h1>
           <ItemList>
             <Item>
-              <Link href="_">Some product</Link>
+              <Link href="_">Airpods Wireless Headphones</Link>
             </Item>
             <Item>
-              <Link href="_">Other product</Link>
+              <Link href="_">Amazon Alexa</Link>
             </Item>
           </ItemList>
         </Section>
         <Section>
-          <h1>Subscribe our newsletter</h1>
+          <h1>Subscribe to our newsletter</h1>
           <Input id="email" type="email" placeholder="Email"></Input>
           <Button>Subscribe</Button>
         </Section>

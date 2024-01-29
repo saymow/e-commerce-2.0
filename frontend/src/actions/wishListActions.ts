@@ -9,38 +9,36 @@ const saveWishList = (wishList: WishListState) => {
   );
 };
 
-export const addProductToWishList = (product: IProduct) => async (
-  dispatch: (arg0: WishListAction | AsideBarAction) => void,
-  getState: any
-) => {
-  dispatch({
-    type: "ADD_PRODUCT_WISHLIST",
-    payload: product,
-  });
+export const addProductToWishList =
+  (product: IProduct) =>
+  async (
+    dispatch: (arg0: WishListAction | AsideBarAction) => void,
+    getState: any
+  ) => {
+    dispatch({
+      type: "ADD_PRODUCT_WISHLIST",
+      payload: product,
+    });
 
-  const { wishList } = getState();
+    const { wishList } = getState();
 
-  dispatch({
-    type: "ASIDE_SHOW_WISHLIST",
-  });
-  saveWishList(wishList);
-};
+    saveWishList(wishList);
+  };
 
-export const removeProductFromWishList = (id: string) => async (
-  dispatch: (arg0: WishListAction | AsideBarAction) => void,
-  getState: any
-) => {
-  dispatch({
-    type: "REMOVE_PRODUCT_WISHLIST",
-    payload: {
-      id,
-    },
-  });
+export const removeProductFromWishList =
+  (id: string) =>
+  async (
+    dispatch: (arg0: WishListAction | AsideBarAction) => void,
+    getState: any
+  ) => {
+    dispatch({
+      type: "REMOVE_PRODUCT_WISHLIST",
+      payload: {
+        id,
+      },
+    });
 
-  const { wishList } = getState();
+    const { wishList } = getState();
 
-  dispatch({
-    type: "ASIDE_SHOW_WISHLIST",
-  });
-  saveWishList(wishList);
-};
+    saveWishList(wishList);
+  };

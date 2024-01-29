@@ -24,8 +24,6 @@ const Paginate: React.FC<{ pages: number }> = ({ pages }) => {
     router.push(`?page=${page}`, undefined, { shallow: true });
   };
 
-  console.log([...Array(pages)], currentPage)
-
   useEffect(() => {
     const page = router.query.page as string ?? 1;
 

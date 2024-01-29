@@ -1,6 +1,6 @@
 import { LocalShipping } from "@styled-icons/material-outlined";
 import { useRouter } from "next/router";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MaskedInput from "react-text-mask";
 import { toast } from "react-toastify";
@@ -103,11 +103,6 @@ const TruckIcon = styled(LocalShipping)`
   fill: var(--light-Grey);
 `;
 
-interface SuccessPostalCodeServiceResponseOnInterface
-  extends SuccessPostalCodeServiceResponse {
-  selected?: boolean;
-}
-
 const Shipment: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -116,11 +111,10 @@ const Shipment: React.FC = () => {
   const [postalCode, setPostalCode] = useState("");
   const [shipmentController, setShipmentController] = useState<{
     postalCode?: string;
-    methods: SuccessPostalCodeServiceResponseOnInterface[];
+    methods: SuccessPostalCodeServiceResponse[];
     address?: FetchedAddress;
   }>({ methods: [] });
-  const [showNextButton, setShowNextButton] = useState(false);
-
+  
   const {
     services,
     address,
@@ -146,6 +140,14 @@ const Shipment: React.FC = () => {
   const cartData = useSelector<typeof reduxStore>(
     (state) => state.cart
   ) as CartState;
+
+  useEffect(() => {
+    if (cartData.shipmentMethod) {
+      setPostalCode(cartData.shipmentMethod.postalCode);
+    }
+  }, []);
+
+
 
   useEffect(() => {
     if (serviceSuccess && serviceReset) {
@@ -199,20 +201,14 @@ const Shipment: React.FC = () => {
     e.preventDefault();
 
     setShipmentController({ methods: [] });
-    setShowNextButton(false);
     dispatch(lockCart());
     dispatch(getShipmentMethods(postalCode));
   };
 
   const handleSelectMethod = (code: string) => {
-    const newMethodsArray = shipmentController.methods.map((service) => ({
-      ...service,
-      selected: service.code === code,
-    }));
-
     const choosenMethod = shipmentController.methods.find(
       (method) => method.code === code
-    ) as SuccessPostalCodeServiceResponseOnInterface;
+    ) as SuccessPostalCodeServiceResponse;
 
     const shipmentMethod = {
       ...choosenMethod,
@@ -220,19 +216,14 @@ const Shipment: React.FC = () => {
       postalCode: shipmentController.postalCode as string,
     };
 
-    setShowNextButton(true);
     dispatch(addShipmmentDataToCart(shipmentMethod));
     dispatch(
       addAddressDataToCart(shipmentController.address as FetchedAddress)
     );
-    setShipmentController({
-      ...shipmentController,
-      methods: newMethodsArray,
-    });
   };
 
   const handleContinueCheckout = () => {
-    if (!userSession) return router.push("/signin?redirect=checkout/shipment");
+    if (!userSession) return router.push(`/signin?redirect=checkout/shipment`);
 
     let keys = [
       "products",
@@ -248,6 +239,8 @@ const Shipment: React.FC = () => {
       toast.error("Checkout cart data missing");
     } else dispatch(createCheckout(cartData as FilledCartState));
   };
+
+  const showNextButton = useMemo(() => !!cartData.shipmentMethod, [cartData])
 
   return (
     <Layout>
@@ -277,7 +270,7 @@ const Shipment: React.FC = () => {
                   {shipmentController.methods.map((service) => (
                     <ShipmentMethod
                       key={service.code}
-                      selected={service.selected}
+                      selected={service.code === cartData.shipmentMethod?.code}
                       onClick={() => handleSelectMethod(service.code)}
                     >
                       <TruckIcon />

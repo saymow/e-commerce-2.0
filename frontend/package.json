@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "cypress:start": "npx cypress open",
+    "cypress:run": "npx cypress run --browser chrome"
   },
   "dependencies": {
     "axios": "^0.21.0",
@@ -33,6 +35,7 @@
     "@types/react-text-mask": "^5.4.6",
     "@types/styled-components": "^5.1.4",
     "@types/yup": "^0.29.9",
+    "cypress": "^13.6.3",
     "typescript": "^4.0.5"
   }
 }

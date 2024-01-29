@@ -114,14 +114,6 @@ export const openEditAddressModal = (id: string) => async (
   });
 };
 
-export const openCheckoutAddressModal = () => async (
-  dispatch: (arg0: ModalAction) => void
-) => {
-  dispatch({
-    type: "USER_CHECKOUT_ADDRESS_CONFIRMATION",
-  });
-};
-
 export const closeModal = () => async (
   dispatch: (arg0: ModalAction) => void
 ) => {
