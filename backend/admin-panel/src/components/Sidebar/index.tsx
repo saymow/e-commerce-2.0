@@ -34,7 +34,7 @@ const SideBar: React.FC = () => {
       <Header>
         <Title>Ecommerce</Title>
         <Chevron
-          className={isClosed ? 'rotate' : ''}
+          className={`sidebar-chevron ${isClosed ? 'rotate' : ''}`}
           onClick={handleToggleBar}
         />
       </Header>

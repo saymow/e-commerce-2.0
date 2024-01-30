@@ -64,27 +64,24 @@ const makeRows = (
     ) : (
       <Unchecked onClick={() => handleToggleUserAdmin(user.id, user.email)} />
     ),
-    edit:
-      (!user.is_admin || user.id === currentAdmin.id) && (
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => handleEditUser(user.id)}
-        >
-          Edit
-        </Button>
-      ),
-    delete:
-      !user.is_admin ||
-      (user.id === currentAdmin.id && (
-        <Button
-          variant="danger"
-          size="sm"
-          onClick={() => handleDeleteUser(user.id, user.email)}
-        >
-          <DeleteIcon />
-        </Button>
-      )),
+    edit: (!user.is_admin || user.id === currentAdmin.id) && (
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => handleEditUser(user.id)}
+      >
+        Edit
+      </Button>
+    ),
+    delete: (!user.is_admin || user.id === currentAdmin.id) && (
+      <Button
+        variant="danger"
+        size="sm"
+        onClick={() => handleDeleteUser(user.id, user.email)}
+      >
+        <DeleteIcon />
+      </Button>
+    ),
   }));
 };
 
