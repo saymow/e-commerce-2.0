@@ -79,7 +79,7 @@ PosgreSQL: v16.1
 Redis: v7.2.4
 
 # Clone this repositoy
-$ git clone https://github.com/saymow/E-Commerce-2.0.git
+$ git clone https://github.com/saymow/e-commerce-2.0.git
 
 # Change into its directory
 $ cd eCommerce-1.0
